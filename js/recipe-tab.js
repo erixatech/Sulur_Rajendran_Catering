@@ -10,9 +10,10 @@ RecipeTab.prototype.init = function() {
 };
 RecipeTab.prototype.render = function() {
 	var _this = this;
-	addOptionsToSelect(_this.recipeCategory, "id_selectRecipeCategory");
-	addOptionsToSelect(_this.recipeCategory, "id_recipeCategory");
-	addOptionsToSelect(ingredientCategories, "id_ingredientCategory_recipe");
+    var utils = require('./utils');
+	utils.addOptionsToSelect(_this.recipeCategory, "id_selectRecipeCategory");
+	utils.addOptionsToSelect(_this.recipeCategory, "id_recipeCategory");
+	utils.addOptionsToSelect(ingredientCategories, "id_ingredientCategory_recipe");
 
 	var recipeJson = {"Snacks" : [
 								{

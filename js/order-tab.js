@@ -1,20 +1,20 @@
-function OrderTab(){
-    console.log("this" + this);
-	this.init();
+function OrderTab($){
+    //sconsole.log("this" + this);
+	this.init($);
 	var isNewOrder = false;
 	var isListServiceForms = false;
 	var dummyRecipies = null;
 }
-OrderTab.prototype.init = function(){
+OrderTab.prototype.init = function($){
 	var _this = this;
-     var utils = require('./utils');
+    var utils = require('./utils');
 	_this.isNewOrder = utils.getValueFromQueryParam('orderIsNew');
 	_this.isListServiceForms = utils.getValueFromQueryParam('listServiceForms');
 	_this.dummyRecipies = ["Kesari", "Badam Alwa", "Chicken Biriyani", "Sambar"];
-	_this.render();
-	_this.renderEvents();
+	_this.render($);
+	_this.renderEvents($);
 }
-OrderTab.prototype.render = function(){
+OrderTab.prototype.render = function($){
 	var _this = this;
 	var renderHtml = [];
 	
@@ -275,7 +275,7 @@ OrderTab.prototype.getReceipeMapRowForSF = function() {
 			
 	return renderHtmlMapRow;
 };
-OrderTab.prototype.renderEvents = function() {
+OrderTab.prototype.renderEvents = function($) {
 	var _this = this;
 	
 	$(document).ready(function(){

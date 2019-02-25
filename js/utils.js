@@ -72,3 +72,4 @@ function getFileValue(){
 }
 
 module.exports.getValueFromQueryParam = getValueFromQueryParam;
+module.exports.addOptionsToSelect = addOptionsToSelect;
