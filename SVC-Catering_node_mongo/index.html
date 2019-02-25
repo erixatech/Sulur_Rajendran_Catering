@@ -1,0 +1,30 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" type="text/css" href="css/lib/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="css/lib/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/common.css">
+		<script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
+
+        <script type="text/javascript" src="js/utils.js"></script>
+		<script type="text/javascript" src="js/order-tab.js"></script>
+		<script type="text/javascript" src="js/recipe-tab.js"></script>
+		<script type="text/javascript" src="js/ingredient-tab.js"></script>
+		<script>
+		    var ingredientCategories = ["Maligai", "KaaiKanigal", "Extras", "Suppliments"];
+        </script> 
+     </head>
+	<body>
+        <div id="id_nodeWrapper">
+        </div>
+	</body>
+	<script type="text/javascript">	
+        $(document).on('ready', function() {
+            new OrderTab();
+            new RecipeTab();
+            new IngredientTab();
+        });
+     </script>
+</html>
