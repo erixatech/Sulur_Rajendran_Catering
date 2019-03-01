@@ -1,0 +1,207 @@
+function RecipeTab(){
+	this.recipeCategory = ["Sweet", "HomeSweet", "Kaaram", "Idly", "Dhosa", "Chattni", "Sambar", "Kulambu", "Gravy",
+		                  "Rotty", "Biriyani", "Pachadi", "Saadam", "Oorugaai", "Baanam", "Snacks"];
+	this.init();
+}
+RecipeTab.prototype.init = function() {
+	var _this = this;
+	_this.render();
+	_this.registerEvents();
+};
+RecipeTab.prototype.render = function() {
+	var _this = this;
+	var allIngredientNames = getIngredientNamesByCategory();
+	addOptionsToSelect(_this.recipeCategory, "id_selectRecipeCategory");
+	addOptionsToSelect(_this.recipeCategory, "id_recipeCategory");
+	addOptionsToSelect(ingredientCategories, "id_ingredientCategory_recipe");
+	addOptionsToSelect(allIngredientNames, "id_ingredientName_recipe");
+	addOptionsToSelect(ingredientUnits, "id_ingredientUnit_recipe");
+
+	var recipeJson = {"Snacks" : [
+								{
+									"id" : 1,
+									"name": "samosa", "tamilName": "சம ோசோ",
+										"Ingredients": [
+										{
+										"id" : 7,
+										"name" : "oil", "tamilName" : "எண்ணெய்",
+										"quantity": "500",
+										"unitofmeasure": "millilitre"
+										},
+										{
+										"id" : 6,
+										"name" : "onion", "tamilName" : "ணெங்காயம்",
+										"quantity": "100",
+										"unitofmeasure": "count"
+										},
+										{
+										"id" : 5,
+										"name": "potato", "tamilName" : "உருளைக்கிழங்கு",
+										"quantity": "200",
+										"unitofmeasure": "count"
+										}
+										],
+									"headCount": 100
+								},
+								{
+									"id" : 2,
+									"name": "samosa", "tamilName": "சம ோசோ",
+										"Ingredients": [
+										{
+										"id" : 7,
+										"name" : "oil", "tamilName" : "எண்ணெய்",
+										"quantity": "500",
+										"unitofmeasure": "millilitre"
+										},
+										{
+										"id" : 6,
+										"name" : "onion", "tamilName" : "ணெங்காயம்",
+										"quantity": "100",
+										"unitofmeasure": "count"
+										},
+										{
+										"id" : 5,
+										"name": "potato", "tamilName" : "உருளைக்கிழங்கு",
+										"quantity": "200",
+										"unitofmeasure": "count"
+										}
+										],
+									"headCount": 100
+								}
+								],
+								"Sweet" : [
+								{
+									"id" : 1,
+									"name": "samosa", "tamilName": "சம ோசோ",
+										"Ingredients": [
+										{
+										"id" : 7,
+										"name" : "oil", "tamilName" : "எண்ணெய்",
+										"quantity": "500",
+										"unitofmeasure": "millilitre"
+										},
+										{
+										"id" : 6,
+										"name" : "onion", "tamilName" : "ணெங்காயம்",
+										"quantity": "100",
+										"unitofmeasure": "count"
+										},
+										{
+										"id" : 5,
+										"name": "potato", "tamilName" : "உருளைக்கிழங்கு",
+										"quantity": "200",
+										"unitofmeasure": "count"
+										}
+										],
+									"headCount": 100
+								},
+								{
+									"id" : 2,
+									"name": "samosa", "tamilName": "சம ோசோ",
+										"Ingredients": [
+										{
+										"id" : 7,
+										"name" : "oil", "tamilName" : "எண்ணெய்",
+										"quantity": "500",
+										"unitofmeasure": "millilitre"
+										},
+										{
+										"id" : 6,
+										"name" : "onion", "tamilName" : "ணெங்காயம்",
+										"quantity": "100",
+										"unitofmeasure": "count"
+										},
+										{
+										"id" : 5,
+										"name": "potato", "tamilName" : "உருளைக்கிழங்கு",
+										"quantity": "200",
+										"unitofmeasure": "count"
+										}
+										],
+									"headCount": 100
+								}
+								]
+							}
+    
+	var catagoryJson;
+	var renderHtml = [];
+	for (var i =0; i<_this.recipeCategory.length; i++ ) {
+		catagoryJson = recipeJson[_this.recipeCategory[i]];
+		if(catagoryJson){
+			renderHtml += "<div class='list-group col-11'>"
+							+ "<a class='list-group-item list-group-item-action cls_recipeCateory active text-white font-weight-bold'>"
+								+ _this.recipeCategory[i]
+
+						for(var j=0; j<catagoryJson.length ; j++){
+							renderHtml += "<a href='' class='list-group-item list-group-item-action'>"
+											+ "<label class='col-4'>" + catagoryJson[j].name +"</label>"
+											+ "<label class='col-4'>" + catagoryJson[j].tamilName +"</label>"
+											+ "<label class='btn btn-secondary btn-md mr-3 col-2 mb-0 text-center cls_delete'>Delete</label>"
+										+ "</a>"
+						}
+			renderHtml += "</a>"
+					   + "</div>"
+		}
+	}
+	$("#id_recipeContent_tab").append(renderHtml);
+};
+
+RecipeTab.prototype.registerEvents = function() {
+	var _this = this;
+	$(document).ready(function(){
+		$(document).on("click", ".cls_addIngredient", function(){
+			var elemToAdd = $(_this.getIngredientMapRow());
+			cloneDOM(elemToAdd, $('.createRecipeIngredientMap'));
+			addOptionsToSelectViaElem(ingredientCategories, $('.cls_ingredientCategory_recipe')[$('.cls_ingredientCategory_recipe').length-1]);
+			var allIngredientNames = getIngredientNamesByCategory();
+			addOptionsToSelectViaElem(allIngredientNames, $('.cls_ingredientName_recipe')[$('.cls_ingredientName_recipe').length-1]);
+			addOptionsToSelectViaElem(ingredientUnits, $('.cls_ingredientUnit_recipe')[$('.cls_ingredientUnit_recipe').length-1]);
+		}); 
+		
+		$(document).on("change", ".cls_ingredientCategory_recipe", function(){
+			var category = $(this).val();
+			var ingredientNames = getIngredientNamesByCategory(category);
+			$(this).closest('.cls_ingredientMapRow').find("#id_ingredientName_recipe option").remove();
+			addOptionsToSelectViaElem(ingredientNames, $($(this).closest('.cls_ingredientMapRow').find("#id_ingredientName_recipe"))[0]);
+			$($(this).closest('.cls_ingredientMapRow').find("#id_ingredientName_recipe")).trigger("change");
+		});
+		
+		$(document).on("change", ".cls_ingredientName_recipe", function(){
+			var name = $(this).val();
+			var ingredientUnits = getIngredientUnitsByName(name);
+			$(this).closest('.cls_ingredientMapRow').find("#id_ingredientUnit_recipe option").remove();
+			addOptionsToSelectViaElem(ingredientUnits, $($(this).closest('.cls_ingredientMapRow').find("#id_ingredientUnit_recipe"))[0]);
+		});
+		
+		$(document).on("click", ".cls_removeCurrentIngredientMap", function(){
+			$(this).parents('.cls_ingredientMapRow').remove();
+		});
+	});
+};
+
+RecipeTab.prototype.getIngredientMapRow = function() {
+	var _this = this;
+	var renderHtmlMapRow = [];
+	
+	renderHtmlMapRow += '    <div class="row cls_ingredientMapRow mt-2 mb-1">'
+		              + '        <div class="col-3">'
+		              + '                <select class="form-control cls_ingredientCategory_recipe" id="id_ingredientCategory_recipe" name="ingredientCategory">'
+		              +'                     <option>--Select All--</option>'
+		              +'                 </select>'
+		              + '        </div>'
+		              + '        <div class="col-4">'
+		              + '            <select class="form-control cls_ingredientName_recipe" id="id_ingredientName_recipe" name="ingredientName"></select>'
+		              + '        </div>'
+		              + '        <div class="col-2">'
+		              + '            <select class="form-control cls_ingredientUnit_recipe" id="id_ingredientUnit_recipe" name="ingredientUnit"></select>'
+		              + '        </div>'
+		              + '		 <div class="col-2">'
+		              + '			 <input type="text" class="form-control cls_ingredientQunatity_recipe" required id="id_ingredientQunatity_recipe" placeholder="Enter Quantity" name="qunatity">'
+		              + '		 </div>'
+		              + '        <div class="col-1">'
+		  			  +             ($('.cls_ingredientMapRow').length>0 ? '<i class="fa fa-minus-circle cls_removeCurrentIngredientMap" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>' : '')
+		  			  + '        </div>'
+		              + '	</div>';
+			
+	return renderHtmlMapRow;
+};

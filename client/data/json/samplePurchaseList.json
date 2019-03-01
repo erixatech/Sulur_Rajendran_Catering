@@ -1,0 +1,22 @@
+﻿{
+    "Provisions" : [{
+        "itemName" : "sugar",
+        "unitofmeasure" : "kilogram",
+        "units" : 50
+    },
+    {
+        "itemName" : "maida",
+        "unitofmeasure" : "kilogram",
+        "units" : 20
+    }],
+    "Dairy" : [{
+        "itemName" : "milk",
+        "unitofmeasure" : "litre",
+        "units" : 15
+        }],
+    "Vegetables" : [{
+        "itemName" : "potato",
+        "unitofmeasure" : "kilogram",
+        "units" : 15
+    }]
+}

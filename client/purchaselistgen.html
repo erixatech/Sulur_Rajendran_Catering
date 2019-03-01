@@ -1,0 +1,73 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" type="text/css" href="css/lib/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="css/lib/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/common.css">
+		<script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
+
+        <script type="text/javascript" src="js/utils.js"></script>
+		<script type="text/javascript" src="js/render-pl.js"></script>
+     </head>
+	<body>
+		<div class="cls_pageContainer container-fluid col" id="id_pageIndex">
+			<div class="cls_pageHeader">
+				<div id="id_pageHeader" class="row">
+					<div class="col-3 text-center p-2">
+						<div class="text-danger font-weight-bold">
+							Name - 1
+						</div>
+						<div>
+							9874563210
+						</div>
+						<br>
+						<div class="text-danger font-weight-bold">
+							Name - 2
+						</div>
+						<div>
+							9874563210
+						</div>	
+					</div>
+					<div class="col-6 text-center">
+						<img src="css/images/logo.png" class="img-rounded" alt="Sulur Vignesh Catering">
+					</div>
+					<div class="col-3 text-center p-2">
+						<div class="text-danger font-weight-bold">
+							Name - 3
+						</div>
+						<div>
+							9874563210
+						</div>
+						<br>
+						<div class="text-danger font-weight-bold">
+							Name - 4
+						</div>
+						<div>
+							9874563210
+						</div>	
+					</div>
+				</div>
+				<div class="row text-center bg-secondary">
+					<div class="col font-italic text-light text-center">
+						VIP Garden, Ranganathapuram, Sulur, Coimbatore - 641 002
+					</div>
+				</div>
+			</div>
+			
+		</div>
+
+		<div class="tab-content p-5 ml-5" id="plContent">
+			<div id="id_plWrapper"></div>
+		</div>
+
+		<script type="text/javascript">	
+	        $(document).on('ready', function() {
+	            new renderPL();
+	        });
+	    </script>
+
+	</body>
+	
+</html>
