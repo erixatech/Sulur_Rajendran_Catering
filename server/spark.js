@@ -22,7 +22,7 @@ router.post("/createIngredient", function(req, res){
 	/*var testJsonOld = {"name" : "Guru"};
 	var testJson = {"name" : "Arun"};
   console.log(req.body);*/
-	mongoOpn1.mongoOpns(req, res, "receipeTest", "insert", req.body);
+	mongoOpn1.mongoOpns(req, res, "Ingredients", "insert", req.body);
 });
 
 app.use("/",router);
