@@ -17,6 +17,6 @@ router.post("/createIngredient", function(req, res){
 
 app.use("/",router);
 
-app.listen(3000,function(){
-  console.log("Live at Port 3000");
+app.listen(80,function(){
+  console.log("Live at Port 80");
 });
