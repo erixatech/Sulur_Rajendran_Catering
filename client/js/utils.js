@@ -109,7 +109,7 @@ function getFileValue(){
       xhttp.open("GET", file, true);
       xhttp.send();
 }*/
-function getIngredientNamesByCategory(categoryName)
+function getIngredientNamesByCategory(ingredientJson, categoryName)
 {
 	var ingredientCategories = Object.keys(ingredientJson);
 	var ingArrToRet = [];
@@ -133,7 +133,7 @@ function getIngredientNamesByCategory(categoryName)
 	return ingArrToRet;
 }
 
-function getIngredientById(id) {
+function getIngredientById(ingredientJson, id) {
 	var toRet = null;
 	$.each( ingredientJson, function( categoryName, ingredientsArr ) {
 		$.each(ingredientsArr, function( index, ingredientObj ) {
@@ -152,7 +152,22 @@ function getIngredientById(id) {
 	return toRet;
 }
 
-function getIngredientUnitsByName(name) {
+function getIngredientsByName(ingredientJson, name) {
+	var toRet = [];
+	$.each( ingredientJson, function( catName, ingArr ) {
+		if(catName!="_id")
+		{
+			$.each(ingArr, function( index, ingredientObj ) {
+			  	if((ingredientObj.name.toLowerCase()).indexOf(name.toLowerCase())>-1) {
+				  	toRet.push(ingredientObj);
+		      	}
+			});
+		}
+	});
+	return toRet;
+}
+
+function getIngredientUnitsByName(ingredientJson, name) {
 	var toRet = null;
 	$.each( ingredientJson, function( categoryName, ingredientsArr ) {
 		$.each(ingredientsArr, function( index, ingredientObj ) {
