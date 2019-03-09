@@ -7,6 +7,8 @@
 		<link rel="stylesheet" type="text/css" href="css/lib/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="css/common.css">
 		<link rel="stylesheet" type="text/css" href="css/successconfirmdialog.css">
+		<link rel="stylesheet" type="text/css" href="css/confirmdialog.css">
+		<link rel="stylesheet" type="text/css" href="css/errorconfirmdialog.css">
 		<script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
 		<script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
 
@@ -228,9 +230,9 @@
      </div>
 
 
-     <!-- Success Popup Try -->
+     <!-- Success Popup -->
      <div id="successPopup" class="modal fade in">
-		<div class="modal-dialog modal-confirm">
+		<div class="modal-dialog modal-success">
 			<div class="modal-content">
 				<div class="modal-header">
 					<div class="icon-box">
@@ -247,6 +249,49 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- Confirmation Popup -->
+	<div id="confirmationPopup" class="modal fade in">
+		<div class="modal-dialog modal-confirm">
+			<div class="modal-content">
+				<div class="modal-header row">
+					<div class="icon-box">
+						<b><i class="material-icons">?</i></b>
+					</div>
+					<h4 class="modal-title col-12">Are you sure?</h4>
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				</div>
+				<!-- <div class="modal-body">
+					<p>Do you really want to delete these records? This process cannot be undone.</p>
+				</div> -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-danger">Delete</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Error Popup -->
+	<div id="errorPopup" class="modal fade in">
+		<div class="modal-dialog modal-error">
+			<div class="modal-content">
+				<div class="modal-header row">
+					<div class="icon-box">
+						<b><i class="material-icons">X</i></b>
+					</div>
+					<h4 class="modal-title col-12">Failed Temporarily</h4>
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				</div>
+				<!-- <div class="modal-body">
+					<p>Do you really want to delete these records? This process cannot be undone.</p>
+				</div> -->
+				<div class="modal-footer">
+					<button class="btn btn-danger btn-block font-weight-bold" data-dismiss="modal">OK</button>
+				</div>
+			</div>
+		</div>
+	</div>
 		
 	</body>
 	<script type="text/javascript">	
@@ -254,6 +299,10 @@
             new OrderTab();
             new RecipeTab();
             new IngredientTab();
+
+			$('#successPopup').on('hidden.bs.modal', function () {
+			    $(this).find('.modal-title').text("Successfully Done !!");
+			});
         });
      </script>
 </html>
