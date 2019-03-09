@@ -303,6 +303,12 @@
 			$('#successPopup').on('hidden.bs.modal', function () {
 			    $(this).find('.modal-title').text("Successfully Done !!");
 			});
+			$('#confirmationPopup').on('hidden.bs.modal', function () {
+			    $(this).find('.modal-title').text("Are you sure?");
+			});
+			$('#errorPopup').on('hidden.bs.modal', function () {
+			    $(this).find('.modal-title').text("Failed Temporarily");
+			});
         });
      </script>
 </html>

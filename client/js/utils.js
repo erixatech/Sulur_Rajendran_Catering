@@ -136,7 +136,7 @@ function getIngredientNamesByCategory(ingredientJson, categoryName)
 function getIngredientById(ingredientJson, id) {
 	var toRet = null;
 	$.each( ingredientJson, function( categoryName, ingredientsArr ) {
-		if(categoryName!="_id")
+		if(categoryName!="_id" && categoryName!="name")
 		{
 			$.each(ingredientsArr, function( index, ingredientObj ) {
 				  if((ingredientObj.id).toString() == id) {
@@ -158,7 +158,7 @@ function getIngredientById(ingredientJson, id) {
 function getIngredientsByName(ingredientJson, name) {
 	var toRet = [];
 	$.each( ingredientJson, function( catName, ingArr ) {
-		if(catName!="_id")
+		if(catName!="_id" && catName!="name")
 		{
 			$.each(ingArr, function( index, ingredientObj ) {
 			  	if((ingredientObj.name.toLowerCase()).indexOf(name.toLowerCase())>-1) {
@@ -174,7 +174,7 @@ function getIngredientsByName(ingredientJson, name) {
 function getIngredientUnitsByName(ingredientJson, name) {
 	var toRet = null;
 	$.each( ingredientJson, function( categoryName, ingredientsArr ) {
-		if(categoryName!="_id")
+		if(categoryName!="_id" && categoryName!="name")
 		{
 			$.each(ingredientsArr, function( index, ingredientObj ) {
 				  if((ingredientObj.name).toString() == name) {
@@ -204,7 +204,7 @@ function getIngredientUnitsByName(ingredientJson, name) {
 function getNextId(ingredientJson) {
 	var highestId = 0;
 	$.each( ingredientJson, function( catName, ingArr ) {
-		if(catName!="_id")
+		if(catName!="_id" && catName!="name")
 		{
 			$.each(ingArr, function( index, ingredientObj ) {
 			  	if(ingredientObj.id > highestId)

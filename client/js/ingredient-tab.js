@@ -167,11 +167,13 @@ IngredientTab.prototype.registerEvents = function() {
 		});
 
 	    $(".cls_saveIngredient").click(function() {
-	    	var ingJson = {
-	    		id: getNextId(_this.ingredientJson),
-		        name: $("#id_tamilName").val(),
-		        unit: $("#id_ingredientUnit").val(),
-		        category: $("#id_ingredientCategory").val()
+	    	var selCat = $("#id_ingredientCategory").val();
+	    	var ingJson = {};
+	    	ingJson[selCat] =
+    		{
+	    		"id": getNextId(_this.ingredientJson),
+		        "name": $("#id_tamilName").val(),
+		        "unit": $("#id_ingredientUnit").val()
 		    };
 	        $.ajax({
 	        	url: "/createIngredient",
@@ -179,11 +181,13 @@ IngredientTab.prototype.registerEvents = function() {
             	contentType: 'application/json',
             	data: JSON.stringify(ingJson),
 	        	success: function(result){
-					alert(result);
+	        		$("#successPopup").find('.modal-title').text(result);
+	        		$("#successPopup").modal('show');
 					$('#ingredientModal .close').click();
 				},
 				error: function(){
-				    alert('Failed to save Ingredient.. Please Try again later..');
+				    $("#errorPopup").find('.modal-title').text('Failed to save Ingredient. Please Try again later.');
+	        		$("#errorPopup").modal('show');
 				}
 			});
 	    });
