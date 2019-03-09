@@ -62,15 +62,15 @@ IngredientTab.prototype.renderIngredientsByCategory = function(ingCat, categoryJ
 	var renderHtml = [];
 	if(categoryJson){
 		renderHtml += "<div class='list-group col-11'>"
-						+ "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
+						+ "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-center h5 text-white font-weight-bold'>"
 							+ ingCat;
 
 					for(var j=0; j<categoryJson.length ; j++){
 						renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ingredient_"+ categoryJson[j].id +"'>"
 										+ "<label class='col-4'>" + categoryJson[j].name +"</label>"
 										+ "<label class='col-4'>" + categoryJson[j].unit +"</label>"
-										+ "<label class='btn btn-info btn-md mr-3 mb-0 col-1 text-center cls_editIngredient' idx='" + categoryJson[j].id +"' data-toggle='modal' data-target='#ingredientModal'>Edit</label>"
-										+ "<label class='btn btn-secondary btn-md mr-3 mb-0 col-1 text-center cls_deleteIngredient' idx='" + categoryJson[j].id +"' name='" + categoryJson[j].name +"'>Delete</label>"
+										+ "<label class='btn btn-primary btn-md mr-4 mb-0 col-1 text-center cls_editIngredient' idx='" + categoryJson[j].id +"' data-toggle='modal' data-target='#ingredientModal'>Edit</label>"
+										+ "<label class='btn btn-secondary btn-md mb-0 col-1 text-center cls_deleteIngredient' idx='" + categoryJson[j].id +"' name='" + categoryJson[j].name +"'>Delete</label>"
 									+ "</a>";
 					}
 		renderHtml += "</a>"
@@ -85,7 +85,7 @@ IngredientTab.prototype.renderSearchResults = function(searchResIngredients) {
 	var renderHtml = [];
 	if(searchResIngredients){
 		renderHtml += "<div class='list-group col-11'>"
-						+ "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
+						+ "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-center h5 text-white font-weight-bold'>"
 							+ "Search Results";
 
 				if(searchResIngredients.length>0)
@@ -93,9 +93,10 @@ IngredientTab.prototype.renderSearchResults = function(searchResIngredients) {
 					for(var j=0; j<searchResIngredients.length ; j++){
 						renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ingredient_"+ searchResIngredients[j].id +"'>"
 										+ "<label class='col-4'>" + searchResIngredients[j].name +"</label>"
-										+ "<label class='col-4'>" + searchResIngredients[j].unit +"</label>"
-										+ "<label class='btn btn-info btn-md mr-3 mb-0 col-1 text-center cls_editIngredient' idx='" + searchResIngredients[j].id +"' data-toggle='modal' data-target='#ingredientModal'>Edit</label>"
-										+ "<label class='btn btn-secondary btn-md mr-3 mb-0 col-1 text-center cls_deleteIngredient' idx='" + searchResIngredients[j].id +"' name='" + searchResIngredients[j].name +"'>Delete</label>"
+										+ "<label class='col-2'>" + searchResIngredients[j].unit +"</label>"
+										+ "<label class='col-2'>" + searchResIngredients[j].category +"</label>"
+										+ "<label class='btn btn-primary btn-md mr-4 mb-0 col-1 text-center cls_editIngredient' idx='" + searchResIngredients[j].id +"' data-toggle='modal' data-target='#ingredientModal'>Edit</label>"
+										+ "<label class='btn btn-secondary btn-md mb-0 col-1 text-center cls_deleteIngredient' idx='" + searchResIngredients[j].id +"' name='" + searchResIngredients[j].name +"'>Delete</label>"
 									+ "</a>";
 					}
 				}
@@ -147,6 +148,7 @@ IngredientTab.prototype.registerEvents = function() {
 
 	    $("#id_selectIngredientCategory").change(function() {
 	    	_this.renderIngredients($("#id_selectIngredientCategory").val());
+	    	$("#id_searchIngredientCategory").val("");
 		});
 
 		$("#id_searchIngredientCategory").keyup(function() {
@@ -160,6 +162,7 @@ IngredientTab.prototype.registerEvents = function() {
 		    else
 		    {
 		    	_this.renderIngredients("All");
+		    	$("#id_selectIngredientCategory").val("All");
 		    }
 		});
 
@@ -185,31 +188,32 @@ IngredientTab.prototype.registerEvents = function() {
 			});
 	    });
 		
-		$(".cls_editIngredient, .cls_createIngredient").click(function() {
-			   if($(this).hasClass("cls_createIngredient")) {
-				   $(".modal-title", modal).text("Create Ingredient");
-		    	   $(".cls_ingredientId", modal).val("");
-		    	   $(".cls_ingredientTamilName", modal).val("");
-			   }
-			   else {
-				   var idx = $(this).attr("idx");
-			       var curIngredientObj = getIngredientById(idx);
-			       if(curIngredientObj && !$.isEmptyObject(curIngredientObj))
-			       {
-			    	   var id = curIngredientObj.id;
-			    	   var name = curIngredientObj.name;
-			    	   var categoryName = curIngredientObj.categoryName;
-			    	   var unit = curIngredientObj.unit;
-			    	   var modal = $("#ingredientModal");
-			    	   $(".modal-title", modal).text("Edit Ingredient");
-			    	   $(".cls_ingredientId", modal).val(id);
-			    	   $(".cls_ingredientTamilName", modal).val(name);
-			    	   $(".cls_ingredientCategory", modal).val(categoryName);
-			    	   $(".cls_ingredientUnit", modal).val(unit);
-			       }
-			   }
-				   
-		    });
+		$(".cls_createIngredient").click(function() {
+			var modal = $("#ingredientModal");
+		    $(".modal-title", modal).text("Create Ingredient");
+	    	$(".cls_ingredientId", modal).val("");
+	    	$(".cls_ingredientTamilName", modal).val("");
+	    });
+
+		$(document).on('click', '.cls_editIngredient', function(){
+			var idx = $(this).attr("idx");
+		       var curIngredientObj = getIngredientById(_this.ingredientJson, idx);
+		       if(curIngredientObj && !$.isEmptyObject(curIngredientObj))
+		       {
+		    	   var id = curIngredientObj.id;
+		    	   var name = curIngredientObj.name;
+		    	   var categoryName = curIngredientObj.categoryName;
+		    	   var unit = curIngredientObj.unit;
+		    	   var modal = $("#ingredientModal");
+		    	   $(".modal-title", modal).text("Edit Ingredient");
+		    	   $(".cls_ingredientId", modal).val(id);
+		    	   $(".cls_ingredientTamilName", modal).val(name);
+		    	   $(".cls_ingredientCategory", modal).val(categoryName);
+		    	   $(".cls_ingredientUnit", modal).val(unit);
+		       }
+		});
+	
+
 	});
 }
 

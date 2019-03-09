@@ -136,14 +136,17 @@ function getIngredientNamesByCategory(ingredientJson, categoryName)
 function getIngredientById(ingredientJson, id) {
 	var toRet = null;
 	$.each( ingredientJson, function( categoryName, ingredientsArr ) {
-		$.each(ingredientsArr, function( index, ingredientObj ) {
-			  if((ingredientObj.id).toString() == id) {
-				  var tempObj = ingredientObj;
-				  tempObj.categoryName = categoryName;
-				  toRet = tempObj;
-				  return false;
-		      }
-		});
+		if(categoryName!="_id")
+		{
+			$.each(ingredientsArr, function( index, ingredientObj ) {
+				  if((ingredientObj.id).toString() == id) {
+					  var tempObj = ingredientObj;
+					  tempObj.categoryName = categoryName;
+					  toRet = tempObj;
+					  return false;
+			      }
+			});
+		}
 		if(toRet != null) {
 			return false;
 		}
@@ -159,6 +162,7 @@ function getIngredientsByName(ingredientJson, name) {
 		{
 			$.each(ingArr, function( index, ingredientObj ) {
 			  	if((ingredientObj.name.toLowerCase()).indexOf(name.toLowerCase())>-1) {
+			  		ingredientObj.category = catName;
 				  	toRet.push(ingredientObj);
 		      	}
 			});
@@ -170,22 +174,25 @@ function getIngredientsByName(ingredientJson, name) {
 function getIngredientUnitsByName(ingredientJson, name) {
 	var toRet = null;
 	$.each( ingredientJson, function( categoryName, ingredientsArr ) {
-		$.each(ingredientsArr, function( index, ingredientObj ) {
-			  if((ingredientObj.name).toString() == name) {
-				  var tempArr = [];
-				  if(ingredientObj.unit == "gram") {
-					  tempArr = ["gram", "kg"]
-				  }
-				  else if(ingredientObj.unit == "ml") {
-					  tempArr = ["ml", "ltr"]
-				  }
-				  else {
-					  tempArr.push(ingredientObj.unit);
-				  }
-				  toRet = tempArr;
-				  return false;
-		      }
-		});
+		if(categoryName!="_id")
+		{
+			$.each(ingredientsArr, function( index, ingredientObj ) {
+				  if((ingredientObj.name).toString() == name) {
+					  var tempArr = [];
+					  if(ingredientObj.unit == "gram") {
+						  tempArr = ["gram", "kg"]
+					  }
+					  else if(ingredientObj.unit == "ml") {
+						  tempArr = ["ml", "ltr"]
+					  }
+					  else {
+						  tempArr.push(ingredientObj.unit);
+					  }
+					  toRet = tempArr;
+					  return false;
+			      }
+			});
+		}
 		if(toRet != null) {
 			return false;
 		}
