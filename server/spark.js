@@ -15,6 +15,10 @@ router.post("/createIngredient", function(req, res){
 	mongoOpn1.mongoOpns(req, res, "Ingredients", "insert", req.body);
 });
 
+router.post("/editIngredient", function(req, res){  
+  mongoOpn1.mongoOpns(req, res, "Ingredients", "update", req.body);
+});
+
 router.get("/getIngredients", function(req, res){
   mongoOpn1.mongoOpns(req, res, "Ingredients", "fetch", req.body);
 });

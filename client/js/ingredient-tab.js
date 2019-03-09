@@ -8,7 +8,7 @@ IngredientTab.prototype.init = function() {
 };
 IngredientTab.prototype.render = function() {
 	var _this = this;
-	addOptionsToSelect(ingredientCategories, "id_selectIngredientCategory")
+	addOptionsToSelect(ingredientFilters, "id_selectIngredientCategory")
 	addOptionsToSelect(ingredientCategories, "id_ingredientCategory");
 	addOptionsToSelect(ingredientUnits, "id_ingredientUnit");
 	_this.ingredientJson = {};
@@ -214,6 +214,7 @@ IngredientTab.prototype.registerEvents = function() {
 		    	   $(".cls_ingredientTamilName", modal).val(name);
 		    	   $(".cls_ingredientCategory", modal).val(categoryName);
 		    	   $(".cls_ingredientUnit", modal).val(unit);
+		    	   $(".cls_ingredientCategory", modal).prop('disabled', true);
 		       }
 		});
 	
