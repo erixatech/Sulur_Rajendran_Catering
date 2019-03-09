@@ -200,3 +200,19 @@ function getIngredientUnitsByName(ingredientJson, name) {
 	});
 	return toRet;
 }
+
+function getNextId(ingredientJson) {
+	var highestId = 0;
+	$.each( ingredientJson, function( catName, ingArr ) {
+		if(catName!="_id")
+		{
+			$.each(ingArr, function( index, ingredientObj ) {
+			  	if(ingredientObj.id > highestId)
+			  	{
+			  		highestId = ingredientObj.id;
+			  	}
+			});
+		}
+	});
+	return highestId+1;
+}

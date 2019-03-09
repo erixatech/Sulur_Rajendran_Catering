@@ -162,13 +162,13 @@ IngredientTab.prototype.registerEvents = function() {
 		    else
 		    {
 		    	_this.renderIngredients("All");
-		    	$("#id_selectIngredientCategory").val("All");
 		    }
+		    $("#id_selectIngredientCategory").val("All");
 		});
 
 	    $(".cls_saveIngredient").click(function() {
 	    	var ingJson = {
-	    		id: 1,
+	    		id: getNextId(_this.ingredientJson),
 		        name: $("#id_tamilName").val(),
 		        unit: $("#id_ingredientUnit").val(),
 		        category: $("#id_ingredientCategory").val()
