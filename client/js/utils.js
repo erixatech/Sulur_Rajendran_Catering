@@ -136,14 +136,17 @@ function getIngredientNamesByCategory(ingredientJson, categoryName)
 function getIngredientById(ingredientJson, id) {
 	var toRet = null;
 	$.each( ingredientJson, function( categoryName, ingredientsArr ) {
-		$.each(ingredientsArr, function( index, ingredientObj ) {
-			  if((ingredientObj.id).toString() == id) {
-				  var tempObj = ingredientObj;
-				  tempObj.categoryName = categoryName;
-				  toRet = tempObj;
-				  return false;
-		      }
-		});
+		if(categoryName!="_id" && categoryName!="name")
+		{
+			$.each(ingredientsArr, function( index, ingredientObj ) {
+				  if((ingredientObj.id).toString() == id) {
+					  var tempObj = ingredientObj;
+					  tempObj.categoryName = categoryName;
+					  toRet = tempObj;
+					  return false;
+			      }
+			});
+		}
 		if(toRet != null) {
 			return false;
 		}
@@ -155,10 +158,11 @@ function getIngredientById(ingredientJson, id) {
 function getIngredientsByName(ingredientJson, name) {
 	var toRet = [];
 	$.each( ingredientJson, function( catName, ingArr ) {
-		if(catName!="_id")
+		if(catName!="_id" && catName!="name")
 		{
 			$.each(ingArr, function( index, ingredientObj ) {
 			  	if((ingredientObj.name.toLowerCase()).indexOf(name.toLowerCase())>-1) {
+			  		ingredientObj.category = catName;
 				  	toRet.push(ingredientObj);
 		      	}
 			});
@@ -170,26 +174,45 @@ function getIngredientsByName(ingredientJson, name) {
 function getIngredientUnitsByName(ingredientJson, name) {
 	var toRet = null;
 	$.each( ingredientJson, function( categoryName, ingredientsArr ) {
-		$.each(ingredientsArr, function( index, ingredientObj ) {
-			  if((ingredientObj.name).toString() == name) {
-				  var tempArr = [];
-				  if(ingredientObj.unit == "gram") {
-					  tempArr = ["gram", "kg"]
-				  }
-				  else if(ingredientObj.unit == "ml") {
-					  tempArr = ["ml", "ltr"]
-				  }
-				  else {
-					  tempArr.push(ingredientObj.unit);
-				  }
-				  toRet = tempArr;
-				  return false;
-		      }
-		});
+		if(categoryName!="_id" && categoryName!="name")
+		{
+			$.each(ingredientsArr, function( index, ingredientObj ) {
+				  if((ingredientObj.name).toString() == name) {
+					  var tempArr = [];
+					  if(ingredientObj.unit == "gram") {
+						  tempArr = ["gram", "kg"]
+					  }
+					  else if(ingredientObj.unit == "ml") {
+						  tempArr = ["ml", "ltr"]
+					  }
+					  else {
+						  tempArr.push(ingredientObj.unit);
+					  }
+					  toRet = tempArr;
+					  return false;
+			      }
+			});
+		}
 		if(toRet != null) {
 			return false;
 		}
 			
 	});
 	return toRet;
+}
+
+function getNextId(ingredientJson) {
+	var highestId = 0;
+	$.each( ingredientJson, function( catName, ingArr ) {
+		if(catName!="_id" && catName!="name")
+		{
+			$.each(ingArr, function( index, ingredientObj ) {
+			  	if(ingredientObj.id > highestId)
+			  	{
+			  		highestId = ingredientObj.id;
+			  	}
+			});
+		}
+	});
+	return highestId+1;
 }

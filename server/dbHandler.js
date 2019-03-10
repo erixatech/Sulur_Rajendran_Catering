@@ -12,7 +12,8 @@ function mongoOpns(req, res, collectionName, operation, dataJson, query)
 	  switch(operation)
 	  {
 		  case "insert":
-		  	    dbo.collection(collectionName).insertOne(dataJson, function(err, resp) {
+		  	    //dbo.collection(collectionName).insertOne(dataJson, function(err, resp) {
+		  	    dbo.collection(collectionName).update({"name": "Ingredients"},{ "$push" : dataJson}, function(err, resp) {
 					if (err) res.send("Error In Insert"+err);
 					db.close();
 					res.send("Inserted Successfully");
@@ -20,7 +21,8 @@ function mongoOpns(req, res, collectionName, operation, dataJson, query)
 			  break;
 		  case "update":
 			  var newvalues = { $set: dataJson };
-			  dbo.collection(collectionName).updateOne(query, newvalues, function(err, res) {
+			  //dbo.collection(collectionName).updateOne(query, newvalues, function(err, res) {
+			  	dbo.collection(collectionName).update({"name": "Ingredients"},newvalues, function(err, resp) {
 				if (err) res.send("Error In Update"+err);
 				db.close();
 				res.send("Updated Successfully");
