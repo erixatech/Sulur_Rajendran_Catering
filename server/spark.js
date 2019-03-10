@@ -12,11 +12,15 @@ app.use(express.static(path.join(__dirname, '../client')));
 app.use(bodyParser.json()); // for parsing application/json
 
 router.post("/createIngredient", function(req, res){  
-	mongoOpn1.mongoOpns(req, res, "Ingredients", "insert", req.body);
+	mongoOpn1.mongoOpns(req, res, "Ingredients", "insertIngredients", req.body);
 });
 
 router.post("/editIngredient", function(req, res){  
-  mongoOpn1.mongoOpns(req, res, "Ingredients", "update", req.body);
+  mongoOpn1.mongoOpns(req, res, "Ingredients", "updateIngredients", req.body);
+});
+
+router.post("/deleteIngredient", function(req, res){  
+  mongoOpn1.mongoOpns(req, res, "Ingredients", "deleteIngredients", req.body);
 });
 
 router.get("/getIngredients", function(req, res){

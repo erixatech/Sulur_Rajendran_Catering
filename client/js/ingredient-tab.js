@@ -168,28 +168,94 @@ IngredientTab.prototype.registerEvents = function() {
 
 	    $(".cls_saveIngredient").click(function() {
 	    	var selCat = $("#id_ingredientCategory").val();
-	    	var ingJson = {};
-	    	ingJson[selCat] =
-    		{
-	    		"id": getNextId(_this.ingredientJson),
-		        "name": $("#id_tamilName").val(),
-		        "unit": $("#id_ingredientUnit").val()
-		    };
-	        $.ajax({
-	        	url: "/createIngredient",
-            	type: "post",
-            	contentType: 'application/json',
-            	data: JSON.stringify(ingJson),
-	        	success: function(result){
-	        		$("#successPopup").find('.modal-title').text(result);
-	        		$("#successPopup").modal('show');
-					$('#ingredientModal .close').click();
-				},
-				error: function(){
-				    $("#errorPopup").find('.modal-title').text('Failed to save Ingredient. Please Try again later.');
-	        		$("#errorPopup").modal('show');
-				}
-			});
+	    	var dialogName = $(".modal-title", $("#ingredientModal")).text();
+	    	
+	    	if(dialogName.indexOf("Edit")>-1)	//Edit Scenario
+	    	{
+	    		var ingJson = {};
+	    		/*ingJson =
+	    		{
+		    		"id": $("#ingredientModal").data("idToEdit"),
+			        "name": $("#id_tamilName").val(),
+			        "unit": $("#id_ingredientUnit").val()
+			    };*/
+			    var reqKey = selCat+"."+getIndexForId(_this.ingredientJson, selCat, $("#ingredientModal").data("idToEdit"));
+			    if(reqKey != -1)
+			    {
+				    ingJson[reqKey] =
+		    		{
+			    		"id": $("#ingredientModal").data("idToEdit"),
+				        "name": $("#id_tamilName").val(),
+				        "unit": $("#id_ingredientUnit").val()
+				    };
+			        $.ajax({
+			        	url: "/editIngredient",
+		            	type: "post",
+		            	contentType: 'application/json',
+		            	data: JSON.stringify(ingJson),
+			        	success: function(result){
+			        		if(result.nModified && result.nModified>0)
+			        		{
+								$("#successPopup").find('.modal-title').text("Ingredient Updated Successfully");
+				        		$("#successPopup").modal('show');
+								//$('#ingredientModal .close').click();
+			        		}
+			        		else
+			        		{
+			        			$("#errorPopup").find('.modal-title').text('Failed to modify Ingredient. Please Try again later.');
+			        			$("#errorPopup").modal('show');
+			        		}
+			        		$('#ingredientModal .close').click();
+						},
+						error: function(){
+						    $("#errorPopup").find('.modal-title').text('Failed to edit Ingredient. Please Try again later.');
+			        		$("#errorPopup").modal('show');
+			        		$('#ingredientModal .close').click();
+						}
+					});
+			    }
+			    else
+			    {
+			    	$("#errorPopup").find('.modal-title').text('Failed to edit Ingredient. Please Try again later.');
+			        $("#errorPopup").modal('show');
+			        $('#ingredientModal .close').click();
+			    }
+	    	}
+	    	else	//Create Scenario
+	    	{
+	    		var ingJson = {};
+	    		ingJson[selCat] =
+	    		{
+		    		"id": getNextId(_this.ingredientJson),
+			        "name": $("#id_tamilName").val(),
+			        "unit": $("#id_ingredientUnit").val()
+			    };
+		        $.ajax({
+		        	url: "/createIngredient",
+	            	type: "post",
+	            	contentType: 'application/json',
+	            	data: JSON.stringify(ingJson),
+		        	success: function(result){
+		        		if(result.nModified && result.nModified>0)
+		        		{
+							$("#successPopup").find('.modal-title').text("Ingredient Created Successfully");
+		        			$("#successPopup").modal('show');
+							//$('#ingredientModal .close').click();
+			        	}
+		        		else
+		        		{
+			        		$("#errorPopup").find('.modal-title').text('Failed to Create New Ingredient. Please Try again later.');
+		        			$("#errorPopup").modal('show');
+			        	}
+		        		$('#ingredientModal .close').click();
+					},
+					error: function(){
+					    $("#errorPopup").find('.modal-title').text('Failed to Create Ingredient. Please Try again later.');
+		        		$("#errorPopup").modal('show');
+		        		$('#ingredientModal .close').click();
+					}
+				});
+	    	}
 	    });
 		
 		$(".cls_createIngredient").click(function() {
@@ -199,25 +265,92 @@ IngredientTab.prototype.registerEvents = function() {
 	    	$(".cls_ingredientTamilName", modal).val("");
 	    });
 
+	    $(".cls_successPopupClose").click(function() {
+			location.reload();
+	    });
+
 		$(document).on('click', '.cls_editIngredient', function(){
 			var idx = $(this).attr("idx");
-		       var curIngredientObj = getIngredientById(_this.ingredientJson, idx);
-		       if(curIngredientObj && !$.isEmptyObject(curIngredientObj))
-		       {
-		    	   var id = curIngredientObj.id;
-		    	   var name = curIngredientObj.name;
-		    	   var categoryName = curIngredientObj.categoryName;
-		    	   var unit = curIngredientObj.unit;
-		    	   var modal = $("#ingredientModal");
-		    	   $(".modal-title", modal).text("Edit Ingredient");
-		    	   $(".cls_ingredientId", modal).val(id);
-		    	   $(".cls_ingredientTamilName", modal).val(name);
-		    	   $(".cls_ingredientCategory", modal).val(categoryName);
-		    	   $(".cls_ingredientUnit", modal).val(unit);
-		    	   $(".cls_ingredientCategory", modal).prop('disabled', true);
-		       }
+			var curIngredientObj = getIngredientById(_this.ingredientJson, idx);
+			if(curIngredientObj && !$.isEmptyObject(curIngredientObj))
+			{
+				var id = curIngredientObj.id;
+				var name = curIngredientObj.name;
+				var categoryName = curIngredientObj.categoryName;
+				var unit = curIngredientObj.unit;
+				var modal = $("#ingredientModal");
+				modal.data("idToEdit",idx);
+				$(".modal-title", modal).text("Edit Ingredient");
+				$(".cls_ingredientId", modal).val(id);
+				$(".cls_ingredientTamilName", modal).val(name);
+				$(".cls_ingredientCategory", modal).val(categoryName);
+				$(".cls_ingredientUnit", modal).val(unit);
+				$(".cls_ingredientCategory", modal).prop('disabled', true);
+			}
+		});
+
+		$(document).on('click', '.cls_deleteIngredient', function(){
+			var idx = $(this).attr("idx");
+	        var curIngredientObj = getIngredientById(_this.ingredientJson, idx);
+	        if(curIngredientObj && !$.isEmptyObject(curIngredientObj))
+	        {
+	    	    var id = curIngredientObj.id;
+	    	    var name = curIngredientObj.name;
+	    	    var categoryName = curIngredientObj.categoryName;
+	    	    //var unit = curIngredientObj.unit;
+	    	    $("#confirmationPopup").find('.modal-title').text("Are you sure to delete this Ingredient ("+name+")?");
+    			$("#confirmationPopup").modal('show');
+    			$("#confirmationPopup").data("idToDelete", id);
+    			$("#confirmationPopup").data("catForId", categoryName);
+    			$("#confirmationPopup").data("module", "Ingredient");
+	        }
 		});
 	
+		$(".cls_confirmPopupDelete").click(function() {
+
+			if($("#confirmationPopup").data("module") == "Ingredient")
+			{
+				var ingJson = {};
+ 				var reqKey = $("#confirmationPopup").data("catForId");
+			    if(reqKey != -1)
+			    {
+				    ingJson[reqKey] =
+		    		{
+			    		"id": $("#confirmationPopup").data("idToDelete")
+				    };
+			        $.ajax({
+			        	url: "/deleteIngredient",
+		            	type: "post",
+		            	contentType: 'application/json',
+		            	data: JSON.stringify(ingJson),
+			        	success: function(result){
+			        		if(result.nModified && result.nModified>0)
+			        		{
+								$("#successPopup").find('.modal-title').text("Ingredient Deleted Successfully");
+				        		$("#successPopup").modal('show');
+			        		}
+			        		else
+			        		{
+			        			$("#errorPopup").find('.modal-title').text('Failed to delete Ingredient at the moment. Please Try again later.');
+			        			$("#errorPopup").modal('show');
+			        		}
+			        		$("#confirmationPopup").modal('hide');
+						},
+						error: function(){
+						    $("#errorPopup").find('.modal-title').text('Failed to delete Ingredient. Please Try again later.');
+			        		$("#errorPopup").modal('show');
+			        		$("#confirmationPopup").modal('hide');
+						}
+					});
+			    }
+			    else
+			    {
+			    	$("#errorPopup").find('.modal-title').text('Failed to delete Ingredient. Please Try again later.');
+			        $("#errorPopup").modal('show');
+			        $("#confirmationPopup").modal('hide');
+			    }
+			}
+	    });
 
 	});
 }

@@ -201,6 +201,28 @@ function getIngredientUnitsByName(ingredientJson, name) {
 	return toRet;
 }
 
+function getIndexForId(ingredientJson, category, id) {
+	var indexToRet = 0;
+	var toRet = -1;
+	$.each( ingredientJson, function( catName, ingArr ) {
+		if(catName == category)
+		{
+			$.each(ingArr, function( index, ingredientObj ) {
+			  	if(ingredientObj.id == id)
+			  	{
+			  		toRet = indexToRet;
+			  	}
+			  	else
+			  	{
+			  		indexToRet++;
+			  	}
+			});
+		}
+	});
+
+	return toRet;
+}
+
 function getNextId(ingredientJson) {
 	var highestId = 0;
 	$.each( ingredientJson, function( catName, ingArr ) {
