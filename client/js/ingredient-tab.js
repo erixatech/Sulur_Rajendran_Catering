@@ -152,7 +152,7 @@ IngredientTab.prototype.registerEvents = function() {
 		});
 
 		$("#id_searchIngredientCategory").keyup(function() {
-	    	var searchKeyword = $(this).val();
+	    	var searchKeyword = $(this).val().trim();
 	    	if(searchKeyword.length>0)
 	    	{
 		    	$(".cls_ingredientsList").html('');
