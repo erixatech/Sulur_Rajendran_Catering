@@ -266,7 +266,10 @@ IngredientTab.prototype.registerEvents = function() {
 	    });
 
 	    $(".cls_successPopupClose").click(function() {
-			location.reload();
+			if($("#id_ingredient-tab").hasClass("active") == true)
+			{
+				window.location.href = window.location.origin + "?tab=ingredients";
+			}
 	    });
 
 		$(document).on('click', '.cls_editIngredient', function(){

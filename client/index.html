@@ -119,6 +119,7 @@
 								    <input type="text" class="form-control cls_searchIngredientCategory" required="" id="id_searchIngredientCategory" placeholder="Enter Ingredient Name" name="searchIngredientCategory">
 								</div>
 							</div>
+
 							<div id="id_createIngredient" class="text-right col-5 mt-4 pt-2">
 								<a class="btn btn-primary btn-md mr-3 text-white cls_createIngredient" data-toggle="modal" data-target="#ingredientModal">
 						          <i class="fa fa-plus-circle" aria-hidden="true"></i> Create Ingredient
@@ -230,6 +231,14 @@
 	     </div>
      </div>
 
+     <div class="modal fade bd-example-modal-lg loadingguage" data-backdrop="static" data-keyboard="false" tabindex="-1">
+	    <div class="modal-dialog modal-sm">
+	        <div class="modal-content" style="width: 48px">
+	            <span class="fa fa-spinner fa-spin fa-3x"></span>
+	        </div>
+	    </div>
+	</div>
+
 
      <!-- Success Popup -->
      <div id="successPopup" class="modal fade in">
@@ -313,6 +322,23 @@
 			$('#ingredientModal').on('hidden.bs.modal', function () {
 			    $(this).find(".cls_ingredientCategory").prop('disabled', false);
 			});
+
+			var urlParts = getUrlParts(window.location.href);
+			if(urlParts && urlParts.tab)
+			{
+				if(urlParts.tab == "ingredients")
+				{
+					$("#id_ingredient-tab").click();
+				}
+				else if(urlParts.tab == "receipe")
+				{
+					$("#id_recipe-tab").click();
+				}
+				else if(urlParts.tab == "order")
+				{
+					$("#id_order-tab").click();
+				}
+			} 
         });
      </script>
 </html>

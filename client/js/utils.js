@@ -238,3 +238,115 @@ function getNextId(ingredientJson) {
 	});
 	return highestId+1;
 }
+
+function getUrlParts(url){
+	// url contains your data.
+	var qs = url.indexOf("?");
+	    if(qs==-1) return [];
+	    var fr = url.indexOf("#");
+	    var q="";
+	    q = (fr==-1)? url.substr(qs+1) : url.substr(qs+1, fr-qs-1);
+	var parts=q.split("&");
+	var vars={};
+	for(var i=0;i<parts.length; i++){
+	var p = parts[i].split("=");
+	        if(p[1]){
+	vars[decodeURIComponent(p[0])] = decodeURIComponent(p[1]);
+	        }else{
+	            vars[decodeURIComponent(p[0])] = "";
+	        }
+	}
+	// vars contain all the variables in an array.
+	return vars;
+}
+
+function addUrlParam(url, paramNameToAdd, paramValueToAdd){
+// url contains your data.
+	var qs = url.indexOf("?");
+    if(qs==-1) return url+"?"+paramNameToAdd+"="+paramValueToAdd;
+	var toReturl = url.split("?")[0];
+	if(url.split("?")[1].length==0) return url+paramNameToAdd+"="+paramValueToAdd;
+    var fr = url.indexOf("#");
+    var q="";
+    q = (fr==-1)? url.substr(qs+1) : url.substr(qs+1, fr-qs-1);
+	var parts=q.split("&");
+	var vars={};
+	var replaced = false;
+	for(var i=0;i<parts.length; i++){
+	var p = parts[i].split("=");
+        if(p[1]){
+			if(paramNameToAdd == decodeURIComponent(p[0]))
+			{
+				vars[decodeURIComponent(p[0])] = paramValueToAdd;
+				replaced = true;
+			}
+			else
+			{
+				vars[decodeURIComponent(p[0])] = decodeURIComponent(p[1]);
+			}
+        }
+        else{
+            vars[decodeURIComponent(p[0])] = "";
+        }
+	}
+	for(var i=0;i<Object.keys(vars).length; i++)
+	{
+		toReturl += ((i==0 ? "?" : "&") + Object.keys(vars)[i] + "=" + vars[Object.keys(vars)[i]]);
+	}
+	if(replaced == false)
+	{
+		toReturl += "&"+paramNameToAdd+"="+paramValueToAdd;
+	}
+	// vars contain all the variables in an array.
+	return toReturl;
+}
+
+function removeUrlParam(url, paramNameToRemove){
+// url contains your data.
+	var qs = url.indexOf("?");
+    if(qs==-1) return url;
+	var toReturl = url.split("?")[0];
+	if(url.split("?")[1].length==0) return url;
+    var fr = url.indexOf("#");
+    var q="";
+    q = (fr==-1)? url.substr(qs+1) : url.substr(qs+1, fr-qs-1);
+	var parts=q.split("&");
+	var vars={};
+	for(var i=0;i<parts.length; i++){
+	var p = parts[i].split("=");
+        if(paramNameToRemove != decodeURIComponent(p[0]))
+		{
+			vars[decodeURIComponent(p[0])] = decodeURIComponent(p[1]);
+		}
+	}
+	for(var i=0;i<Object.keys(vars).length; i++)
+	{
+		toReturl += ((i==0 ? "?" : "&") + Object.keys(vars)[i] + "=" + vars[Object.keys(vars)[i]]);
+	}
+	// vars contain all the variables in an array.
+	return toReturl;
+}
+
+function removeTrailingCharIf(value, ifChar)
+{
+	var toRet = value;
+	if(value && value.length>0)
+	{
+		var trailingChar = value.substring(value.length-1,value.length);
+		if(trailingChar == ifChar)
+		{
+			toRet = value.substring(0,value.length-1);
+		}
+	}
+	return toRet;
+}
+
+function showLoading()
+{
+	$('.loadingguage').modal('show');
+}
+
+function hideLoading()
+{
+	$('.loadingguage').modal('hide');
+}

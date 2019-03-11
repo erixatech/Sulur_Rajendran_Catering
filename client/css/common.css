@@ -1,3 +1,15 @@
 input, select, button, textarea{
 	box-shadow: none !important;
 }
+
+.bd-example-modal-lg .modal-dialog{	/* for loading guage*/
+    display: table;
+    position: relative;
+    margin: 0 auto;
+    top: calc(50% - 24px);
+}
+
+.bd-example-modal-lg .modal-dialog .modal-content{	/* for loading guage*/
+	background-color: transparent;
+	border: none;
+}
