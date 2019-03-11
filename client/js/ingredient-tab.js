@@ -13,15 +13,20 @@ IngredientTab.prototype.render = function() {
 	addOptionsToSelect(ingredientUnits, "id_ingredientUnit");
 	_this.ingredientJson = {};
 
+	showLoading();
 	$.ajax({
     	url: "/getIngredients?category=all",
     	type: "get",
     	success: function(result){
+    		hideLoading();
     		if(result && result.length == 1)
-    		_this.ingredientJson = result[0];
+    		{
+	    		_this.ingredientJson = result[0];
+	    	}
 			_this.renderIngredients("All");
 		},
 		error: function(){
+			hideLoading();
 		    alert('Failed to fetch Ingredients.. Please Try again later..');
 		}
 	});
@@ -182,6 +187,7 @@ IngredientTab.prototype.registerEvents = function() {
 			    var reqKey = selCat+"."+getIndexForId(_this.ingredientJson, selCat, $("#ingredientModal").data("idToEdit"));
 			    if(reqKey != -1)
 			    {
+			    	showLoading();
 				    ingJson[reqKey] =
 		    		{
 			    		"id": $("#ingredientModal").data("idToEdit"),
@@ -194,6 +200,7 @@ IngredientTab.prototype.registerEvents = function() {
 		            	contentType: 'application/json',
 		            	data: JSON.stringify(ingJson),
 			        	success: function(result){
+			        		hideLoading();
 			        		if(result.nModified && result.nModified>0)
 			        		{
 								$("#successPopup").find('.modal-title').text("Ingredient Updated Successfully");
@@ -208,6 +215,7 @@ IngredientTab.prototype.registerEvents = function() {
 			        		$('#ingredientModal .close').click();
 						},
 						error: function(){
+							hideLoading();
 						    $("#errorPopup").find('.modal-title').text('Failed to edit Ingredient. Please Try again later.');
 			        		$("#errorPopup").modal('show');
 			        		$('#ingredientModal .close').click();
@@ -223,6 +231,7 @@ IngredientTab.prototype.registerEvents = function() {
 	    	}
 	    	else	//Create Scenario
 	    	{
+	    		showLoading();
 	    		var ingJson = {};
 	    		ingJson[selCat] =
 	    		{
@@ -236,6 +245,7 @@ IngredientTab.prototype.registerEvents = function() {
 	            	contentType: 'application/json',
 	            	data: JSON.stringify(ingJson),
 		        	success: function(result){
+		        		hideLoading();
 		        		if(result.nModified && result.nModified>0)
 		        		{
 							$("#successPopup").find('.modal-title').text("Ingredient Created Successfully");
@@ -250,6 +260,7 @@ IngredientTab.prototype.registerEvents = function() {
 		        		$('#ingredientModal .close').click();
 					},
 					error: function(){
+						hideLoading();
 					    $("#errorPopup").find('.modal-title').text('Failed to Create Ingredient. Please Try again later.');
 		        		$("#errorPopup").modal('show');
 		        		$('#ingredientModal .close').click();
@@ -317,6 +328,7 @@ IngredientTab.prototype.registerEvents = function() {
  				var reqKey = $("#confirmationPopup").data("catForId");
 			    if(reqKey != -1)
 			    {
+			    	showLoading();
 				    ingJson[reqKey] =
 		    		{
 			    		"id": $("#confirmationPopup").data("idToDelete")
@@ -327,6 +339,7 @@ IngredientTab.prototype.registerEvents = function() {
 		            	contentType: 'application/json',
 		            	data: JSON.stringify(ingJson),
 			        	success: function(result){
+			        		hideLoading();
 			        		if(result.nModified && result.nModified>0)
 			        		{
 								$("#successPopup").find('.modal-title').text("Ingredient Deleted Successfully");
@@ -340,6 +353,7 @@ IngredientTab.prototype.registerEvents = function() {
 			        		$("#confirmationPopup").modal('hide');
 						},
 						error: function(){
+							hideLoading();
 						    $("#errorPopup").find('.modal-title').text('Failed to delete Ingredient. Please Try again later.');
 			        		$("#errorPopup").modal('show');
 			        		$("#confirmationPopup").modal('hide');
