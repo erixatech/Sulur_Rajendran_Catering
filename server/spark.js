@@ -27,6 +27,10 @@ router.get("/getIngredients", function(req, res){
   mongoOpn1.mongoOpns(req, res, "Ingredients", "fetch", req.body);
 });
 
+router.post("/createOrder", function(req, res){  
+	mongoOpn1.mongoOpns(req, res, "orders", "insertOrder", req.body);
+});
+
 app.use("/",router);
 
 app.listen(80,function(){

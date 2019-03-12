@@ -349,7 +349,8 @@ OrderTab.prototype.renderEvents = function() {
 		});
 		
 		$(document).on("click", "#id_listServiceForms", function(){
-			addQueryParamToUrlAndReload('listServiceForms', 'true');
+			showLoading();
+			_this.getOrderDataAndCreate();
 		});
 		
 		$(document).on("click", ".cls_addReceipe_sf", function(){
@@ -378,3 +379,35 @@ OrderTab.prototype.renderEvents = function() {
 	});
 	
 };
+OrderTab.prototype.getOrderDataAndCreate = function(){
+	var _this= this;
+
+	var orderMetaData = {};
+	orderMetaData.clientName = $("#clientName").val();
+	orderMetaData.clientPhone = $("#clientPhone").val();
+	orderMetaData.clientAddress = $("#clientAddress").val();
+	orderMetaData.eventName = $("#eventName").val();
+	orderMetaData.eventDate = $("#eventDate").val();
+	orderMetaData.eventVenue = $("#eventVenue").val();
+	orderMetaData.clientNotes = $("#clientNotes").val();
+
+	$.ajax({
+    	url: "/createOrder",
+    	type: "post",
+    	contentType: 'application/json',
+    	data: JSON.stringify(orderMetaData),
+    	success: function(result){
+    		hideLoading();
+
+			$("#successPopup").find('.modal-title').text("Order Created Successfully");
+    		$("#successPopup").modal('show');
+    		addQueryParamToUrlAndReload('listServiceForms', 'true');
+		},
+		error: function(){
+			hideLoading();
+		    $("#errorPopup").find('.modal-title').text('Failed to create Order. Please Try again later.');
+    		$("#errorPopup").modal('show');
+		}
+	});
+
+}
