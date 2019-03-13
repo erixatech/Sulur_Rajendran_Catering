@@ -41,6 +41,6 @@ router.post("/createOrder", function(req, res){
 
 app.use("/",router);
 
-app.listen(8095,function(){
-  console.log("Live at Port 8095");
+app.listen(80,function(){
+  console.log("Live at Port 80");
 });
