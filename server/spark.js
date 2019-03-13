@@ -23,6 +23,10 @@ router.post("/deleteIngredient", function(req, res){
   mongoOpn1.mongoOpns(req, res, "Ingredients", "deleteIngredients", req.body);
 });
 
+router.delete("/deleteOrder", function(req, res){  
+  mongoOpn1.mongoOpns(req, res, "orders", "delete", req.body);
+});
+
 router.get("/getIngredients", function(req, res){
   mongoOpn1.mongoOpns(req, res, "Ingredients", "fetch", req.body);
 });
@@ -37,6 +41,6 @@ router.post("/createOrder", function(req, res){
 
 app.use("/",router);
 
-app.listen(80,function(){
-  console.log("Live at Port 80");
+app.listen(8095,function(){
+  console.log("Live at Port 8095");
 });

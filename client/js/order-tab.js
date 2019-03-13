@@ -23,12 +23,11 @@ OrderTab.prototype.render = function(){
 		renderHtml = _this.renderCreateOrder();
 	}
 	else{
-		renderHtml = _this.getOrderListFromDB();
+		_this.getOrderListFromDB();
 	}
 	$("#id_orderContent_tab").append(renderHtml);
 };
 OrderTab.prototype.getOrderListFromDB = function(){
-	alert("Make DB call");
 	var _this = this;
 	$.ajax({
     	url: "/getOrders",
@@ -69,7 +68,7 @@ OrderTab.prototype.renderOrderList = function(orderJson){
 						  	+ "</div>"
 						  	+ "<div class='card-footer text-center bg-light border-secondary row p-0'>"
 						  		+ "<label class='col-6 border-right border-secondary m-0 p-2' style='cursor:pointer'>Complete</label>"
-						  		+ "<label class='col-6 m-0 p-2' style='cursor:pointer'>Delete</label>"
+						  		+ "<label class='col-6 m-0 p-2 cls_deleteOrder'  data-idx="+orderJson[i].orderId+" data-name='"+orderJson[i].eventName+"' style='cursor:pointer'>Delete</label>"
 						  	+ "</div>"
 						+ "</div>";
 		if(i%2 != 0){
@@ -353,58 +352,45 @@ OrderTab.prototype.renderEvents = function() {
 			$(".serviceFormDetails").removeClass("d-none");
 		});
 
-		$(document).on('click', '.cls_deleteReceipe', function(){
-			/*var idx = $(this).attr("idx");
-	        var curReceipeObj = getIngredientById(_this.ingredientJson, idx);
-	        if(curIngredientObj && !$.isEmptyObject(curReceipeObj))
+		$(document).on('click', '.cls_deleteOrder', function(event){
+			event.stopPropagation();
+
+			var idx = $(this).data("idx");
+			var orderName = $(this).data("name");
+	        if(idx !== undefined)
 	        {
-	    	    var id = curIngredientObj.id;
-	    	    var name = curIngredientObj.name;
-	    	    var categoryName = curIngredientObj.categoryName;
-	    	    //var unit = curIngredientObj.unit;
-	    	    $("#confirmationPopup").find('.modal-title').text("Are you sure to delete this Ingredient ("+name+")?");
+	    	    $("#confirmationPopup").find('.modal-title').text("Are you sure to delete this Order ("+orderName+")?");
     			$("#confirmationPopup").modal('show');
-    			$("#confirmationPopup").data("idToDelete", id);
-    			$("#confirmationPopup").data("catForId", categoryName);
-    			$("#confirmationPopup").data("module", "Ingredient");
-	        }*/
+    			$("#confirmationPopup").data("idToDelete", idx);
+    			$("#confirmationPopup").data("module", "Order");
+	        }
 		});
 	
 		$(".cls_confirmPopupDelete").click(function() {
-/*
-			if($("#confirmationPopup").data("module") == "Ingredient")
+
+			if($("#confirmationPopup").data("module") == "Order")
 			{
-				var ingJson = {};
- 				var reqKey = $("#confirmationPopup").data("catForId");
-			    if(reqKey != -1)
+ 				var orderJson = {};
+ 				orderJson["orderId"] = $("#confirmationPopup").data("idToDelete");
+			    if(orderJson["orderId"] != undefined)
 			    {
 			    	showLoading();
-				    ingJson[reqKey] =
-		    		{
-			    		"id": $("#confirmationPopup").data("idToDelete")
-				    };
 			        $.ajax({
-			        	url: "/deleteIngredient",
-		            	type: "post",
+			        	url: "/deleteOrder",
+		            	type: "delete",
 		            	contentType: 'application/json',
-		            	data: JSON.stringify(ingJson),
+		            	data: JSON.stringify(orderJson),
 			        	success: function(result){
 			        		hideLoading();
-			        		if(result.nModified && result.nModified>0)
-			        		{
-								$("#successPopup").find('.modal-title').text("Ingredient Deleted Successfully");
-				        		$("#successPopup").modal('show');
-			        		}
-			        		else
-			        		{
-			        			$("#errorPopup").find('.modal-title').text('Failed to delete Ingredient at the moment. Please Try again later.');
-			        			$("#errorPopup").modal('show');
-			        		}
+							$("#successPopup").find('.modal-title').text("Order" + result);
+			        		$("#successPopup").modal('show');
 			        		$("#confirmationPopup").modal('hide');
+			        		showLoading();
+			        		location.reload();
 						},
 						error: function(){
 							hideLoading();
-						    $("#errorPopup").find('.modal-title').text('Failed to delete Ingredient. Please Try again later.');
+						    $("#errorPopup").find('.modal-title').text('Failed to delete Order. Please Try again later.');
 			        		$("#errorPopup").modal('show');
 			        		$("#confirmationPopup").modal('hide');
 						}
@@ -417,8 +403,7 @@ OrderTab.prototype.renderEvents = function() {
 			        $("#confirmationPopup").modal('hide');
 			    }
 			}
-	    });*/
-	});
+	    });
 	});
 	
 };
@@ -426,6 +411,7 @@ OrderTab.prototype.getOrderDataAndCreate = function(){
 	var _this= this;
 
 	var orderMetaData = {};
+	orderMetaData.orderId = "order_id"+(new Date()).getTime();
 	orderMetaData.clientName = $("#clientName").val();
 	orderMetaData.clientPhone = $("#clientPhone").val();
 	orderMetaData.clientAddress = $("#clientAddress").val();
