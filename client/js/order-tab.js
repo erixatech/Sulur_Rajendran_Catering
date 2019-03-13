@@ -23,72 +23,48 @@ OrderTab.prototype.render = function(){
 		renderHtml = _this.renderCreateOrder();
 	}
 	else{
-		renderHtml = _this.renderOrderList();
+		renderHtml = _this.getOrderListFromDB();
 	}
 	$("#id_orderContent_tab").append(renderHtml);
 };
-OrderTab.prototype.renderOrderList = function(){
+OrderTab.prototype.getOrderListFromDB = function(){
+	alert("Make DB call");
+	var _this = this;
+	$.ajax({
+    	url: "/getOrders",
+    	type: "get",
+    	success: function(result){
+    		hideLoading();
+    		$("#id_orderContent_tab").append(_this.renderOrderList(result));
+		},
+		error: function(){
+			hideLoading();
+		    alert('Failed to fetch Receipes.. Please Try again later..');
+		}
+	});
+}
+OrderTab.prototype.renderOrderList = function(orderJson){
 	var renderHtml = [];
 
 	$("#id_createOrder").attr('hidden', false);
-	var orderJson = [{
-						"name": "Ganapathy Catering Services",
-						"contactNo": "9876543210",
-						"address": "No.1, KRG Nagar, 3rd st., Ganapathy, Cbe-6",
-						"client": "Isha - Anand Wedding",
-						"dateOfEvent": "31-01-2019 & 01-02-2019",
-						"venue": "Codissia"
-					},
-					{
-						"name": "Ganapathy Catering Services",
-						"contactNo": "9876543210",
-						"address": "No.1, KRG Nagar, 3rd st., Ganapathy, Cbe-6",
-						"client": "Isha - Anand Wedding",
-						"dateOfEvent": "31-01-2019 & 01-02-2019",
-						"venue": "Codissia"
-					},
-					{
-						"name": "Ganapathy Catering Services",
-						"contactNo": "9876543210",
-						"address": "No.1, KRG Nagar, 3rd st., Ganapathy, Cbe-6",
-						"client": "Isha - Anand Wedding",
-						"dateOfEvent": "31-01-2019 & 01-02-2019",
-						"venue": "Codissia"
-					},
-					{
-						"name": "Ganapathy Catering Services",
-						"contactNo": "9876543210",
-						"address": "No.1, KRG Nagar, 3rd st., Ganapathy, Cbe-6",
-						"client": "Isha - Anand Wedding",
-						"dateOfEvent": "31-01-2019 & 01-02-2019",
-						"venue": "Codissia"
-					},
-					{
-						"name": "Ganapathy Catering Services",
-						"contactNo": "9876543210",
-						"address": "No.1, KRG Nagar, 3rd st., Ganapathy, Cbe-6",
-						"client": "Isha - Anand Wedding",
-						"dateOfEvent": "31-01-2019 & 01-02-2019",
-						"venue": "Codissia"
-					}
-					]
+
 	for(var i=0; i< orderJson.length; i++){
 		if(i%2 == 0){
 			renderHtml += "<div class='row'>"
 		}
 		renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_orderDetails' style='cursor:pointer'>"
-							+ "<h6 class='card-header text-success bg-transparent border-secondary text-center cls_orderName'>"+ orderJson[i].name +"</h6>"
+							+ "<h6 class='card-header text-success bg-transparent border-secondary text-center cls_orderName'>"+ orderJson[i].clientName +"</h6>"
 							+ "<div class='card-body text-secondary font-weight-bold'>"
 						 		+ "<div class='row'>"
-						   			+ "<div class='card-title cls_eventName col-6'>" + orderJson[i].client +"</div>"
-						    		+ "<div class='card-text cls_eventDate col-6 text-right'>"+ orderJson[i].dateOfEvent +"</div>"
+						   			+ "<div class='card-title cls_eventName col-6'>" + orderJson[i].eventName +"</div>"
+						    		+ "<div class='card-text cls_eventDate col-6 text-right'>"+ orderJson[i].eventDate +"</div>"
 						    	+ "</div>"
 						 	   	+ "<div class='row'>"
-						    		+ "<div class='card-title cls_eventVenue col-6'>"+ orderJson[i].venue +"</div>"
-						    		+ "<div class='card-text cls_contactNumber col-6 text-right'>"+ orderJson[i].contactNo +"</div>"
+						    		+ "<div class='card-title cls_eventVenue col-6'>"+ orderJson[i].eventVenue +"</div>"
+						    		+ "<div class='card-text cls_contactNumber col-6 text-right'>"+ orderJson[i].clientPhone +"</div>"
 						    	+ "</div>"
 						    	+ "<div class='row'>"
-						   			+ "<div class='card-title cls_clientAddress col'>"+ orderJson[i].address +"</div>"
+						   			+ "<div class='card-title cls_clientAddress col'>"+ orderJson[i].clientAddress +"</div>"
 						    	+ "</div>"
 						  	+ "</div>"
 						  	+ "<div class='card-footer text-center bg-light border-secondary row p-0'>"
@@ -376,6 +352,73 @@ OrderTab.prototype.renderEvents = function() {
 			$(".cls_orderServiceList").addClass("d-none");
 			$(".serviceFormDetails").removeClass("d-none");
 		});
+
+		$(document).on('click', '.cls_deleteReceipe', function(){
+			/*var idx = $(this).attr("idx");
+	        var curReceipeObj = getIngredientById(_this.ingredientJson, idx);
+	        if(curIngredientObj && !$.isEmptyObject(curReceipeObj))
+	        {
+	    	    var id = curIngredientObj.id;
+	    	    var name = curIngredientObj.name;
+	    	    var categoryName = curIngredientObj.categoryName;
+	    	    //var unit = curIngredientObj.unit;
+	    	    $("#confirmationPopup").find('.modal-title').text("Are you sure to delete this Ingredient ("+name+")?");
+    			$("#confirmationPopup").modal('show');
+    			$("#confirmationPopup").data("idToDelete", id);
+    			$("#confirmationPopup").data("catForId", categoryName);
+    			$("#confirmationPopup").data("module", "Ingredient");
+	        }*/
+		});
+	
+		$(".cls_confirmPopupDelete").click(function() {
+/*
+			if($("#confirmationPopup").data("module") == "Ingredient")
+			{
+				var ingJson = {};
+ 				var reqKey = $("#confirmationPopup").data("catForId");
+			    if(reqKey != -1)
+			    {
+			    	showLoading();
+				    ingJson[reqKey] =
+		    		{
+			    		"id": $("#confirmationPopup").data("idToDelete")
+				    };
+			        $.ajax({
+			        	url: "/deleteIngredient",
+		            	type: "post",
+		            	contentType: 'application/json',
+		            	data: JSON.stringify(ingJson),
+			        	success: function(result){
+			        		hideLoading();
+			        		if(result.nModified && result.nModified>0)
+			        		{
+								$("#successPopup").find('.modal-title').text("Ingredient Deleted Successfully");
+				        		$("#successPopup").modal('show');
+			        		}
+			        		else
+			        		{
+			        			$("#errorPopup").find('.modal-title').text('Failed to delete Ingredient at the moment. Please Try again later.');
+			        			$("#errorPopup").modal('show');
+			        		}
+			        		$("#confirmationPopup").modal('hide');
+						},
+						error: function(){
+							hideLoading();
+						    $("#errorPopup").find('.modal-title').text('Failed to delete Ingredient. Please Try again later.');
+			        		$("#errorPopup").modal('show');
+			        		$("#confirmationPopup").modal('hide');
+						}
+					});
+			    }
+			    else
+			    {
+			    	$("#errorPopup").find('.modal-title').text('Failed to delete Ingredient. Please Try again later.');
+			        $("#errorPopup").modal('show');
+			        $("#confirmationPopup").modal('hide');
+			    }
+			}
+	    });*/
+	});
 	});
 	
 };
