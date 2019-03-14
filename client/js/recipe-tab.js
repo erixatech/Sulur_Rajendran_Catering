@@ -1,6 +1,8 @@
 function RecipeTab(){
 	this.recipeCategory = ["Sweet", "HomeSweet", "Kaaram", "Idly", "Dhosa", "Chattni", "Sambar", "Kulambu", "Gravy",
 		                  "Rotty", "Biriyani", "Pachadi", "Saadam", "Oorugaai", "Baanam", "Snacks"];
+	this.recipeFilters = ["All", "Sweet", "HomeSweet", "Kaaram", "Idly", "Dhosa", "Chattni", "Sambar", "Kulambu", "Gravy",
+		                  "Rotty", "Biriyani", "Pachadi", "Saadam", "Oorugaai", "Baanam", "Snacks"];		                  
 	this.init();
 }
 RecipeTab.prototype.init = function() {
@@ -26,7 +28,7 @@ RecipeTab.prototype.render = function() {
 	});
 
 	var allIngredientNames = getIngredientNamesByCategory(_this.ingredientJson);
-	addOptionsToSelect(_this.recipeCategory, "id_selectRecipeCategory");
+	addOptionsToSelect(_this.recipeFilters, "id_selectRecipeCategory");
 	addOptionsToSelect(_this.recipeCategory, "id_recipeCategory");
 	addOptionsToSelect(ingredientCategories, "id_ingredientCategory_recipe");
 	addOptionsToSelect(allIngredientNames, "id_ingredientName_recipe");
@@ -144,19 +146,20 @@ RecipeTab.prototype.render = function() {
 		catagoryJson = recipeJson[_this.recipeCategory[i]];
 		if(catagoryJson){
 			renderHtml += "<div class='list-group col-11'>"
-							+ "<a class='list-group-item list-group-item-action cls_recipeCateory active text-white font-weight-bold'>"
+							+ "<a class='list-group-item list-group-item-action cls_recipeCateory active text-center h5 text-white font-weight-bold'>"
 								+ _this.recipeCategory[i]
 
 						for(var j=0; j<catagoryJson.length ; j++){
 							renderHtml += "<a class='list-group-item list-group-item-action cls_recipeCont recipe_"+ catagoryJson[j].id +"'>"
-											+ "<label class='col-4'>" + catagoryJson[j].name +"</label>"
-											+ "<label class='col-4'>" + catagoryJson[j].tamilName +"</label>"
-											+ "<label class='btn btn-info btn-md mr-3 mb-0 col-1 text-center cls_editRecipe' idx='" + catagoryJson[j].id +"' data-toggle='modal' data-target='#recipeModal'>Edit</label>"
+											+ "<label class='col-3'>" + catagoryJson[j].name +"</label>"
+											+ "<label class='col-3'>" + catagoryJson[j].tamilName +"</label>"
+											+ "<label class='col-3'>" + catagoryJson[j].itemCategory +"</label>"
+											+ "<label class='btn btn-primary btn-md mr-3 mb-0 col-1 text-center cls_editRecipe' idx='" + catagoryJson[j].id +"' data-toggle='modal' data-target='#recipeModal'>Edit</label>"
 											+ "<label class='btn btn-secondary btn-md mr-3 mb-0 col-1 text-center cls_deleteRecipe' idx='" + catagoryJson[j].id +"' name='" + catagoryJson[j].name +"'>Delete</label>"
 										+ "</a>"
 						}
 			renderHtml += "</a>"
-					   + "</div>"
+					   + "</div><br><br>"
 		}
 	}
 	$("#id_recipeContent_tab").append(renderHtml);

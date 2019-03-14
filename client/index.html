@@ -92,14 +92,20 @@
 					</div>
 				  	<div class="tab-pane fade" id="id_recipeContent_tab" role="tabpanel" aria-labelledby="id_recipe-tab">
 				  		<div class="row">
-				  			<div class="col-6 pb-4">
+				  			<div class="col-3 pb-4">
 						        <div class="form-group">
 								    <label for="selectRecipeCategory">Select Category</label>
 								    <select class="form-control" id="id_selectRecipeCategory" name="selectRecipeCategory"></select>
 								</div>
 							</div>
-					  		<div id="id_createRecipe" class="text-right col-5 mt-4">
-								<a data-toggle="modal" data-target="#recipeModal" class="btn btn-primary btn-md mr-3 text-white">
+							<div class="col-3 pb-4">
+						        <div class="form-group">
+								    <label for="searchIngredientCategory">Search Receipe</label>
+								    <input type="text" class="form-control cls_searchReceipeCategory" required="" id="id_searchReceipeCategory" placeholder="Enter Receipe Name" name="searchReceipeCategory">
+								</div>
+							</div>
+					  		<div id="id_createRecipe" class="text-right col-5 mt-4 pt-2">
+								<a data-toggle="modal" data-target="#recipeModal" class="btn btn-primary btn-md mr-3 text-white cls_createReceipe">
 						          <i class="fa fa-plus-circle" aria-hidden="true"></i> Create Recipe
 						        </a>
 						    </div>
