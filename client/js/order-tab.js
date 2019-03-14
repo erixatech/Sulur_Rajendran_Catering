@@ -3,7 +3,7 @@ function OrderTab(){
 	var isNewOrder = false;
 	var isListServiceForms = false;
 	var dummyRecipies = null;
-	var ordersList = null;
+	this.ordersList = {};
 }
 OrderTab.prototype.init = function(){
 	var _this = this;
