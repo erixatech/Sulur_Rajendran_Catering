@@ -44,33 +44,34 @@ OrderTab.prototype.getOrderListFromDB = function(){
 		}
 	});
 }
-OrderTab.prototype.renderOrderList = function(orderJson){
+OrderTab.prototype.renderOrderList = function(ordersJsonArr){
 	var renderHtml = [];
 
 	$("#id_createOrder").attr('hidden', false);
 
-	for(var i=0; i< orderJson.length; i++){
+	for(var i=0; i< ordersJsonArr.length; i++){
 		if(i%2 == 0){
 			renderHtml += "<div class='row'>"
 		}
-		renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_orderDetails' style='cursor:pointer'>"
-							+ "<h6 class='card-header text-success bg-transparent border-secondary text-center cls_orderName'>"+ orderJson[i].clientName +"</h6>"
+		var curOrderObj = ordersJsonArr[i];
+		renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_orderDetails' style='cursor:pointer' idx='"+curOrderObj._id+"'>"
+							+ "<h6 class='card-header text-success bg-transparent border-secondary text-center cls_orderName'>"+ curOrderObj.clientName +"</h6>"
 							+ "<div class='card-body text-secondary font-weight-bold'>"
 						 		+ "<div class='row'>"
-						   			+ "<div class='card-title cls_eventName col-6'>" + orderJson[i].eventName +"</div>"
-						    		+ "<div class='card-text cls_eventDate col-6 text-right'>"+ orderJson[i].eventDate +"</div>"
+						   			+ "<div class='card-title cls_eventName col-6'>" + curOrderObj.eventName +"</div>"
+						    		+ "<div class='card-text cls_eventDate col-6 text-right'>"+ curOrderObj.eventDate +"</div>"
 						    	+ "</div>"
 						 	   	+ "<div class='row'>"
-						    		+ "<div class='card-title cls_eventVenue col-6'>"+ orderJson[i].eventVenue +"</div>"
-						    		+ "<div class='card-text cls_contactNumber col-6 text-right'>"+ orderJson[i].clientPhone +"</div>"
+						    		+ "<div class='card-title cls_eventVenue col-6'>"+ curOrderObj.eventVenue +"</div>"
+						    		+ "<div class='card-text cls_contactNumber col-6 text-right'>"+ curOrderObj.clientPhone +"</div>"
 						    	+ "</div>"
 						    	+ "<div class='row'>"
-						   			+ "<div class='card-title cls_clientAddress col'>"+ orderJson[i].clientAddress +"</div>"
+						   			+ "<div class='card-title cls_clientAddress col'>"+ curOrderObj.clientAddress +"</div>"
 						    	+ "</div>"
 						  	+ "</div>"
 						  	+ "<div class='card-footer text-center bg-light border-secondary row p-0'>"
 						  		+ "<label class='col-6 border-right border-secondary m-0 p-2' style='cursor:pointer'>Complete</label>"
-						  		+ "<label class='col-6 m-0 p-2 cls_deleteOrder'  data-idx="+orderJson[i].orderId+" data-name='"+orderJson[i].eventName+"' style='cursor:pointer'>Delete</label>"
+						  		+ "<label class='col-6 m-0 p-2 cls_deleteOrder'  data-idx="+curOrderObj.orderId+" data-name='"+curOrderObj.eventName+"' style='cursor:pointer'>Delete</label>"
 						  	+ "</div>"
 						+ "</div>";
 		if(i%2 != 0){
