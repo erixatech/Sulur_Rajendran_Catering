@@ -25,6 +25,14 @@ function mongoOpns(req, res, collectionName, operation, dataJson, query)
 				res.send(resp);
 			});
 		 	 break;
+		  case "updateOrder":
+		    var newvalues = { $set: dataJson };
+	  	    dbo.collection(collectionName).update({"orderId": dataJson.orderId}, newvalues, function(err, resp) {
+				if (err) res.send("Error In Update"+err);
+				db.close();
+				res.send(resp);
+			});
+		 	 break;
 		  case "insertIngredients":
 		  	    dbo.collection(collectionName).update({"name": "Ingredients"},{ "$push" : dataJson}, function(err, resp) {
 					if (err) res.send("Error In Insert"+err);

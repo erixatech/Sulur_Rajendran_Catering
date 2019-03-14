@@ -3,11 +3,12 @@ function OrderTab(){
 	var isNewOrder = false;
 	var isListServiceForms = false;
 	var dummyRecipies = null;
+	var ordersList = null;
 }
 OrderTab.prototype.init = function(){
 	var _this = this;
 	_this.isNewOrder = getValueFromQueryParam('orderIsNew');
-	_this.isListServiceForms = getValueFromQueryParam('listServiceForms');
+	_this.isListServiceForms = getValueFromQueryParam('orderid') ? "true" : "false";
 	_this.dummyRecipies = ["Kesari", "Badam Alwa", "Chicken Biriyani", "Sambar"];
 	_this.render();
 	_this.renderEvents();
@@ -34,6 +35,7 @@ OrderTab.prototype.getOrderListFromDB = function(){
     	type: "get",
     	success: function(result){
     		hideLoading();
+    		_this.setOrderbyId(result);
     		$("#id_orderContent_tab").append(_this.renderOrderList(result));
 		},
 		error: function(){
@@ -176,10 +178,38 @@ OrderTab.prototype.renderCreateOrder = function(){
 
 		return renderHtml;
 };
+OrderTab.prototype.setOrderbyId = function(orders) {
+	var _this = this;
+	if(orders){
+		for(var i=0; i<orders.length; i++){
+			_this.ordersList[orders[i].orderId] = orders[i];
+		};
+	}
+};
+OrderTab.prototype.getOrderByIdFromDB = function(){
+	var _this = this;
+	$.ajax({
+    	url: "/getOrders",
+    	type: "get",
+    	success: function(result){
+    		hideLoading();
+    		return result;
+		},
+		error: function(){
+			hideLoading();
+		    alert('Failed to fetch Receipes.. Please Try again later..');
+		}
+	});
+}
 OrderTab.prototype.renderServiceForm = function(){
 	var _this = this;
 	var renderHtml = [];
 	$("#id_createOrder").attr('hidden', true);
+	/*var orderId = getValueFromQueryParam("orderid");
+	var order = _this.ordersList[orderId];
+	if(!order){
+		order = _this.getOrderByIdFromDB(orderId)
+	}*/
 	var serviceJson = [
 				        {
 				            "name": "Sangeet",
@@ -302,7 +332,7 @@ OrderTab.prototype.getReceipeMapRowForSF = function() {
 			+ '        <select class="form-control cls_receipeCategory_sf" name="receipeCategory"></select>'
 			+ '      </div>'
 			+ '      <div class="col">'
-			+ '        <input type="number" min="0" class="form-control" required id="id_receipeCount_sf" placeholder="Enter Count / No. Of People" name="receipeCount">'
+			+ '        <input type="number" min="0" class="form-control cls_receipeCount_sf" required id="id_receipeCount_sf" placeholder="Enter Count / No. Of People" name="receipeCount">'
 			+ '      </div>'
 			+ '      <div class="col">'
 			+ ($('.recipeMapRowSf').length>0 ? '<a role="button" class="btn p-0"> <i class="fa fa-minus-circle mt-2 cls_removeCurrentReceipeMap" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i></a>' : '')
@@ -339,8 +369,8 @@ OrderTab.prototype.renderEvents = function() {
 		});
 
 		$(document).on("click", "#id_createServiceForm", function(){
-			var dummyServiceFormList = [{"name": "jelabi", "count":"100"},{"name": "idly", "count":"10"}];
-			calculatePL(dummyServiceFormList);
+			showLoading();
+			_this.getServiceFormDataAndCreate();
 		});
 		
 		if(_this.isListServiceForms == "true") {
@@ -411,7 +441,7 @@ OrderTab.prototype.getOrderDataAndCreate = function(){
 	var _this= this;
 
 	var orderMetaData = {};
-	orderMetaData.orderId = "order_id"+(new Date()).getTime();
+	orderMetaData.orderId = "orderid_"+(new Date()).getTime();
 	orderMetaData.clientName = $("#clientName").val();
 	orderMetaData.clientPhone = $("#clientPhone").val();
 	orderMetaData.clientAddress = $("#clientAddress").val();
@@ -430,11 +460,59 @@ OrderTab.prototype.getOrderDataAndCreate = function(){
 
 			$("#successPopup").find('.modal-title').text("Order Created Successfully");
     		$("#successPopup").modal('show');
-    		addQueryParamToUrlAndReload('listServiceForms', 'true');
+    		addQueryParamToUrlAndReload('orderid', orderMetaData.orderId);
 		},
 		error: function(){
 			hideLoading();
 		    $("#errorPopup").find('.modal-title').text('Failed to create Order. Please Try again later.');
+    		$("#errorPopup").modal('show');
+		}
+	});
+
+}
+OrderTab.prototype.getServiceFormDataAndCreate = function(){
+	var _this= this;
+
+	var updateOrderData = {};
+	updateOrderData.orderId = getValueFromQueryParam("orderid"	);
+	updateOrderData.serviceForms = [];
+
+	var serviceForms = {};
+	serviceForms.serviceId = "serviceid_"+(new Date()).getTime();
+	serviceForms.sessionName = $("#sessionName").val();
+	serviceForms.sessionDateTime = $("#sessionDateTime").val();
+	serviceForms.sessionNotes = $("#sessionNotes").val();
+
+	var recipes = [];
+	var categoryList = {};
+	var category;
+	var categoryCount;
+	$(".recipeMapRowSf").each(function(index, element) {
+		category = $(".cls_receipeCategory_sf", this).val();
+		categoryCount = $(".cls_receipeCount_sf", this).val()
+		if(category && categoryCount){
+			categoryList.name = category;
+			categoryList.count = categoryCount;
+			recipes.push(categoryList);
+		}
+	});
+	serviceForms.recipes = recipes;
+	updateOrderData.serviceForms.push(serviceForms);
+	$.ajax({
+    	url: "/updateOrder",
+    	type: "post",
+    	contentType: 'application/json',
+    	data: JSON.stringify(updateOrderData),
+    	success: function(result){
+    		hideLoading();
+			$("#successPopup").find('.modal-title').text("Service form Created Successfully");
+    		$("#successPopup").modal('show');
+			calculatePL(recipes);
+			window.location.reload();
+		},
+		error: function(){
+			hideLoading();
+		    $("#errorPopup").find('.modal-title').text('Failed to Service form. Please Try again later.');
     		$("#errorPopup").modal('show');
 		}
 	});

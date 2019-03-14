@@ -39,6 +39,10 @@ router.post("/createOrder", function(req, res){
 	mongoOpn1.mongoOpns(req, res, "orders", "insertOrder", req.body);
 });
 
+router.post("/updateOrder", function(req, res){  
+	mongoOpn1.mongoOpns(req, res, "orders", "updateOrder", req.body);
+});
+
 app.use("/",router);
 
 app.listen(80,function(){
