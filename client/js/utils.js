@@ -201,6 +201,36 @@ function getIngredientUnitsByName(ingredientJson, name) {
 	return toRet;
 }
 
+function getRecipeByCategory(receipeJson, catName) {
+	var toRet = null;
+	var tempArr = [];
+	$.each(receipeJson, function( index, receipeObj ) {
+		if(receipeObj.itemCategory && receipeObj.itemCategory.toLowerCase() == catName.toLowerCase()) {
+			tempArr.push(receipeObj);
+		}
+	});
+	if(tempArr.length>0)
+	{
+		toRet = tempArr;
+	}
+	return toRet;
+}
+
+function getRecipeByName(receipeJson, receipeName) {
+	var toRet = null;
+	var tempArr = [];
+	$.each(receipeJson, function( index, receipeObj ) {
+		if((receipeObj.name && (receipeObj.name.toLowerCase().indexOf(receipeName.toLowerCase())>-1)) || (receipeObj.tamilName && (receipeObj.tamilName.toLowerCase().indexOf(receipeName.toLowerCase())>-1)) ) {
+			tempArr.push(receipeObj);
+		}
+	});
+	if(tempArr.length>0)
+	{
+		toRet = tempArr;
+	}
+	return toRet;
+}
+
 function getIndexForId(ingredientJson, category, id) {
 	var indexToRet = 0;
 	var toRet = -1;

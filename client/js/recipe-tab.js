@@ -13,19 +13,7 @@ RecipeTab.prototype.init = function() {
 RecipeTab.prototype.render = function() {
 	var _this = this;
 
-	_this.ingredientJson = {};
-
-	$.ajax({
-    	url: "/getIngredients?category=all",
-    	type: "get",
-    	success: function(result){
-    		if(result && result.length == 1)
-    		_this.ingredientJson = result[0];
-		},
-		error: function(){
-		    alert('Failed to fetch Ingredients.. Please Try again later..');
-		}
-	});
+	_this.ingredientJson = ingredientJson;
 
 	var allIngredientNames = getIngredientNamesByCategory(_this.ingredientJson);
 	addOptionsToSelect(_this.recipeFilters, "id_selectRecipeCategory");
@@ -34,135 +22,143 @@ RecipeTab.prototype.render = function() {
 	addOptionsToSelect(allIngredientNames, "id_ingredientName_recipe");
 	addOptionsToSelect(ingredientUnits, "id_ingredientUnit_recipe");
 
-	var recipeJson = {"Snacks" : [
-								{
-									"id" : 1,
-									"name": "samosa", "tamilName": "சம ோசோ",
-										"Ingredients": [
-										{
-										"id" : 7,
-										"name" : "oil", "tamilName" : "எண்ணெய்",
-										"quantity": "500",
-										"unitofmeasure": "millilitre"
-										},
-										{
-										"id" : 6,
-										"name" : "onion", "tamilName" : "ணெங்காயம்",
-										"quantity": "100",
-										"unitofmeasure": "count"
-										},
-										{
-										"id" : 5,
-										"name": "potato", "tamilName" : "உருளைக்கிழங்கு",
-										"quantity": "200",
-										"unitofmeasure": "count"
-										}
-										],
-									"headCount": 100
-								},
-								{
-									"id" : 2,
-									"name": "samosa", "tamilName": "சம ோசோ",
-										"Ingredients": [
-										{
-										"id" : 7,
-										"name" : "oil", "tamilName" : "எண்ணெய்",
-										"quantity": "500",
-										"unitofmeasure": "millilitre"
-										},
-										{
-										"id" : 6,
-										"name" : "onion", "tamilName" : "ணெங்காயம்",
-										"quantity": "100",
-										"unitofmeasure": "count"
-										},
-										{
-										"id" : 5,
-										"name": "potato", "tamilName" : "உருளைக்கிழங்கு",
-										"quantity": "200",
-										"unitofmeasure": "count"
-										}
-										],
-									"headCount": 100
-								}
-								],
-								"Sweet" : [
-								{
-									"id" : 1,
-									"name": "samosa", "tamilName": "சம ோசோ",
-										"Ingredients": [
-										{
-										"id" : 7,
-										"name" : "oil", "tamilName" : "எண்ணெய்",
-										"quantity": "500",
-										"unitofmeasure": "millilitre"
-										},
-										{
-										"id" : 6,
-										"name" : "onion", "tamilName" : "ணெங்காயம்",
-										"quantity": "100",
-										"unitofmeasure": "count"
-										},
-										{
-										"id" : 5,
-										"name": "potato", "tamilName" : "உருளைக்கிழங்கு",
-										"quantity": "200",
-										"unitofmeasure": "count"
-										}
-										],
-									"headCount": 100
-								},
-								{
-									"id" : 2,
-									"name": "samosa", "tamilName": "சம ோசோ",
-										"Ingredients": [
-										{
-										"id" : 7,
-										"name" : "oil", "tamilName" : "எண்ணெய்",
-										"quantity": "500",
-										"unitofmeasure": "millilitre"
-										},
-										{
-										"id" : 6,
-										"name" : "onion", "tamilName" : "ணெங்காயம்",
-										"quantity": "100",
-										"unitofmeasure": "count"
-										},
-										{
-										"id" : 5,
-										"name": "potato", "tamilName" : "உருளைக்கிழங்கு",
-										"quantity": "200",
-										"unitofmeasure": "count"
-										}
-										],
-									"headCount": 100
-								}
-								]
-							}
-    
-	var catagoryJson;
-	var renderHtml = [];
-	for (var i =0; i<_this.recipeCategory.length; i++ ) {
-		catagoryJson = recipeJson[_this.recipeCategory[i]];
-		if(catagoryJson){
-			renderHtml += "<div class='list-group col-11'>"
-							+ "<a class='list-group-item list-group-item-action cls_recipeCateory active text-center h5 text-white font-weight-bold'>"
-								+ _this.recipeCategory[i]
+	_this.recipeJson = {};
 
-						for(var j=0; j<catagoryJson.length ; j++){
-							renderHtml += "<a class='list-group-item list-group-item-action cls_recipeCont recipe_"+ catagoryJson[j].id +"'>"
-											+ "<label class='col-3'>" + catagoryJson[j].name +"</label>"
-											+ "<label class='col-3'>" + catagoryJson[j].tamilName +"</label>"
-											+ "<label class='col-3'>" + catagoryJson[j].itemCategory +"</label>"
-											+ "<label class='btn btn-primary btn-md mr-3 mb-0 col-1 text-center cls_editRecipe' idx='" + catagoryJson[j].id +"' data-toggle='modal' data-target='#recipeModal'>Edit</label>"
-											+ "<label class='btn btn-secondary btn-md mr-3 mb-0 col-1 text-center cls_deleteRecipe' idx='" + catagoryJson[j].id +"' name='" + catagoryJson[j].name +"'>Delete</label>"
-										+ "</a>"
-						}
-			renderHtml += "</a>"
-					   + "</div><br><br>"
+	showLoading();
+	$.ajax({
+    	url: "/getRecipe?category=all",
+    	type: "get",
+    	success: function(result){
+    		hideLoading();
+    		if(result && result.length == 1)
+    		{
+	    		_this.recipeJson = result[0];
+	    		delete _this.recipeJson["_id"];
+	    	}
+			_this.renderRecipe("All");
+		},
+		error: function(){
+			hideLoading();
+		    alert('Failed to fetch Recipe.. Please Try again later..');
 		}
+	});
+};
+
+RecipeTab.prototype.renderRecipe = function(recipeCat) {
+	var _this = this;
+
+	$(".cls_recipeList").html('');
+
+	if(recipeCat!="All")
+	{
+		$(".cls_recipeList").append(_this.renderRecipeByCategory(recipeCat, getRecipeByCategory(_this.recipeJson, recipeCat)));
 	}
-	$("#id_recipeContent_tab").append(renderHtml);
+	else
+	{
+		_this.renderAllRecipe();
+	}
+};
+
+RecipeTab.prototype.renderAllRecipe = function() {
+	var _this = this;
+
+	var renderHtml = [];
+		for (var i =0; i<_this.recipeCategory.length; i++ ) 
+		{
+			var categoryName = _this.recipeCategory[i];
+			catagoryJson = getRecipeByCategory(_this.recipeJson, categoryName);
+			renderHtml += _this.renderRecipeByCategory(categoryName, catagoryJson, true);
+		}
+		$(".cls_recipeList").append(renderHtml);
+};
+
+RecipeTab.prototype.renderRecipeByCategory = function(recipeCat, catagoryJson, isAll) {
+	var _this = this;
+
+	var renderHtml = [];
+	if(catagoryJson){
+		renderHtml += "<div class='list-group col-11'>"
+						+ "<a class='list-group-item list-group-item-action cls_recipeCateory active text-center h5 text-white font-weight-bold'>"
+							+ recipeCat
+
+					for(var j=0; j<catagoryJson.length ; j++){
+						renderHtml += "<a class='list-group-item list-group-item-action cls_recipeCont recipe_"+ catagoryJson[j].id +"'>"
+										+ "<label class='col-3'>" + catagoryJson[j].name +"</label>"
+										+ "<label class='col-3'>" + catagoryJson[j].tamilName +"</label>"
+										+ "<label class='col-3'>" + catagoryJson[j].headCount +"</label>"
+										+ "<label class='btn btn-primary btn-md mr-3 mb-0 col-1 text-center cls_editRecipe' idx='" + catagoryJson[j].id +"' data-toggle='modal' data-target='#recipeModal'>Edit</label>"
+										+ "<label class='btn btn-secondary btn-md mr-3 mb-0 col-1 text-center cls_deleteRecipe' idx='" + catagoryJson[j].id +"' name='" + catagoryJson[j].name +"'>Delete</label>"
+									+ "</a>"
+					}
+		renderHtml += "</a>"
+				   + "</div><br><br>"
+	}
+	else if(!isAll)
+	{
+		renderHtml += "<a class='list-group-item list-group-item-action cls_recipeCont'>"
+						   + "<label class='col-12 text-center'>No Recipe in this Category</label>"
+						   + "</a>";
+	}
+	return renderHtml;
+};
+
+RecipeTab.prototype.renderSearchResults = function(searchResRecipe) {
+	var _this = this;
+
+	var renderHtml = [];
+	renderHtml += "<div class='list-group col-11'>"
+					+ "<a class='list-group-item list-group-item-action cls_recipeCateory active text-center h5 text-white font-weight-bold'>"
+						+ "Search Results";
+
+			if(searchResRecipe && searchResRecipe.length>0)
+			{
+				for(var j=0; j<searchResRecipe.length ; j++){
+					renderHtml += "<a class='list-group-item list-group-item-action cls_recipeCont recipe_"+ searchResRecipe[j].id +"'>"
+									+ "<label class='col-3'>" + searchResRecipe[j].name +"</label>"
+									+ "<label class='col-3'>" + searchResRecipe[j].tamilName +"</label>"
+									+ "<label class='col-1'>" + searchResRecipe[j].headCount +"</label>"
+									+ "<label class='col-2'>" + searchResRecipe[j].itemCategory +"</label>"
+									+ "<label class='btn btn-primary btn-md mr-3 mb-0 col-1 text-center cls_editRecipe' idx='" + searchResRecipe[j].id +"' data-toggle='modal' data-target='#recipeModal'>Edit</label>"
+									+ "<label class='btn btn-secondary btn-md mr-3 mb-0 col-1 text-center cls_deleteRecipe' idx='" + searchResRecipe[j].id +"' name='" + searchResRecipe[j].name +"'>Delete</label>"
+								+ "</a>";
+				}
+			}
+			else
+			{
+				renderHtml += "<a class='list-group-item list-group-item-action cls_recipeCont'>"
+						   + "<label class='col-12 text-center'>No Matching Recipe</label>"
+						   + "</a>";
+			}
+	renderHtml += "</a>"
+			   + "</div><br><br>";
+	return renderHtml;
+};
+
+RecipeTab.prototype.getIngredientMapRow = function() {
+	var _this = this;
+	var renderHtmlMapRow = [];
+	
+	renderHtmlMapRow += '    <div class="row cls_ingredientMapRow mt-2 mb-1">'
+		              + '        <div class="col-3">'
+		              + '                <select class="form-control cls_ingredientCategory_recipe" id="id_ingredientCategory_recipe" name="ingredientCategory">'
+		              +'                     <option>--Select All--</option>'
+		              +'                 </select>'
+		              + '        </div>'
+		              + '        <div class="col-4">'
+		              + '            <select class="form-control cls_ingredientName_recipe" id="id_ingredientName_recipe" name="ingredientName"></select>'
+		              + '        </div>'
+		              + '        <div class="col-2">'
+		              + '            <select class="form-control cls_ingredientUnit_recipe" id="id_ingredientUnit_recipe" name="ingredientUnit"></select>'
+		              + '        </div>'
+		              + '		 <div class="col-2">'
+		              + '			 <input type="text" class="form-control cls_ingredientQunatity_recipe" required id="id_ingredientQunatity_recipe" placeholder="Enter Quantity" name="qunatity">'
+		              + '		 </div>'
+		              + '        <div class="col-1">'
+		  			  +             ($('.cls_ingredientMapRow').length>0 ? '<i class="fa fa-minus-circle cls_removeCurrentIngredientMap" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>' : '')
+		  			  + '        </div>'
+		              + '	</div>';
+			
+	return renderHtmlMapRow;
 };
 
 RecipeTab.prototype.registerEvents = function() {
@@ -195,19 +191,39 @@ RecipeTab.prototype.registerEvents = function() {
 		$(document).on("click", ".cls_removeCurrentIngredientMap", function(){
 			$(this).parents('.cls_ingredientMapRow').remove();
 		});
+
+		$("#id_selectRecipeCategory").change(function() {
+	    	_this.renderRecipe($("#id_selectRecipeCategory").val());
+	    	$("#id_searchReceipeCategory").val("");
+		});
+
+		$("#id_searchReceipeCategory").keyup(function() {
+	    	var searchKeyword = $(this).val().trim();
+	    	if(searchKeyword.length>0)
+	    	{
+		    	$(".cls_recipeList").html('');
+		    	var results = getRecipeByName(_this.recipeJson, searchKeyword);
+		    	$(".cls_recipeList").append(_this.renderSearchResults(results));
+		    }
+		    else
+		    {
+		    	_this.renderRecipe("All");
+		    }
+		    $("#id_selectRecipeCategory").val("All");
+		});
 		
 		$(".cls_deleteRecipe").click(function() {
-		       var idx = $(this).attr("idx");
-		       var name = $(this).attr("name");
-		       var parent = $(this).parent().parent();
-		       var isDelete = confirm("You wish to delete the recipe "+name+" ?");
-		       if (isDelete == true) {
-		         $(".recipe_"+idx).remove();
-		         if(parent.find(".cls_recipeCont").length == 0) {
-		        	 parent.remove()
-		         }
-		       }
-		    });
+	       var idx = $(this).attr("idx");
+	       var name = $(this).attr("name");
+	       var parent = $(this).parent().parent();
+	       var isDelete = confirm("You wish to delete the recipe "+name+" ?");
+	       if (isDelete == true) {
+	         $(".recipe_"+idx).remove();
+	         if(parent.find(".cls_recipeCont").length == 0) {
+	        	 parent.remove()
+	         }
+	       }
+	    });
 			
 		$(".cls_editRecipe, .cls_createRecipe").click(function() {
 	        if($(this).hasClass("cls_createRecipe")) {
@@ -235,31 +251,4 @@ RecipeTab.prototype.registerEvents = function() {
 				   
 	    });
 	});
-};
-
-RecipeTab.prototype.getIngredientMapRow = function() {
-	var _this = this;
-	var renderHtmlMapRow = [];
-	
-	renderHtmlMapRow += '    <div class="row cls_ingredientMapRow mt-2 mb-1">'
-		              + '        <div class="col-3">'
-		              + '                <select class="form-control cls_ingredientCategory_recipe" id="id_ingredientCategory_recipe" name="ingredientCategory">'
-		              +'                     <option>--Select All--</option>'
-		              +'                 </select>'
-		              + '        </div>'
-		              + '        <div class="col-4">'
-		              + '            <select class="form-control cls_ingredientName_recipe" id="id_ingredientName_recipe" name="ingredientName"></select>'
-		              + '        </div>'
-		              + '        <div class="col-2">'
-		              + '            <select class="form-control cls_ingredientUnit_recipe" id="id_ingredientUnit_recipe" name="ingredientUnit"></select>'
-		              + '        </div>'
-		              + '		 <div class="col-2">'
-		              + '			 <input type="text" class="form-control cls_ingredientQunatity_recipe" required id="id_ingredientQunatity_recipe" placeholder="Enter Quantity" name="qunatity">'
-		              + '		 </div>'
-		              + '        <div class="col-1">'
-		  			  +             ($('.cls_ingredientMapRow').length>0 ? '<i class="fa fa-minus-circle cls_removeCurrentIngredientMap" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>' : '')
-		  			  + '        </div>'
-		              + '	</div>';
-			
-	return renderHtmlMapRow;
 };

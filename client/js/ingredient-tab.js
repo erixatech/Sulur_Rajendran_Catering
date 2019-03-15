@@ -20,8 +20,10 @@ IngredientTab.prototype.render = function() {
     	success: function(result){
     		hideLoading();
     		if(result && result.length == 1)
-    		{
-	    		_this.ingredientJson = result[0];
+    		{	    		
+	    		ingredientJson = result[0];
+	    		_this.ingredientJson = ingredientJson;
+	    		new RecipeTab();
 	    	}
 			_this.renderIngredients("All");
 		},
@@ -87,32 +89,30 @@ IngredientTab.prototype.renderSearchResults = function(searchResIngredients) {
 	var _this = this;
 
 	var renderHtml = [];
-	if(searchResIngredients){
-		renderHtml += "<div class='list-group col-11'>"
-						+ "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-center h5 text-white font-weight-bold'>"
-							+ "Search Results";
+	renderHtml += "<div class='list-group col-11'>"
+					+ "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-center h5 text-white font-weight-bold'>"
+						+ "Search Results";
 
-				if(searchResIngredients.length>0)
-				{
-					for(var j=0; j<searchResIngredients.length ; j++){
-						renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ingredient_"+ searchResIngredients[j].id +"'>"
-										+ "<label class='col-4'>" + searchResIngredients[j].name +"</label>"
-										+ "<label class='col-2'>" + searchResIngredients[j].unit +"</label>"
-										+ "<label class='col-2'>" + searchResIngredients[j].category +"</label>"
-										+ "<label class='btn btn-primary btn-md mr-4 mb-0 col-1 text-center cls_editIngredient' idx='" + searchResIngredients[j].id +"' data-toggle='modal' data-target='#ingredientModal'>Edit</label>"
-										+ "<label class='btn btn-secondary btn-md mb-0 col-1 text-center cls_deleteIngredient' idx='" + searchResIngredients[j].id +"' name='" + searchResIngredients[j].name +"'>Delete</label>"
-									+ "</a>";
-					}
+			if(searchResIngredients && searchResIngredients.length>0)
+			{
+				for(var j=0; j<searchResIngredients.length ; j++){
+					renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ingredient_"+ searchResIngredients[j].id +"'>"
+									+ "<label class='col-4'>" + searchResIngredients[j].name +"</label>"
+									+ "<label class='col-2'>" + searchResIngredients[j].unit +"</label>"
+									+ "<label class='col-2'>" + searchResIngredients[j].category +"</label>"
+									+ "<label class='btn btn-primary btn-md mr-4 mb-0 col-1 text-center cls_editIngredient' idx='" + searchResIngredients[j].id +"' data-toggle='modal' data-target='#ingredientModal'>Edit</label>"
+									+ "<label class='btn btn-secondary btn-md mb-0 col-1 text-center cls_deleteIngredient' idx='" + searchResIngredients[j].id +"' name='" + searchResIngredients[j].name +"'>Delete</label>"
+								+ "</a>";
 				}
-				else
-				{
-					renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont'>"
-							   + "<label class='col-12 text-center'>No Matching Ingredients</label>"
-							   + "</a>";
-				}
-		renderHtml += "</a>"
-				   + "</div><br><br>";
-	}
+			}
+			else
+			{
+				renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont'>"
+						   + "<label class='col-12 text-center'>No Matching Ingredients</label>"
+						   + "</a>";
+			}
+	renderHtml += "</a>"
+			   + "</div><br><br>";
 	return renderHtml;
 };
 
