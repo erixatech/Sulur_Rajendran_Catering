@@ -11,6 +11,12 @@ app.use(express.static(path.join(__dirname, '../client')));
 
 app.use(bodyParser.json()); // for parsing application/json
 
+//Ingredient Queries
+
+router.get("/getIngredients", function(req, res){
+  mongoOpn1.mongoOpns(req, res, "Ingredients", "fetch", req.body);
+});
+
 router.post("/createIngredient", function(req, res){  
 	mongoOpn1.mongoOpns(req, res, "Ingredients", "insertIngredients", req.body);
 });
@@ -23,13 +29,16 @@ router.post("/deleteIngredient", function(req, res){
   mongoOpn1.mongoOpns(req, res, "Ingredients", "deleteIngredients", req.body);
 });
 
-router.delete("/deleteOrder", function(req, res){  
-  mongoOpn1.mongoOpns(req, res, "orders", "delete", req.body);
+
+
+//Receipe Queries
+router.get("/getRecipe", function(req, res){
+  mongoOpn1.mongoOpns(req, res, "Recipe", "fetch", req.body);
 });
 
-router.get("/getIngredients", function(req, res){
-  mongoOpn1.mongoOpns(req, res, "Ingredients", "fetch", req.body);
-});
+
+
+//Order Queries
 
 router.get("/getOrders", function(req, res){
   mongoOpn1.mongoOpns(req, res, "orders", "fetch", req.body);
@@ -41,6 +50,10 @@ router.post("/createOrder", function(req, res){
 
 router.post("/updateOrder", function(req, res){  
 	mongoOpn1.mongoOpns(req, res, "orders", "updateOrder", req.body);
+});
+
+router.delete("/deleteOrder", function(req, res){  
+  mongoOpn1.mongoOpns(req, res, "orders", "delete", req.body);
 });
 
 app.use("/",router);
