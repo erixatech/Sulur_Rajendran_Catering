@@ -70,6 +70,13 @@ function mongoOpns(req, res, collectionName, operation, dataJson, query)
 					res.send(resp);
 				});
 			  break;
+		  case "getOrderById":
+			dbo.collection(collectionName).find({"orderId": req.query.orderId}).toArray(function(err, result) { 
+					if (err) res.send("Error In get"+err);
+					db.close();
+					res.send(result);
+				});
+			  break;
 		  default:
 			dbo.collection(collectionName).find(dataJson).toArray(function(err, result) {
 					if (err) res.send("Error In Fetch"+err);

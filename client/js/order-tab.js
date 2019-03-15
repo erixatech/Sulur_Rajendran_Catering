@@ -3,7 +3,8 @@ function OrderTab(){
 	var isNewOrder = false;
 	var isListServiceForms = false;
 	var dummyRecipies = null;
-	this.ordersList = {};
+	var ordersList = {};
+	var currentOrder = null;
 }
 OrderTab.prototype.init = function(){
 	var _this = this;
@@ -18,15 +19,14 @@ OrderTab.prototype.render = function(){
 	var renderHtml = [];
 	
 	if(_this.isNewOrder == 'true' && _this.isListServiceForms == 'true'){
-		renderHtml = _this.renderServiceForm();
+		_this.renderServiceForm();
 	}
 	else if(_this.isNewOrder == 'true'){
-		renderHtml = _this.renderCreateOrder();
+		$("#id_orderContent_tab").append(_this.renderCreateOrder());
 	}
 	else{
 		_this.getOrderListFromDB();
 	}
-	$("#id_orderContent_tab").append(renderHtml);
 };
 OrderTab.prototype.getOrderListFromDB = function(){
 	var _this = this;
@@ -181,53 +181,50 @@ OrderTab.prototype.renderCreateOrder = function(){
 };
 OrderTab.prototype.setOrderbyId = function(orders) {
 	var _this = this;
+	_this.ordersList = {};
 	if(orders){
 		for(var i=0; i<orders.length; i++){
 			_this.ordersList[orders[i].orderId] = orders[i];
 		};
 	}
 };
-OrderTab.prototype.getOrderByIdFromDB = function(){
+OrderTab.prototype.getOrderByIdFromDB = function(orderId, cbk){
 	var _this = this;
 	$.ajax({
-    	url: "/getOrders",
+    	url: "/getOrderById?orderId=" + orderId,
     	type: "get",
     	success: function(result){
     		hideLoading();
-    		return result;
+    		_this.currentOrder = result;
+    		cbk();
 		},
-		error: function(){
+		error: function(res){
 			hideLoading();
-		    alert('Failed to fetch Receipes.. Please Try again later..');
+		    alert('Failed to fetch Order.. Please Try again later..');
 		}
 	});
 }
 OrderTab.prototype.renderServiceForm = function(){
 	var _this = this;
-	var renderHtml = [];
 	$("#id_createOrder").attr('hidden', true);
-	/*var orderId = getValueFromQueryParam("orderid");
-	var order = _this.ordersList[orderId];
-	if(!order){
-		order = _this.getOrderByIdFromDB(orderId)
-	}*/
-	var serviceJson = [
-				        {
-				            "name": "Sangeet",
-				            "dateAndTime": "31-01-2019 6PM",
-				            "venue": "Temple"
-				        },
-				        {
-				            "name": "Muhurtham",
-				            "dateAndTime": "01-02-2019 5AM",
-				            "venue": "Temple"
-				        },
-				        {
-				            "name": "Reception",
-				            "dateAndTime": "01-02-2019 11AM",
-				            "venue": "Temple"
-				        }]
+	var orderId = getValueFromQueryParam("orderid");
+	_this.currentOrder = _this.ordersList && _this.ordersList[orderId];
 
+	var cbk = function(){
+		$("#id_orderContent_tab").append(_this.renderServiceFormList());
+	}
+	if(!_this.currentOrder){
+		_this.getOrderByIdFromDB(orderId, cbk);
+	}
+	else{
+		cbk();
+	}
+};
+OrderTab.prototype.renderServiceFormList = function(){
+	var _this = this;
+	var renderHtml = [];
+
+	var serviceJson = _this.currentOrder && _this.currentOrder[0] && _this.currentOrder[0].serviceForms;
 	renderHtml += '<div class="cls_orderServiceList">'
 					+ '<div class="row">'
 						+ '<div class="text-right col-11 pb-4">'
@@ -236,25 +233,27 @@ OrderTab.prototype.renderServiceForm = function(){
 					        + '</a>'
 						+ '</div>'
 				   	+ '</div>'
-	for(var i=0; i< serviceJson.length; i++){
-		if(i%2 == 0){
-			renderHtml += "<div class='row'>"
-		}
-		renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_serviceDetails' style='cursor:pointer'>"
-							+ "<h6 class='card-header text-success bg-transparent border-secondary text-center cls_serviceName'>"+ serviceJson[i].name +"</h6>"
-							+ "<div class='card-body text-secondary font-weight-bold'>"
-						 		+ "<div class='row'>"
-						 		    + "<div class='card-title cls_eventVenue col-6'>"+ serviceJson[i].venue +"</div>"
-						    		+ "<div class='card-text cls_eventDate col-6'>"+ serviceJson[i].dateAndTime +"</div>"
-						    	+ "</div>"
-						  	+ "</div>"
-						  	+ "<div class='card-footer text-center bg-light border-secondary row p-0'>"
-						  		+ "<label class='col-6 border-right border-secondary m-0 p-2' style='cursor:pointer'>Complete</label>"
-						  		+ "<label class='col-6 m-0 p-2' style='cursor:pointer'>Delete</label>"
-						  	+ "</div>"
-						+ "</div>";
-		if(i%2 != 0 || (i == serviceJson.length-1)){
-			renderHtml += "</div>"
+	if(serviceJson){
+		for(var i=0; i< serviceJson.length; i++){
+			if(i%2 == 0){
+				renderHtml += "<div class='row'>"
+			}
+			renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_serviceDetails' style='cursor:pointer'>"
+								+ "<h6 class='card-header text-success bg-transparent border-secondary text-center cls_serviceName'>"+ serviceJson[i].sessionName +"</h6>"
+								+ "<div class='card-body text-secondary font-weight-bold'>"
+							 		+ "<div class='row'>"
+							 		    + "<div class='card-title cls_eventVenue col-6'>"+ serviceJson[i].sessionVenue +"</div>"
+							    		+ "<div class='card-text cls_eventDate col-6'>"+ serviceJson[i].sessionDateTime +"</div>"
+							    	+ "</div>"
+							  	+ "</div>"
+							  	+ "<div class='card-footer text-center bg-light border-secondary row p-0'>"
+							  		+ "<label class='col-6 border-right border-secondary m-0 p-2' style='cursor:pointer'>Complete</label>"
+							  		+ "<label class='col-6 m-0 p-2' style='cursor:pointer'>Delete</label>"
+							  	+ "</div>"
+							+ "</div>";
+			if(i%2 != 0 || (i == serviceJson.length-1)){
+				renderHtml += "</div>"
+			}
 		}
 	}
 	renderHtml += '</div>'
@@ -275,6 +274,16 @@ OrderTab.prototype.renderServiceForm = function(){
 		+ '  		<div class="col">'
 		+ '    			<label for="serviceFormDateTime">Session Date and Time</label>'
 		+ '    			<input type="text" class="form-control" id="sessionDateTime" placeholder="Enter Session Date and Time">'
+		+ '  		</div>'
+		+ '  		<div class="col"></div>' 
+		+ '  		</div>'
+		+ '  	</div>'
+		+ '  </div>'
+		+ '  <div class="form-group">'
+		+ '  	<div class="row">'
+		+ '  		<div class="col">'
+		+ '    			<label for="sessionVenue">Session Date and Time</label>'
+		+ '    			<input type="text" class="form-control" id="sessionVenue" placeholder="Enter Session Venue">'
 		+ '  		</div>'
 		+ '  		<div class="col"></div>' 
 		+ '  		</div>'
@@ -323,7 +332,7 @@ OrderTab.prototype.renderServiceForm = function(){
 		+ '</form>';
 
 		return renderHtml;
-};
+}
 OrderTab.prototype.getReceipeMapRowForSF = function() {
 	var _this = this;
 	var renderHtmlMapRow = [];
@@ -483,6 +492,7 @@ OrderTab.prototype.getServiceFormDataAndCreate = function(){
 	serviceForms.sessionName = $("#sessionName").val();
 	serviceForms.sessionDateTime = $("#sessionDateTime").val();
 	serviceForms.sessionNotes = $("#sessionNotes").val();
+	serviceForms.sessionVenue = $("#sessionVenue").val();
 
 	var recipes = [];
 	var categoryList = {};

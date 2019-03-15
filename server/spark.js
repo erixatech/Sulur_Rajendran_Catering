@@ -35,6 +35,10 @@ router.get("/getOrders", function(req, res){
   mongoOpn1.mongoOpns(req, res, "orders", "fetch", req.body);
 });
 
+router.get("/getOrderById", function(req, res){
+  mongoOpn1.mongoOpns(req, res, "orders", "getOrderById", req.body);
+});
+
 router.post("/createOrder", function(req, res){  
 	mongoOpn1.mongoOpns(req, res, "orders", "insertOrder", req.body);
 });
