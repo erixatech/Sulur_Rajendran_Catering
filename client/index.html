@@ -103,12 +103,12 @@
 							</div>
 							<div class="col-3 pb-4">
 						        <div class="form-group">
-								    <label for="searchIngredientCategory">Search Receipe</label>
-								    <input type="text" class="form-control cls_searchReceipeCategory" required="" id="id_searchReceipeCategory" placeholder="Enter Receipe Name" name="searchReceipeCategory">
+								    <label for="searchIngredientCategory">Search Recipe</label>
+								    <input type="text" class="form-control cls_searchRecipeCategory" required="" id="id_searchRecipeCategory" placeholder="Enter Recipe Name" name="searchRecipeCategory">
 								</div>
 							</div>
 					  		<div id="id_createRecipe" class="text-right col-5 mt-4 pt-2">
-								<a data-toggle="modal" data-target="#recipeModal" class="btn btn-primary btn-md mr-3 text-white cls_createReceipe">
+								<a data-toggle="modal" data-target="#recipeModal" class="btn btn-primary btn-md mr-3 text-white cls_createRecipe">
 						          <i class="fa fa-plus-circle" aria-hidden="true"></i> Create Recipe
 						        </a>
 						    </div>
@@ -186,11 +186,11 @@
 	     <!-- Modal content-->
 	     <div class="modal-content cls_recipeCreateModal" style="width: 750px;">
 	       <div class="modal-header">
-	       <h4 class="modal-title">Create Receipe</h4>
+	       <h4 class="modal-title">Create Recipe</h4>
 	         <button type="button" class="close" data-dismiss="modal">&times;</button>
 	       </div>
 	       <div class="modal-body">
-	         <form id="id_createReceipeForm">
+	         <form id="id_createRecipeForm">
 			    <div class="form-group">
 			      <label for="name">Name</label>
 			      <input type="text" class="form-control" required id="id_name" placeholder="Enter name" name="name">
@@ -342,7 +342,7 @@
 				{
 					$("#id_ingredient-tab").click();
 				}
-				else if(urlParts.tab == "receipe")
+				else if(urlParts.tab == "recipe")
 				{
 					$("#id_recipe-tab").click();
 				}
@@ -350,7 +350,105 @@
 				{
 					$("#id_order-tab").click();
 				}
-			} 
+			}
+
+			$(".cls_successPopupClose").click(function() {
+				if($("#id_ingredient-tab").hasClass("active") == true)
+				{
+					window.location.href = window.location.origin + "?tab=ingredients";
+				}
+				else if($("#id_recipe-tab").hasClass("active") == true)
+				{
+					window.location.href = window.location.origin + "?tab=recipe";
+				}
+		    });
+
+			$(".cls_confirmPopupDelete").click(function() {
+
+				if($("#confirmationPopup").data("module") == "Ingredient")
+				{
+					var ingJson = {};
+	 				var reqKey = $("#confirmationPopup").data("catForId");
+				    if(reqKey != -1)
+				    {
+				    	showLoading();
+					    ingJson[reqKey] =
+			    		{
+				    		"id": $("#confirmationPopup").data("idToDelete")
+					    };
+				        $.ajax({
+				        	url: "/deleteIngredient",
+			            	type: "post",
+			            	contentType: 'application/json',
+			            	data: JSON.stringify(ingJson),
+				        	success: function(result){
+				        		hideLoading();
+				        		if(result.nModified && result.nModified>0)
+				        		{
+									$("#successPopup").find('.modal-title').text("Ingredient Deleted Successfully");
+					        		$("#successPopup").modal('show');
+				        		}
+				        		else
+				        		{
+				        			$("#errorPopup").find('.modal-title').text('Failed to delete Ingredient at the moment. Please Try again later.');
+				        			$("#errorPopup").modal('show');
+				        		}
+				        		$("#confirmationPopup").modal('hide');
+							},
+							error: function(){
+								hideLoading();
+							    $("#errorPopup").find('.modal-title').text('Failed to delete Ingredient. Please Try again later.');
+				        		$("#errorPopup").modal('show');
+				        		$("#confirmationPopup").modal('hide');
+							}
+						});
+				    }
+				    else
+				    {
+				    	$("#errorPopup").find('.modal-title').text('Failed to delete Ingredient. Please Try again later.');
+				        $("#errorPopup").modal('show');
+				        $("#confirmationPopup").modal('hide');
+				    }
+				}
+
+				else if($("#confirmationPopup").data("module") == "Recipe")
+				{
+					var recipeJsonToDelete = {};
+				    showLoading();
+				    recipeJsonToDelete["Recipe"] =
+		    		{
+			    		"id": $("#confirmationPopup").data("idToDelete")
+				    };
+			        $.ajax({
+			        	url: "/deleteRecipe",
+		            	type: "post",
+		            	contentType: 'application/json',
+		            	data: JSON.stringify(recipeJsonToDelete),
+			        	success: function(result){
+			        		hideLoading();
+			        		if(result.nModified && result.nModified>0)
+			        		{
+								$("#successPopup").find('.modal-title').text("Recipe Deleted Successfully");
+				        		$("#successPopup").modal('show');
+			        		}
+			        		else
+			        		{
+			        			$("#errorPopup").find('.modal-title').text('Failed to delete Recipe at the moment. Please Try again later.');
+			        			$("#errorPopup").modal('show');
+			        		}
+			        		$("#confirmationPopup").modal('hide');
+						},
+						error: function(){
+							hideLoading();
+						    $("#errorPopup").find('.modal-title').text('Failed to delete Recipe. Please Try again later.');
+			        		$("#errorPopup").modal('show');
+			        		$("#confirmationPopup").modal('hide');
+						}
+					});
+				}
+
+		    });
+
         });
      </script>
 </html>

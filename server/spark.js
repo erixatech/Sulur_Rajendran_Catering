@@ -31,9 +31,13 @@ router.post("/deleteIngredient", function(req, res){
 
 
 
-//Receipe Queries
+//Recipe Queries
 router.get("/getRecipe", function(req, res){
   mongoOpn1.mongoOpns(req, res, "Recipe", "fetch", req.body);
+});
+
+router.post("/deleteRecipe", function(req, res){  
+  mongoOpn1.mongoOpns(req, res, "Recipe", "deleteRecipe", req.body);
 });
 
 

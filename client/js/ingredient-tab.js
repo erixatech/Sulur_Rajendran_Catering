@@ -21,6 +21,7 @@ IngredientTab.prototype.render = function() {
     		if(result && result.length == 1)
     		{	    		
 	    		ingredientJson = result[0];
+	    		delete ingredientJson["_id"];
 	    	}
 			_this.renderIngredients("All");
 		},
@@ -272,13 +273,6 @@ IngredientTab.prototype.registerEvents = function() {
 	    	$(".cls_ingredientTamilName", modal).val("");
 	    });
 
-	    $(".cls_successPopupClose").click(function() {
-			if($("#id_ingredient-tab").hasClass("active") == true)
-			{
-				window.location.href = window.location.origin + "?tab=ingredients";
-			}
-	    });
-
 		$(document).on('click', '.cls_editIngredient', function(){
 			var idx = $(this).attr("idx");
 			var curIngredientObj = getIngredientById(ingredientJson, idx);
@@ -297,6 +291,11 @@ IngredientTab.prototype.registerEvents = function() {
 				$(".cls_ingredientUnit", modal).val(unit);
 				$(".cls_ingredientCategory", modal).prop('disabled', true);
 			}
+			else
+	        {
+	        	$("#errorPopup").find('.modal-title').text('Failed to get Ingredient details for Delete. Please Try again later.');
+			    $("#errorPopup").modal('show');
+	        }
 		});
 
 		$(document).on('click', '.cls_deleteIngredient', function(){
@@ -314,56 +313,7 @@ IngredientTab.prototype.registerEvents = function() {
     			$("#confirmationPopup").data("catForId", categoryName);
     			$("#confirmationPopup").data("module", "Ingredient");
 	        }
-		});
-	
-		$(".cls_confirmPopupDelete").click(function() {
-
-			if($("#confirmationPopup").data("module") == "Ingredient")
-			{
-				var ingJson = {};
- 				var reqKey = $("#confirmationPopup").data("catForId");
-			    if(reqKey != -1)
-			    {
-			    	showLoading();
-				    ingJson[reqKey] =
-		    		{
-			    		"id": $("#confirmationPopup").data("idToDelete")
-				    };
-			        $.ajax({
-			        	url: "/deleteIngredient",
-		            	type: "post",
-		            	contentType: 'application/json',
-		            	data: JSON.stringify(ingJson),
-			        	success: function(result){
-			        		hideLoading();
-			        		if(result.nModified && result.nModified>0)
-			        		{
-								$("#successPopup").find('.modal-title').text("Ingredient Deleted Successfully");
-				        		$("#successPopup").modal('show');
-			        		}
-			        		else
-			        		{
-			        			$("#errorPopup").find('.modal-title').text('Failed to delete Ingredient at the moment. Please Try again later.');
-			        			$("#errorPopup").modal('show');
-			        		}
-			        		$("#confirmationPopup").modal('hide');
-						},
-						error: function(){
-							hideLoading();
-						    $("#errorPopup").find('.modal-title').text('Failed to delete Ingredient. Please Try again later.');
-			        		$("#errorPopup").modal('show');
-			        		$("#confirmationPopup").modal('hide');
-						}
-					});
-			    }
-			    else
-			    {
-			    	$("#errorPopup").find('.modal-title').text('Failed to delete Ingredient. Please Try again later.');
-			        $("#errorPopup").modal('show');
-			        $("#confirmationPopup").modal('hide');
-			    }
-			}
-	    });
+		});		
 
 	});
 }

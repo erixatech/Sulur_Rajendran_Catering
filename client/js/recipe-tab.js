@@ -28,10 +28,10 @@ RecipeTab.prototype.render = function() {
     	type: "get",
     	success: function(result){
     		hideLoading();
-    		if(result && result.length == 1)
+    		if(result && result[0] && result[0].Recipe && result[0].Recipe.length > 0)
     		{
-	    		_this.recipeJson = result[0];
-	    		delete _this.recipeJson["_id"];
+	    		_this.recipeJson = result[0].Recipe;
+	    		//delete _this.recipeJson["_id"];
 	    	}
 			_this.renderRecipe("All");
 		},
@@ -190,12 +190,32 @@ RecipeTab.prototype.registerEvents = function() {
 			$(this).parents('.cls_ingredientMapRow').remove();
 		});
 
+		$(document).on('click', '.cls_deleteRecipe', function(){
+			var idx = $(this).attr("idx");
+	        var curRecipeObj = getRecipeObjById(_this.recipeJson, idx);
+	        if(curRecipeObj && !$.isEmptyObject(curRecipeObj))
+	        {
+	    	    var id = curRecipeObj.id;
+	    	    var name = curRecipeObj.name;
+	    	    var tamilName = curRecipeObj.tamilName;
+	    	    $("#confirmationPopup").find('.modal-title').text("Are you sure to delete this Recipe "+ tamilName +" ("+name+")?");
+    			$("#confirmationPopup").modal('show');
+    			$("#confirmationPopup").data("idToDelete", id);
+    			$("#confirmationPopup").data("module", "Recipe");
+	        }
+	        else
+	        {
+	        	$("#errorPopup").find('.modal-title').text('Failed to get Recipe details for Delete. Please Try again later.');
+			    $("#errorPopup").modal('show');
+	        }
+		});	
+
 		$("#id_selectRecipeCategory").change(function() {
 	    	_this.renderRecipe($("#id_selectRecipeCategory").val());
-	    	$("#id_searchReceipeCategory").val("");
+	    	$("#id_searchRecipeCategory").val("");
 		});
 
-		$("#id_searchReceipeCategory").keyup(function() {
+		$("#id_searchRecipeCategory").keyup(function() {
 	    	var searchKeyword = $(this).val().trim();
 	    	if(searchKeyword.length>0)
 	    	{
@@ -210,7 +230,7 @@ RecipeTab.prototype.registerEvents = function() {
 		    $("#id_selectRecipeCategory").val("All");
 		});
 		
-		$(".cls_deleteRecipe").click(function() {
+		/*$(".cls_deleteRecipe").click(function() {
 	       var idx = $(this).attr("idx");
 	       var name = $(this).attr("name");
 	       var parent = $(this).parent().parent();
@@ -221,7 +241,7 @@ RecipeTab.prototype.registerEvents = function() {
 	        	 parent.remove()
 	         }
 	       }
-	    });
+	    });*/
 			
 		$(".cls_editRecipe, .cls_createRecipe").click(function() {
 	        if($(this).hasClass("cls_createRecipe")) {

@@ -18,6 +18,14 @@ function mongoOpns(req, res, collectionName, operation, dataJson, query)
 					res.send("Inserted Successfully");
 				});
 			  break;
+		  case "insertIngredients":
+		  	    //dbo.collection(collectionName).update({"name": "Ingredients"},{ "$push" : dataJson}, function(err, resp) {
+		  	    dbo.collection(collectionName).update({},{ "$push" : dataJson}, function(err, resp) {
+					if (err) res.send("Error In Insert"+err);
+					db.close();
+					res.send(resp);
+				});
+			  break;
 		  case "insertOrder":
 	  	    dbo.collection(collectionName).insertOne(dataJson, function(err, resp) {
 				if (err) res.send("Error In Insert"+err);
@@ -25,21 +33,6 @@ function mongoOpns(req, res, collectionName, operation, dataJson, query)
 				res.send(resp);
 			});
 		 	 break;
-		  case "updateOrder":
-		    var newvalues = { $set: dataJson };
-	  	    dbo.collection(collectionName).update({"orderId": dataJson.orderId}, newvalues, function(err, resp) {
-				if (err) res.send("Error In Update"+err);
-				db.close();
-				res.send(resp);
-			});
-		 	 break;
-		  case "insertIngredients":
-		  	    dbo.collection(collectionName).update({"name": "Ingredients"},{ "$push" : dataJson}, function(err, resp) {
-					if (err) res.send("Error In Insert"+err);
-					db.close();
-					res.send(resp);
-				});
-			  break;
 		  case "update":
 			  var newvalues = { $set: dataJson };
 			  dbo.collection(collectionName).updateOne(query, newvalues, function(err, resp) {
@@ -50,12 +43,21 @@ function mongoOpns(req, res, collectionName, operation, dataJson, query)
 			  break;
 		  case "updateIngredients":
 	  		var newvalues = { $set: dataJson };
-		  	dbo.collection(collectionName).update({"name": "Ingredients"},newvalues, function(err, resp) {
+		  	//dbo.collection(collectionName).update({"name": "Ingredients"},newvalues, function(err, resp) {
+		  	dbo.collection(collectionName).update({},newvalues, function(err, resp) {
 					if (err) res.send("Error In Update"+err);
 					db.close();
 					res.send(resp);
 			  });
 			  break;
+		  case "updateOrder":
+		    var newvalues = { $set: dataJson };
+	  	    dbo.collection(collectionName).update({"orderId": dataJson.orderId}, newvalues, function(err, resp) {
+				if (err) res.send("Error In Update"+err);
+				db.close();
+				res.send(resp);
+			});
+		 	 break;
 		  case "delete":
 			dbo.collection(collectionName).deleteOne(dataJson, function(err, obj) {
 					if (err) res.send("Error In Delete"+err);
@@ -64,8 +66,16 @@ function mongoOpns(req, res, collectionName, operation, dataJson, query)
 			  });
 			  break;
 		  case "deleteIngredients":
-			dbo.collection(collectionName).update({"name": "Ingredients"},{ "$pull" : dataJson}, function(err, resp) {
-					if (err) res.send("Error In Insert"+err);
+			//dbo.collection(collectionName).update({"name": "Ingredients"},{ "$pull" : dataJson}, function(err, resp) {
+			dbo.collection(collectionName).update({},{ "$pull" : dataJson}, function(err, resp) {
+					if (err) res.send("Error In Delete"+err);
+					db.close();
+					res.send(resp);
+				});
+			  break;
+		  case "deleteRecipe":
+			dbo.collection(collectionName).update({},{ "$pull" : dataJson}, function(err, resp) {
+					if (err) res.send("Error In Delete"+err);
 					db.close();
 					res.send(resp);
 				});

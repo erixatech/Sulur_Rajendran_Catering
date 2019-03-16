@@ -201,12 +201,12 @@ function getIngredientUnitsByName(ingredientJson, name) {
 	return toRet;
 }
 
-function getRecipeByCategory(receipeJson, catName) {
+function getRecipeByCategory(recipeJson, catName) {
 	var toRet = null;
 	var tempArr = [];
-	$.each(receipeJson, function( index, receipeObj ) {
-		if(receipeObj.itemCategory && receipeObj.itemCategory.toLowerCase() == catName.toLowerCase()) {
-			tempArr.push(receipeObj);
+	$.each(recipeJson, function( index, recipeObj ) {
+		if(recipeObj.itemCategory && recipeObj.itemCategory.toLowerCase() == catName.toLowerCase()) {
+			tempArr.push(recipeObj);
 		}
 	});
 	if(tempArr.length>0)
@@ -216,18 +216,28 @@ function getRecipeByCategory(receipeJson, catName) {
 	return toRet;
 }
 
-function getRecipeByName(receipeJson, receipeName) {
+function getRecipeByName(recipeJson, recipeName) {
 	var toRet = null;
 	var tempArr = [];
-	$.each(receipeJson, function( index, receipeObj ) {
-		if((receipeObj.name && (receipeObj.name.toLowerCase().indexOf(receipeName.toLowerCase())>-1)) || (receipeObj.tamilName && (receipeObj.tamilName.toLowerCase().indexOf(receipeName.toLowerCase())>-1)) ) {
-			tempArr.push(receipeObj);
+	$.each(recipeJson, function( index, recipeObj ) {
+		if((recipeObj.name && (recipeObj.name.toLowerCase().indexOf(recipeName.toLowerCase())>-1)) || (recipeObj.tamilName && (recipeObj.tamilName.toLowerCase().indexOf(recipeName.toLowerCase())>-1)) ) {
+			tempArr.push(recipeObj);
 		}
 	});
 	if(tempArr.length>0)
 	{
 		toRet = tempArr;
 	}
+	return toRet;
+}
+
+function getRecipeObjById(recipeJson, idToFind) {
+	var toRet = null;
+	$.each(recipeJson, function( index, recipeObj ) {
+		if(recipeObj.id == idToFind) {
+			toRet = recipeObj;
+		}
+	});
 	return toRet;
 }
 
