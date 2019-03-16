@@ -18,11 +18,11 @@ router.get("/getIngredients", function(req, res){
 });
 
 router.post("/createIngredient", function(req, res){  
-	mongoOpn1.mongoOpns(req, res, "Ingredients", "insertIngredients", req.body);
+	mongoOpn1.mongoOpns(req, res, "Ingredients", "insertInArray", req.body);
 });
 
 router.post("/editIngredient", function(req, res){  
-  mongoOpn1.mongoOpns(req, res, "Ingredients", "updateIngredients", req.body);
+  mongoOpn1.mongoOpns(req, res, "Ingredients", "updateInArray", req.body);
 });
 
 router.post("/deleteIngredient", function(req, res){  
@@ -34,6 +34,10 @@ router.post("/deleteIngredient", function(req, res){
 //Recipe Queries
 router.get("/getRecipe", function(req, res){
   mongoOpn1.mongoOpns(req, res, "Recipe", "fetch", req.body);
+});
+
+router.post("/createRecipe", function(req, res){  
+	mongoOpn1.mongoOpns(req, res, "Recipe", "insertInArray", req.body);
 });
 
 router.post("/deleteRecipe", function(req, res){  

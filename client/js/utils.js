@@ -263,19 +263,31 @@ function getIndexForId(ingredientJson, category, id) {
 	return toRet;
 }
 
-function getNextId(ingredientJson) {
+function getNextId(jsonToFind, module) {
 	var highestId = 0;
-	$.each( ingredientJson, function( catName, ingArr ) {
-		if(catName!="_id" && catName!="name")
-		{
-			$.each(ingArr, function( index, ingredientObj ) {
-			  	if(ingredientObj.id > highestId)
-			  	{
-			  		highestId = ingredientObj.id;
-			  	}
-			});
-		}
-	});
+	if(module == "Ingredient")
+	{
+		$.each( jsonToFind, function( catName, ingArr ) {
+			if(catName!="_id" && catName!="name")
+			{
+				$.each(ingArr, function( index, ingredientObj ) {
+				  	if(ingredientObj.id > highestId)
+				  	{
+				  		highestId = ingredientObj.id;
+				  	}
+				});
+			}
+		});
+	}
+	else if(module == "Recipe")
+	{
+		$.each(jsonToFind, function( index, receipeObj ) {
+		  	if(receipeObj.id > highestId)
+		  	{
+		  		highestId = receipeObj.id;
+		  	}
+		});
+	}
 	return highestId+1;
 }
 

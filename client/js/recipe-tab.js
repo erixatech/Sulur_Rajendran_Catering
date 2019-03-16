@@ -145,18 +145,43 @@ RecipeTab.prototype.getIngredientMapRow = function() {
 		              + '        <div class="col-4">'
 		              + '            <select class="form-control cls_ingredientName_recipe" id="id_ingredientName_recipe" name="ingredientName"></select>'
 		              + '        </div>'
-		              + '        <div class="col-2">'
-		              + '            <select class="form-control cls_ingredientUnit_recipe" id="id_ingredientUnit_recipe" name="ingredientUnit"></select>'
-		              + '        </div>'
 		              + '		 <div class="col-2">'
 		              + '			 <input type="text" class="form-control cls_ingredientQunatity_recipe" required id="id_ingredientQunatity_recipe" placeholder="Enter Quantity" name="qunatity">'
 		              + '		 </div>'
+		              + '        <div class="col-2">'
+		              + '            <select class="form-control cls_ingredientUnit_recipe" id="id_ingredientUnit_recipe" name="ingredientUnit"></select>'
+		              + '        </div>'
 		              + '        <div class="col-1">'
 		  			  +             ($('.cls_ingredientMapRow').length>0 ? '<i class="fa fa-minus-circle cls_removeCurrentIngredientMap" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>' : '')
 		  			  + '        </div>'
 		              + '	</div>';
 			
 	return renderHtmlMapRow;
+};
+
+RecipeTab.prototype.constructIngArrForRecipe = function() {
+	var _this = this;
+	var ingMapToReturn = [];
+	
+	if($('#recipeModal .createRecipeIngredientMap'))
+	{
+		var elems = $('#recipeModal .createRecipeIngredientMap').find('.cls_ingredientMapRow');
+
+		if(elems && elems.length>0)
+		{
+			$.each( elems, function( index, elem ) {
+				var currIngRow = {};
+				var currElem = $(elem);
+				currIngRow["category"] = currElem.find('#id_ingredientCategory_recipe').val();
+				currIngRow["name"] = currElem.find('#id_ingredientName_recipe').val();
+				currIngRow["quantity"] = currElem.find('#id_ingredientQunatity_recipe').val();
+				currIngRow["unit"] = currElem.find('#id_ingredientUnit_recipe').val();
+				ingMapToReturn.push(currIngRow);
+			});
+		}
+	}
+			
+	return ingMapToReturn;
 };
 
 RecipeTab.prototype.registerEvents = function() {
@@ -229,6 +254,56 @@ RecipeTab.prototype.registerEvents = function() {
 		    }
 		    $("#id_selectRecipeCategory").val("All");
 		});
+
+		$(".cls_saveRecipe").click(function() {
+	    	
+	    	var dialogName = $(".modal-title", $("#recipeModal")).text();
+	    	
+	    	if(dialogName.indexOf("Edit")>-1)	//Edit Scenario
+	    	{
+	    		
+	    	}
+	    	else	//Create Scenario
+	    	{
+	    		showLoading();
+	    		var recipeJsonToCreate = {};
+	    		recipeJsonToCreate["Recipe"] =
+	    		{
+		    		"id": getNextId(_this.recipeJson, "Recipe"),
+			        "name": $("#id_recipeName").val(),
+			        "tamilName": $("#id_recipeTamilName").val(),
+			        "itemCategory": $("#id_recipeCategory").val(),
+			        "headCount": $("#id_recipeHeadCount").val(),
+			        "Ingredients": _this.constructIngArrForRecipe()
+			    };
+		        $.ajax({
+		        	url: "/createRecipe",
+	            	type: "post",
+	            	contentType: 'application/json',
+	            	data: JSON.stringify(recipeJsonToCreate),
+		        	success: function(result){
+		        		hideLoading();
+		        		if(result.nModified && result.nModified>0)
+		        		{
+							$("#successPopup").find('.modal-title').text("Recipe Created Successfully");
+		        			$("#successPopup").modal('show');
+			        	}
+		        		else
+		        		{
+			        		$("#errorPopup").find('.modal-title').text('Failed to Create New Recipe. Please Try again later.');
+		        			$("#errorPopup").modal('show');
+			        	}
+		        		$('#recipeModal .close').click();
+					},
+					error: function(){
+						hideLoading();
+					    $("#errorPopup").find('.modal-title').text('Failed to Create Recipe. Please Try again later.');
+		        		$("#errorPopup").modal('show');
+		        		$('#recipeModal .close').click();
+					}
+				});
+	    	}
+	    });
 		
 		/*$(".cls_deleteRecipe").click(function() {
 	       var idx = $(this).attr("idx");
@@ -244,6 +319,7 @@ RecipeTab.prototype.registerEvents = function() {
 	    });*/
 			
 		$(".cls_editRecipe, .cls_createRecipe").click(function() {
+			var modal = $("#recipeModal");
 	        if($(this).hasClass("cls_createRecipe")) {
 			    $(".modal-title", modal).text("Create Recipe");
 	    	    $(".cls_recipeId", modal).val("");

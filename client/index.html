@@ -193,15 +193,19 @@
 	         <form id="id_createRecipeForm">
 			    <div class="form-group">
 			      <label for="name">Name</label>
-			      <input type="text" class="form-control" required id="id_name" placeholder="Enter name" name="name">
+			      <input type="text" class="form-control" required id="id_recipeName" placeholder="Enter name" name="name">
 			    </div>
 			    <div class="form-group">
 			      <label for="tamilname">Tamil Name</label>
-			      <input type="text" class="form-control" required id="id_tamilName" placeholder="Enter Tamil Name" name="tamilname">
+			      <input type="text" class="form-control" required id="id_recipeTamilName" placeholder="Enter Tamil Name" name="tamilname">
 			    </div>
 				<div class="form-group">
 				  	<label for="recipeCategory">Category</label>
                     <select class="form-control" id="id_recipeCategory" name="recipeCategory"></select>
+				</div>
+				<div class="form-group">
+				  	<label for="recipeHeadCount">Head Count</label>
+                    <input type="text" class="form-control" required id="id_recipeHeadCount" placeholder="Enter Head Count" name="recipeHeadCount">
 				</div>
 				<h5><u>Add Ingredients to the Recipe</u></h5>
 				<div class="form-group">
@@ -217,13 +221,13 @@
 			                    <select class="form-control cls_ingredientName_recipe" id="id_ingredientName_recipe" name="ingredientName"></select>
 		                    </div>
 		                    <div class="col-2">
-							  	<label for="ingredientUnit">Unit</label>
-			                    <select class="form-control cls_ingredientUnit_recipe" id="id_ingredientUnit_recipe" name="ingredientUnit"></select>
-		                    </div>
-		                    <div class="col-2">
 						      <label for="qunatity">Quantity</label>
 						      <input type="text" class="form-control cls_ingredientQunatity_recipe" required id="id_ingredientQunatity_recipe" placeholder="Enter Quantity" name="qunatity">
 						    </div>
+		                    <div class="col-2">
+							  	<label for="ingredientUnit">Unit</label>
+			                    <select class="form-control cls_ingredientUnit_recipe" id="id_ingredientUnit_recipe" name="ingredientUnit"></select>
+		                    </div>
 						    <div class="col-1">
 						    </div>
 	                    </div>

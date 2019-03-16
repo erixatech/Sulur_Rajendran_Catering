@@ -18,7 +18,7 @@ function mongoOpns(req, res, collectionName, operation, dataJson, query)
 					res.send("Inserted Successfully");
 				});
 			  break;
-		  case "insertIngredients":
+		  case "insertInArray":
 		  	    //dbo.collection(collectionName).update({"name": "Ingredients"},{ "$push" : dataJson}, function(err, resp) {
 		  	    dbo.collection(collectionName).update({},{ "$push" : dataJson}, function(err, resp) {
 					if (err) res.send("Error In Insert"+err);
@@ -41,7 +41,7 @@ function mongoOpns(req, res, collectionName, operation, dataJson, query)
 					res.send("Updated Successfully");
 			  });
 			  break;
-		  case "updateIngredients":
+		  case "updateInArray":
 	  		var newvalues = { $set: dataJson };
 		  	//dbo.collection(collectionName).update({"name": "Ingredients"},newvalues, function(err, resp) {
 		  	dbo.collection(collectionName).update({},newvalues, function(err, resp) {

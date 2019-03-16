@@ -137,7 +137,7 @@ IngredientTab.prototype.registerEvents = function() {
 
 		$('#ingredientModal').on('hidden.bs.modal', function () {
 		    $(this).find('form').trigger('reset');
-		})
+		});
 		
 		/*$(".cls_deleteIngredient").click(function() {
 	       var idx = $(this).attr("idx");
@@ -232,7 +232,7 @@ IngredientTab.prototype.registerEvents = function() {
 	    		var ingJson = {};
 	    		ingJson[selCat] =
 	    		{
-		    		"id": getNextId(ingredientJson),
+		    		"id": getNextId(ingredientJson, "Ingredient"),
 			        "name": $("#id_tamilName").val(),
 			        "unit": $("#id_ingredientUnit").val()
 			    };
@@ -247,7 +247,6 @@ IngredientTab.prototype.registerEvents = function() {
 		        		{
 							$("#successPopup").find('.modal-title').text("Ingredient Created Successfully");
 		        			$("#successPopup").modal('show');
-							//$('#ingredientModal .close').click();
 			        	}
 		        		else
 		        		{
