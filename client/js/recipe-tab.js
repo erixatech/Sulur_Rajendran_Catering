@@ -13,9 +13,7 @@ RecipeTab.prototype.init = function() {
 RecipeTab.prototype.render = function() {
 	var _this = this;
 
-	_this.ingredientJson = ingredientJson;
-
-	var allIngredientNames = getIngredientNamesByCategory(_this.ingredientJson);
+	var allIngredientNames = getIngredientNamesByCategory(ingredientJson);
 	addOptionsToSelect(_this.recipeFilters, "id_selectRecipeCategory");
 	addOptionsToSelect(_this.recipeCategory, "id_recipeCategory");
 	addOptionsToSelect(ingredientCategories, "id_ingredientCategory_recipe");
@@ -168,14 +166,14 @@ RecipeTab.prototype.registerEvents = function() {
 			var elemToAdd = $(_this.getIngredientMapRow());
 			cloneDOM(elemToAdd, $('.createRecipeIngredientMap'));
 			addOptionsToSelectViaElem(ingredientCategories, $('.cls_ingredientCategory_recipe')[$('.cls_ingredientCategory_recipe').length-1]);
-			var allIngredientNames = getIngredientNamesByCategory(_this.ingredientJson);
+			var allIngredientNames = getIngredientNamesByCategory(ingredientJson);
 			addOptionsToSelectViaElem(allIngredientNames, $('.cls_ingredientName_recipe')[$('.cls_ingredientName_recipe').length-1]);
 			addOptionsToSelectViaElem(ingredientUnits, $('.cls_ingredientUnit_recipe')[$('.cls_ingredientUnit_recipe').length-1]);
 		}); 
 		
 		$(document).on("change", ".cls_ingredientCategory_recipe", function(){
 			var category = $(this).val();
-			var ingredientNames = getIngredientNamesByCategory(_this.ingredientJson, category);
+			var ingredientNames = getIngredientNamesByCategory(ingredientJson, category);
 			$(this).closest('.cls_ingredientMapRow').find("#id_ingredientName_recipe option").remove();
 			addOptionsToSelectViaElem(ingredientNames, $($(this).closest('.cls_ingredientMapRow').find("#id_ingredientName_recipe"))[0]);
 			$($(this).closest('.cls_ingredientMapRow').find("#id_ingredientName_recipe")).trigger("change");
@@ -183,7 +181,7 @@ RecipeTab.prototype.registerEvents = function() {
 		
 		$(document).on("change", ".cls_ingredientName_recipe", function(){
 			var name = $(this).val();
-			var ingredientUnits = getIngredientUnitsByName(_this.ingredientJson, name);
+			var ingredientUnits = getIngredientUnitsByName(ingredientJson, name);
 			$(this).closest('.cls_ingredientMapRow').find("#id_ingredientUnit_recipe option").remove();
 			addOptionsToSelectViaElem(ingredientUnits, $($(this).closest('.cls_ingredientMapRow').find("#id_ingredientUnit_recipe"))[0]);
 		});

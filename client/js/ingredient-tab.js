@@ -11,7 +11,6 @@ IngredientTab.prototype.render = function() {
 	addOptionsToSelect(ingredientFilters, "id_selectIngredientCategory")
 	addOptionsToSelect(ingredientCategories, "id_ingredientCategory");
 	addOptionsToSelect(ingredientUnits, "id_ingredientUnit");
-	_this.ingredientJson = {};
 
 	showLoading();
 	$.ajax({
@@ -22,8 +21,6 @@ IngredientTab.prototype.render = function() {
     		if(result && result.length == 1)
     		{	    		
 	    		ingredientJson = result[0];
-	    		_this.ingredientJson = ingredientJson;
-	    		new RecipeTab();
 	    	}
 			_this.renderIngredients("All");
 		},
@@ -41,7 +38,7 @@ IngredientTab.prototype.renderIngredients = function(ingCat) {
 
 	if(ingCat!="All")
 	{
-		$(".cls_ingredientsList").append(_this.renderIngredientsByCategory(ingCat, _this.ingredientJson[ingCat]));
+		$(".cls_ingredientsList").append(_this.renderIngredientsByCategory(ingCat, ingredientJson[ingCat]));
 	}
 	else
 	{
@@ -56,7 +53,7 @@ IngredientTab.prototype.renderAllIngredients = function() {
 		for (var i =0; i<ingredientCategories.length; i++ ) 
 		{
 			var categoryName = ingredientCategories[i];
-			catagoryJson = _this.ingredientJson[categoryName];
+			catagoryJson = ingredientJson[categoryName];
 			renderHtml += _this.renderIngredientsByCategory(categoryName, catagoryJson);
 		}
 		$(".cls_ingredientsList").append(renderHtml);
@@ -141,14 +138,14 @@ IngredientTab.prototype.registerEvents = function() {
 		    $(this).find('form').trigger('reset');
 		})
 		
-		$(".cls_deleteIngredient").click(function() {
+		/*$(".cls_deleteIngredient").click(function() {
 	       var idx = $(this).attr("idx");
 	       var name = $(this).attr("name");
 	       var isDelete = confirm("You wish to delete the ingredient "+name+" ?");
 	       if (isDelete == true) {
 	         $(".ingredient_"+idx).remove();
 	       }
-	    });
+	    });*/
 
 	    $("#id_selectIngredientCategory").change(function() {
 	    	_this.renderIngredients($("#id_selectIngredientCategory").val());
@@ -160,7 +157,7 @@ IngredientTab.prototype.registerEvents = function() {
 	    	if(searchKeyword.length>0)
 	    	{
 		    	$(".cls_ingredientsList").html('');
-		    	var results = getIngredientsByName(_this.ingredientJson, searchKeyword);
+		    	var results = getIngredientsByName(ingredientJson, searchKeyword);
 		    	$(".cls_ingredientsList").append(_this.renderSearchResults(results));
 		    }
 		    else
@@ -183,7 +180,7 @@ IngredientTab.prototype.registerEvents = function() {
 			        "name": $("#id_tamilName").val(),
 			        "unit": $("#id_ingredientUnit").val()
 			    };*/
-			    var reqKey = selCat+"."+getIndexForId(_this.ingredientJson, selCat, $("#ingredientModal").data("idToEdit"));
+			    var reqKey = selCat+"."+getIndexForId(ingredientJson, selCat, $("#ingredientModal").data("idToEdit"));
 			    if(reqKey != -1)
 			    {
 			    	showLoading();
@@ -234,7 +231,7 @@ IngredientTab.prototype.registerEvents = function() {
 	    		var ingJson = {};
 	    		ingJson[selCat] =
 	    		{
-		    		"id": getNextId(_this.ingredientJson),
+		    		"id": getNextId(ingredientJson),
 			        "name": $("#id_tamilName").val(),
 			        "unit": $("#id_ingredientUnit").val()
 			    };
@@ -284,7 +281,7 @@ IngredientTab.prototype.registerEvents = function() {
 
 		$(document).on('click', '.cls_editIngredient', function(){
 			var idx = $(this).attr("idx");
-			var curIngredientObj = getIngredientById(_this.ingredientJson, idx);
+			var curIngredientObj = getIngredientById(ingredientJson, idx);
 			if(curIngredientObj && !$.isEmptyObject(curIngredientObj))
 			{
 				var id = curIngredientObj.id;
@@ -304,7 +301,7 @@ IngredientTab.prototype.registerEvents = function() {
 
 		$(document).on('click', '.cls_deleteIngredient', function(){
 			var idx = $(this).attr("idx");
-	        var curIngredientObj = getIngredientById(_this.ingredientJson, idx);
+	        var curIngredientObj = getIngredientById(ingredientJson, idx);
 	        if(curIngredientObj && !$.isEmptyObject(curIngredientObj))
 	        {
 	    	    var id = curIngredientObj.id;
