@@ -141,7 +141,9 @@ RecipeTab.prototype.resetRecipeModal = function() {
 	$('#id_recipeCategory').val($("#id_recipeCategory option:first").val()).trigger('change');
 	$("#id_recipeHeadCount", modal).val("");*/
 
-	for(var i=1; i<$('.cls_ingredientMapRow').length; i++)
+	var nodesToRemove = $('.cls_ingredientMapRow').length;
+
+	for(var i=nodesToRemove-1; i>0; i--)
 	{
 		$($('.cls_ingredientMapRow')[i]).remove();
 	}
@@ -323,7 +325,7 @@ RecipeTab.prototype.registerEvents = function() {
 	    			showLoading();
 		    		recipeJsonToCreate[reqKey] =
 		    		{
-			    		"id": $("#recipeModal").data("idToEdit"),
+			    		"id": Number($("#recipeModal").data("idToEdit")),
 				        "name": $("#id_recipeName").val(),
 				        "tamilName": $("#id_recipeTamilName").val(),
 				        "itemCategory": $("#id_recipeCategory").val(),
@@ -439,7 +441,7 @@ RecipeTab.prototype.registerEvents = function() {
 	    	    var IngredientsListForRecipe = curRecipeObj.Ingredients;
 	    	    var modal = $("#recipeModal");
 	    	    $(".modal-title", modal).text("Edit Recipe");
-				modal.data("idToEdit",idx);
+				modal.data("idToEdit",Number(idx));
 	    	    $("#id_recipeName", modal).val(name);
 	    	    $("#id_recipeTamilName", modal).val(tamilName);
 	    	    $("#id_recipeCategory", modal).val(categoryName);

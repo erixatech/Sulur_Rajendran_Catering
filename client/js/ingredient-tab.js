@@ -188,7 +188,7 @@ IngredientTab.prototype.registerEvents = function() {
 			    	showLoading();
 				    ingJson[reqKey] =
 		    		{
-			    		"id": $("#ingredientModal").data("idToEdit"),
+			    		"id": Number($("#ingredientModal").data("idToEdit")),
 				        "name": $("#id_tamilName").val(),
 				        "unit": $("#id_ingredientUnit").val()
 				    };
@@ -283,7 +283,7 @@ IngredientTab.prototype.registerEvents = function() {
 				var categoryName = curIngredientObj.categoryName;
 				var unit = curIngredientObj.unit;
 				var modal = $("#ingredientModal");
-				modal.data("idToEdit",idx);
+				modal.data("idToEdit",Number(idx));
 				$(".modal-title", modal).text("Edit Ingredient");
 				$(".cls_ingredientId", modal).val(id);
 				$(".cls_ingredientTamilName", modal).val(name);
