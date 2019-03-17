@@ -186,7 +186,7 @@ RecipeTab.prototype.getIngredientMapRow = function() {
 	renderHtmlMapRow += '    <div class="row cls_ingredientMapRow mt-2 mb-1">'
 		              + '        <div class="col-3">'
 		              + '                <select class="form-control cls_ingredientCategory_recipe" id="id_ingredientCategory_recipe" name="ingredientCategory">'
-		              +'                     <option>--Select All--</option>'
+		              +'                     <option>Choose Category</option>'
 		              +'                 </select>'
 		              + '        </div>'
 		              + '        <div class="col-4">'
@@ -241,8 +241,6 @@ RecipeTab.prototype.registerEvents = function() {
 			var elemToAdd = $(_this.getIngredientMapRow());
 			cloneDOM(elemToAdd, $('.createRecipeIngredientMap'));
 			addOptionsToSelectViaElem(ingredientCategories, $('.cls_ingredientCategory_recipe')[$('.cls_ingredientCategory_recipe').length-1]);
-			var allIngredientNames = getIngredientNamesByCategory(ingredientJson);
-			addOptionsToSelectViaElem(allIngredientNames, $('.cls_ingredientName_recipe')[$('.cls_ingredientName_recipe').length-1]);
 			addOptionsToSelectViaElem(ingredientUnits, $('.cls_ingredientUnit_recipe')[$('.cls_ingredientUnit_recipe').length-1]);
 		}); 
 		
