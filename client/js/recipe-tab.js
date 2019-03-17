@@ -132,6 +132,51 @@ RecipeTab.prototype.renderSearchResults = function(searchResRecipe) {
 	return renderHtml;
 };
 
+RecipeTab.prototype.resetRecipeModal = function() {
+	var _this = this;
+
+	/*var modal = $("#recipeModal");	
+	$("#id_recipeName", modal).val("");
+	$("#id_recipeTamilName", modal).val("");
+	$('#id_recipeCategory').val($("#id_recipeCategory option:first").val()).trigger('change');
+	$("#id_recipeHeadCount", modal).val("");*/
+
+	for(var i=1; i<$('.cls_ingredientMapRow').length; i++)
+	{
+		$($('.cls_ingredientMapRow')[i]).remove();
+	}
+
+	$($('.cls_ingredientCategory_recipe')[0]).val($(".cls_ingredientCategory_recipe option:first").val()).trigger('change');
+};	
+
+RecipeTab.prototype.renderIngListForRecipe = function(IngredientsListForRecipe) {
+	var _this = this;
+	
+	if(IngredientsListForRecipe && IngredientsListForRecipe.length>0)
+	{
+		for(var i=1; i<IngredientsListForRecipe.length; i++)
+		{
+			$(".cls_addIngredient").click();
+		}
+
+		for(var j=0; j<IngredientsListForRecipe.length; j++)
+		{
+			var curIngredientObj = getIngredientById(ingredientJson, IngredientsListForRecipe[j].id);
+
+			if(curIngredientObj && !$.isEmptyObject(curIngredientObj))
+			{
+				$($('.cls_ingredientCategory_recipe')[j]).val(curIngredientObj.categoryName).trigger('change');
+				$($('.cls_ingredientName_recipe')[j]).val(curIngredientObj.name).trigger('change');
+				$($('.cls_ingredientQunatity_recipe')[j]).val(IngredientsListForRecipe[j].quantity);
+				$($('.cls_ingredientUnit_recipe')[j]).val(IngredientsListForRecipe[j].unit).trigger('change');
+				/*var ingredientUnits = getIngredientUnitsByName(ingredientJson, curIngredientObj.name);
+				var unitToPopulate = getSuitableUnit(ingredientUnits, curIngredientObj);
+				$('.cls_ingredientUnit_recipe')[j].val(unitToPopulate);*/
+			}
+		}
+	}
+};
+
 RecipeTab.prototype.getIngredientMapRow = function() {
 	var _this = this;
 	var renderHtmlMapRow = [];
@@ -174,6 +219,7 @@ RecipeTab.prototype.constructIngArrForRecipe = function() {
 				var currElem = $(elem);
 				currIngRow["category"] = currElem.find('#id_ingredientCategory_recipe').val();
 				currIngRow["name"] = currElem.find('#id_ingredientName_recipe').val();
+				currIngRow["id"] = getIngredientIdByNameAndCat(ingredientJson, currIngRow["name"], currIngRow["category"]);
 				currIngRow["quantity"] = currElem.find('#id_ingredientQunatity_recipe').val();
 				currIngRow["unit"] = currElem.find('#id_ingredientUnit_recipe').val();
 				ingMapToReturn.push(currIngRow);
@@ -186,7 +232,9 @@ RecipeTab.prototype.constructIngArrForRecipe = function() {
 
 RecipeTab.prototype.registerEvents = function() {
 	var _this = this;
+
 	$(document).ready(function(){
+
 		$(document).on("click", ".cls_addIngredient", function(){
 			var elemToAdd = $(_this.getIngredientMapRow());
 			cloneDOM(elemToAdd, $('.createRecipeIngredientMap'));
@@ -213,6 +261,11 @@ RecipeTab.prototype.registerEvents = function() {
 		
 		$(document).on("click", ".cls_removeCurrentIngredientMap", function(){
 			$(this).parents('.cls_ingredientMapRow').remove();
+		});
+
+		$('#recipeModal').on('hidden.bs.modal', function () {
+		    $(this).find('form').trigger('reset');
+		    _this.resetRecipeModal();
 		});
 
 		$(document).on('click', '.cls_deleteRecipe', function(){
@@ -261,7 +314,55 @@ RecipeTab.prototype.registerEvents = function() {
 	    	
 	    	if(dialogName.indexOf("Edit")>-1)	//Edit Scenario
 	    	{
-	    		
+	    		var recipeJsonToCreate = {};
+	    		var targetIndex = getIndexForIdForRecipe(_this.recipeJson, $("#recipeModal").data("idToEdit"));
+	    		var reqKey = "Recipe."+targetIndex;
+
+	    		if(targetIndex != -1)
+	    		{
+	    			showLoading();
+		    		recipeJsonToCreate[reqKey] =
+		    		{
+			    		"id": $("#recipeModal").data("idToEdit"),
+				        "name": $("#id_recipeName").val(),
+				        "tamilName": $("#id_recipeTamilName").val(),
+				        "itemCategory": $("#id_recipeCategory").val(),
+				        "headCount": $("#id_recipeHeadCount").val(),
+				        "Ingredients": _this.constructIngArrForRecipe()
+				    };
+			        $.ajax({
+			        	url: "/editRecipe",
+		            	type: "post",
+		            	contentType: 'application/json',
+		            	data: JSON.stringify(recipeJsonToCreate),
+			        	success: function(result){
+			        		hideLoading();
+			        		if(result.nModified && result.nModified>0)
+			        		{
+								$("#successPopup").find('.modal-title').text("Recipe Updated Successfully");
+			        			$("#successPopup").modal('show');
+				        	}
+			        		else
+			        		{
+				        		$("#errorPopup").find('.modal-title').text('Failed to Modify Recipe. Please Try again later.');
+			        			$("#errorPopup").modal('show');
+				        	}
+			        		$('#recipeModal .close').click();
+						},
+						error: function(){
+							hideLoading();
+						    $("#errorPopup").find('.modal-title').text('Failed to Edit Recipe. Please Try again later.');
+			        		$("#errorPopup").modal('show');
+			        		$('#recipeModal .close').click();
+						}
+					});
+			    }
+			    else
+			    {
+			    	$("#errorPopup").find('.modal-title').text('Failed to Edit Recipe. Please Try again later..!');
+	        		$("#errorPopup").modal('show');
+	        		$('#recipeModal .close').click();
+			    }
 	    	}
 	    	else	//Create Scenario
 	    	{
@@ -318,31 +419,34 @@ RecipeTab.prototype.registerEvents = function() {
 	       }
 	    });*/
 			
-		$(".cls_editRecipe, .cls_createRecipe").click(function() {
+		$(".cls_createRecipe").click(function() {
 			var modal = $("#recipeModal");
-	        if($(this).hasClass("cls_createRecipe")) {
-			    $(".modal-title", modal).text("Create Recipe");
-	    	    $(".cls_recipeId", modal).val("");
-	    	    $(".cls_recipeTamilName", modal).val("");
-		    }
-		    /*else {
-			    var idx = $(this).attr("idx");
-		        var curIngredientObj = getIngredientById(idx);
-		        if(curIngredientObj && !$.isEmptyObject(curIngredientObj))
-		        {
-		    	    var id = curIngredientObj.id;
-		    	    var name = curIngredientObj.name;
-		    	    var categoryName = curIngredientObj.categoryName;
-		    	    var unit = curIngredientObj.unit;
-		    	    var modal = $("#recipeModal");
-		    	    $(".modal-title", modal).text("Edit Ingredient");
-		    	    $(".cls_recipeId", modal).val(id);
-		    	    $(".cls_recipeTamilName", modal).val(name);
-		    	    $(".cls_recipeCategory", modal).val(categoryName);
-		    	    $(".cls_recipeUnit", modal).val(unit);
-		        }
-		    }*/
-				   
+	        $(".modal-title", modal).text("Create Recipe");
+    	    $(".cls_recipeId", modal).val("");
+    	    $(".cls_recipeTamilName", modal).val("");
 	    });
+
+		$(document).on('click', '.cls_editRecipe', function(){
+			var modal = $("#recipeModal");	        
+		    var idx = $(this).attr("idx");
+	        var curRecipeObj = getRecipeObjById(_this.recipeJson, idx);
+	        if(curRecipeObj && !$.isEmptyObject(curRecipeObj))
+	        {
+	    	    var name = curRecipeObj.name;
+	    	    var tamilName = curRecipeObj.tamilName;
+	    	    var categoryName = curRecipeObj.itemCategory;
+	    	    var headCount = curRecipeObj.headCount;
+	    	    var IngredientsListForRecipe = curRecipeObj.Ingredients;
+	    	    var modal = $("#recipeModal");
+	    	    $(".modal-title", modal).text("Edit Recipe");
+				modal.data("idToEdit",idx);
+	    	    $("#id_recipeName", modal).val(name);
+	    	    $("#id_recipeTamilName", modal).val(tamilName);
+	    	    $("#id_recipeCategory", modal).val(categoryName);
+	    	    $("#id_recipeHeadCount", modal).val(headCount);
+	    	    _this.renderIngListForRecipe(IngredientsListForRecipe);
+	        }
+	    });
+
 	});
 };

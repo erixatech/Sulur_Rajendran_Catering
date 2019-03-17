@@ -155,7 +155,7 @@ function getIngredientById(ingredientJson, id) {
 	return toRet;
 }
 
-function getIngredientsByName(ingredientJson, name) {
+function getIngredientsByName(ingredientJson, name) {		//For Search
 	var toRet = [];
 	$.each( ingredientJson, function( catName, ingArr ) {
 		if(catName!="_id" && catName!="name")
@@ -164,6 +164,22 @@ function getIngredientsByName(ingredientJson, name) {
 			  	if((ingredientObj.name.toLowerCase()).indexOf(name.toLowerCase())>-1) {
 			  		ingredientObj.category = catName;
 				  	toRet.push(ingredientObj);
+		      	}
+			});
+		}
+	});
+	return toRet;
+}
+
+function getIngredientIdByNameAndCat(ingredientJson, name, category) {
+	var toRet = -1;
+	$.each( ingredientJson, function( catName, ingArr ) {
+		if(catName!="_id" && catName!="name" && category == catName)
+		{
+			$.each(ingArr, function( index, ingredientObj ) {
+			  	if(ingredientObj.name.toLowerCase() == name.toLowerCase()) {
+			  		toRet = ingredientObj.id;
+			  		return toRet;
 		      	}
 			});
 		}
@@ -216,7 +232,7 @@ function getRecipeByCategory(recipeJson, catName) {
 	return toRet;
 }
 
-function getRecipeByName(recipeJson, recipeName) {
+function getRecipeByName(recipeJson, recipeName) {		//For Search
 	var toRet = null;
 	var tempArr = [];
 	$.each(recipeJson, function( index, recipeObj ) {
@@ -241,7 +257,7 @@ function getRecipeObjById(recipeJson, idToFind) {
 	return toRet;
 }
 
-function getIndexForId(ingredientJson, category, id) {
+function getIndexForIdForIng(ingredientJson, category, id) {
 	var indexToRet = 0;
 	var toRet = -1;
 	$.each( ingredientJson, function( catName, ingArr ) {
@@ -258,6 +274,24 @@ function getIndexForId(ingredientJson, category, id) {
 			  	}
 			});
 		}
+	});
+
+	return toRet;
+}
+
+function getIndexForIdForRecipe(recipeJson, id) {
+	var indexToRet = 0;
+	var toRet = -1;
+	
+	$.each(recipeJson, function( index, recipeObj ) {
+	  	if(recipeObj.id == id)
+	  	{
+	  		toRet = indexToRet;
+	  	}
+	  	else
+	  	{
+	  		indexToRet++;
+	  	}
 	});
 
 	return toRet;

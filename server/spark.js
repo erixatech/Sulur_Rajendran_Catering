@@ -40,6 +40,10 @@ router.post("/createRecipe", function(req, res){
 	mongoOpn1.mongoOpns(req, res, "Recipe", "insertInArray", req.body);
 });
 
+router.post("/editRecipe", function(req, res){  
+  mongoOpn1.mongoOpns(req, res, "Recipe", "updateInArray", req.body);
+});
+
 router.post("/deleteRecipe", function(req, res){  
   mongoOpn1.mongoOpns(req, res, "Recipe", "deleteRecipe", req.body);
 });

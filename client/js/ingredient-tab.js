@@ -181,8 +181,9 @@ IngredientTab.prototype.registerEvents = function() {
 			        "name": $("#id_tamilName").val(),
 			        "unit": $("#id_ingredientUnit").val()
 			    };*/
-			    var reqKey = selCat+"."+getIndexForId(ingredientJson, selCat, $("#ingredientModal").data("idToEdit"));
-			    if(reqKey != -1)
+			    var targetIndex = getIndexForIdForIng(ingredientJson, selCat, $("#ingredientModal").data("idToEdit"));
+			    var reqKey = selCat+"."+targetIndex;
+			    if(targetIndex != -1)
 			    {
 			    	showLoading();
 				    ingJson[reqKey] =
@@ -221,7 +222,7 @@ IngredientTab.prototype.registerEvents = function() {
 			    }
 			    else
 			    {
-			    	$("#errorPopup").find('.modal-title').text('Failed to edit Ingredient. Please Try again later.');
+			    	$("#errorPopup").find('.modal-title').text('Failed to edit Ingredient. Please Try again later..!');
 			        $("#errorPopup").modal('show');
 			        $('#ingredientModal .close').click();
 			    }
