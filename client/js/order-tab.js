@@ -9,7 +9,8 @@ function OrderTab(){
 OrderTab.prototype.init = function(){
 	var _this = this;
 	_this.isNewOrder = getValueFromQueryParam('orderIsNew');
-	_this.isListServiceForms = getValueFromQueryParam('orderid') ? "true" : "false";
+	_this.orderId = getValueFromQueryParam('orderId');
+	_this.isListServiceForms = getValueFromQueryParam('listServiceForms') ? "true" : "false";
 	_this.dummyRecipies = ["Kesari", "Badam Alwa", "Chicken Biriyani", "Sambar"];
 	_this.render();
 	_this.renderEvents();
@@ -21,8 +22,25 @@ OrderTab.prototype.render = function(){
 	if(_this.isNewOrder == 'true' && _this.isListServiceForms == 'true'){
 		_this.renderServiceForm();
 	}
+	else if(_this.orderId && _this.orderId.length > 0 && _this.isListServiceForms == 'true') {
+		_this.renderServiceForm();
+	}
 	else if(_this.isNewOrder == 'true'){
-		$("#id_orderContent_tab").append(_this.renderCreateOrder());
+		$("#id_orderContent_tab").append(_this.renderCreateOrUpdateOrder());
+	}
+	else if(_this.orderId && _this.orderId.length > 0){
+		showLoading();
+		var cbk = function(){
+			console.log("Clicked Order"+ _this.currentOrder);
+			if(_this.currentOrder && _this.currentOrder.length > 0){
+				var currentOrder = _this.currentOrder[0];
+				$("#id_orderContent_tab").append(_this.renderCreateOrUpdateOrder(currentOrder));
+				//Unable to retrieve text area values in UI, Need to fix this
+				$("#clientAddress").val(currentOrder.clientAddress);
+				$("#clientNotes").val(currentOrder.clientNotes);
+			}
+	    }
+	    _this.getOrderByIdFromDB(_this.orderId, cbk);
 	}
 	else{
 		_this.getOrderListFromDB();
@@ -54,7 +72,7 @@ OrderTab.prototype.renderOrderList = function(ordersJsonArr){
 			renderHtml += "<div class='row'>"
 		}
 		var curOrderObj = ordersJsonArr[i];
-		renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_orderDetails' style='cursor:pointer' idx='"+curOrderObj._id+"'>"
+		renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_orderDetails' style='cursor:pointer' idx='"+curOrderObj.orderId+"'>"
 							+ "<h6 class='card-header text-success bg-transparent border-secondary text-center cls_orderName'>"+ curOrderObj.clientName +"</h6>"
 							+ "<div class='card-body text-secondary font-weight-bold'>"
 						 		+ "<div class='row'>"
@@ -80,16 +98,17 @@ OrderTab.prototype.renderOrderList = function(ordersJsonArr){
 	}
 	return renderHtml;
 };
-OrderTab.prototype.renderCreateOrder = function(){
+OrderTab.prototype.renderCreateOrUpdateOrder = function(orderObj){
 	var renderHtml = [];
 	$("#id_createOrder").attr('hidden', true);
+	var isUpdate = (orderObj && !$.isEmptyObject(orderObj)) ? true : false;
 		//getFileValue();
 	renderHtml += '<form>'
 		+ '  <div class="form-group">'
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
 		+ '    			<label for="clientName">Name</label>'
-		+ '    			<input type="text" class="form-control" id="clientName" placeholder="Enter Name">'
+		+ '    			<input type="text" class="form-control" id="clientName" placeholder="Enter Name" value="'+ (isUpdate ? orderObj.clientName : "")+'">'
 		+ '  		</div>'
 		+ '  		<div class="col"></div>' 
 		+ '  		</div>'
@@ -99,7 +118,7 @@ OrderTab.prototype.renderCreateOrder = function(){
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
 		+ '    			<label for="clientPhone">Phone Number</label>'
-		+ '    			<input type="text" class="form-control" id="clientPhone" placeholder="Enter Phone Number">'
+		+ '    			<input type="text" class="form-control" id="clientPhone" placeholder="Enter Phone Number" value="'+ (isUpdate ? orderObj.clientPhone : "")+'">'
 		+ '  		</div>'
 		+ '  		<div class="col"></div>' 
 		+ '  		</div>'
@@ -109,7 +128,7 @@ OrderTab.prototype.renderCreateOrder = function(){
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
 		+ '    			<label for="clientAddress">Address</label>'
-		+ '    			<textarea class="form-control" id="clientAddress" rows="3" placeholder="Enter Address"></textarea>'
+		+ '    			<textarea class="form-control" id="clientAddress" rows="3" placeholder="Enter Address" value="'+ (isUpdate ? orderObj.clientAddress : "")+'"></textarea>'
 		+ '  		</div>'
 		+ '  		<div class="col"></div>' 
 		+ '  		</div>'
@@ -119,7 +138,7 @@ OrderTab.prototype.renderCreateOrder = function(){
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
 		+ '    			<label for="eventName">Event Name</label>'
-		+ '    			<input type="text" class="form-control" id="eventName" placeholder="Enter Event Name">'
+		+ '    			<input type="text" class="form-control" id="eventName" placeholder="Enter Event Name" value="'+ (isUpdate ? orderObj.eventName : "")+'">'
 		+ '  		</div>'
 		+ '  		<div class="col"></div>' 
 		+ '  		</div>'
@@ -129,7 +148,7 @@ OrderTab.prototype.renderCreateOrder = function(){
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
 		+ '    			<label for="eventDate">Event Date</label>'
-		+ '    			<input type="text" class="form-control" id="eventDate" placeholder="Enter Event Date">'
+		+ '    			<input type="text" class="form-control" id="eventDate" placeholder="Enter Event Date" value="'+ (isUpdate ? orderObj.eventDate : "")+'">'
 		+ '  		</div>'
 		+ '  		<div class="col"></div>' 
 		+ '  		</div>'
@@ -139,7 +158,7 @@ OrderTab.prototype.renderCreateOrder = function(){
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
 		+ '    			<label for="eventVenue">Event Venue</label>'
-		+ '    			<input type="text" class="form-control" id="eventVenue" placeholder="Enter Event Venue">'
+		+ '    			<input type="text" class="form-control" id="eventVenue" placeholder="Enter Event Venue" value="'+ (isUpdate ? orderObj.eventVenue : "")+'">'
 		+ '  		</div>'
 		+ '  		<div class="col"></div>' 
 		+ '  		</div>'
@@ -149,7 +168,7 @@ OrderTab.prototype.renderCreateOrder = function(){
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
 		+ '    			<label for="clientNotes">Notes</label>'
-		+ '    			<textarea class="form-control" id="clientNotes" rows="3" placeholder="Enter Any Additional Notes"></textarea>'
+		+ '    			<textarea class="form-control" id="clientNotes" rows="3" placeholder="Enter Any Additional Notes" value="'+ (isUpdate ? orderObj.clientNotes : "")+'"></textarea>'
 		+ '  		</div>'
 		+ '  		<div class="col"></div>' 
 		+ '  		</div>'
@@ -169,7 +188,7 @@ OrderTab.prototype.renderCreateOrder = function(){
 		+ '  </div>' */
 		+ '  <div class="row mt-4">'
 		+ '  	<div class="col text-right">'
-		+ '     	<button type="button" id="id_listServiceForms" class="btn btn-primary">Save and Proceed To Service Form</button>'
+		+ '     	<button type="button" id="id_listServiceForms" class="btn btn-primary" isupdate="'+isUpdate+'" orderid="'+ (isUpdate ? orderObj.orderId : "")+'">Save and Proceed To Service Form</button>'
 		+ '       	<button type="button" id="id_listServiceFormsCancel" class="btn btn-secondary ml-3">Cancel</button>'
 		+ '  	</div>'
 		+ '  	<div class="col"></div>' 
@@ -356,7 +375,8 @@ OrderTab.prototype.renderEvents = function() {
 	
 	$(document).ready(function(){
 		$(document).on("click", ".cls_orderDetails", function(){
-			alert("Order Clicked");// Do ur code here
+			var orderId = $(this).attr("idx");
+			addQueryParamToUrlAndReload('orderId', orderId);
 		});
 
 		$(document).on("click", "#id_createOrder", function(){
@@ -365,7 +385,14 @@ OrderTab.prototype.renderEvents = function() {
 		
 		$(document).on("click", "#id_listServiceForms", function(){
 			showLoading();
-			_this.getOrderDataAndCreate();
+			var isUpdate = $(this).attr("isupdate") == "true" ? true : false;
+			if(isUpdate) {
+				var orderId = $(this).attr("orderid");
+				_this.getOrderDataAndUpdate(orderId);
+			}
+			else {
+				_this.getOrderDataAndCreate();
+			}
 		});
 		
 		$(document).on("click", ".cls_addReceipe_sf", function(){
@@ -475,6 +502,39 @@ OrderTab.prototype.getOrderDataAndCreate = function(){
 		error: function(){
 			hideLoading();
 		    $("#errorPopup").find('.modal-title').text('Failed to create Order. Please Try again later.');
+    		$("#errorPopup").modal('show');
+		}
+	});
+
+}
+OrderTab.prototype.getOrderDataAndUpdate = function(orderId){
+	var _this= this;
+
+	var orderMetaData = {};
+	orderMetaData.orderId = orderId;
+	orderMetaData.clientName = $("#clientName").val();
+	orderMetaData.clientPhone = $("#clientPhone").val();
+	orderMetaData.clientAddress = $("#clientAddress").val();
+	orderMetaData.eventName = $("#eventName").val();
+	orderMetaData.eventDate = $("#eventDate").val();
+	orderMetaData.eventVenue = $("#eventVenue").val();
+	orderMetaData.clientNotes = $("#clientNotes").val();
+
+	$.ajax({
+    	url: "/updateOrder",
+    	type: "post",
+    	contentType: 'application/json',
+    	data: JSON.stringify(orderMetaData),
+    	success: function(result){
+    		hideLoading();
+
+			$("#successPopup").find('.modal-title').text("Order Updated Successfully");
+    		$("#successPopup").modal('show');
+    		addQueryParamToUrlAndReload('listServiceForms', "true");
+		},
+		error: function(){
+			hideLoading();
+		    $("#errorPopup").find('.modal-title').text('Failed to update Order. Please Try again later.');
     		$("#errorPopup").modal('show');
 		}
 	});
