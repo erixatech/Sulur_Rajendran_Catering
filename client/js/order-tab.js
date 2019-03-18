@@ -29,6 +29,7 @@ OrderTab.prototype.render = function(){
 	}
 	else if(_this.isNewOrder == 'true'){
 		$("#id_orderContent_tab").append(_this.renderCreateOrUpdateOrder());
+		$(".backFromCreateOrder").removeClass("d-none");
 	}
 	else if(_this.orderId && _this.orderId.length > 0){
 		showLoading();
@@ -39,6 +40,7 @@ OrderTab.prototype.render = function(){
 				//Unable to retrieve text area values in UI, Need to fix this
 				$("#clientAddress").val(currentOrder.clientAddress);
 				$("#clientNotes").val(currentOrder.clientNotes);
+				$(".backFromCreateOrder").removeClass("d-none");
 			}
 	    }
 	    _this.getOrderByIdFromDB(_this.orderId, cbk);
@@ -232,6 +234,7 @@ OrderTab.prototype.renderServiceForms = function(){
 
 	var cbk = function(){
 		$("#id_orderContent_tab").append(_this.renderServiceFormList());
+		$(".backFromServiceList").removeClass("d-none");
 	}
 	if(!_this.currentOrder){
 		_this.getOrderByIdFromDB(orderId, cbk);
@@ -250,6 +253,9 @@ OrderTab.prototype.renderServiceFormList = function(){
 						+ '<div class="text-right col-11 pb-4">'
 							+ '<a id="id_createService" class="btn btn-primary btn-md mr-3 col-2 text-white">'
 					          + '<i class="fa fa-plus-circle" aria-hidden="true"></i> Create New Service'
+					        + '</a>'
+					        + '<a id="id_back" class="btn btn-primary btn-md mr-3 col-1 text-white backFromServiceList d-none">'
+					          + '<i aria-hidden="true"></i> Back'
 					        + '</a>'
 						+ '</div>'
 				   	+ '</div>'
@@ -428,7 +434,6 @@ OrderTab.prototype.renderEvents = function() {
 			url = addQueryParamToUrl(url, 'createServiceForm', "true");
 			window.location.href = url;
 		});
-
 		$(document).on('click', '.cls_deleteOrder', function(event){
 			event.stopPropagation();
 
@@ -481,6 +486,24 @@ OrderTab.prototype.renderEvents = function() {
 			    }
 			}
 	    });
+		
+        $(document).on('click', '.backFromCreateOrder, #id_listServiceFormsCancel', function(event){
+        	var url = window.location.href;
+			url = removeQueryParamFromUrl(url, "orderIsNew");
+			url = removeQueryParamFromUrl(url, "orderId");
+			window.location.href = url;
+		});
+		$(document).on('click', '.backFromServiceList', function(event){
+        	var url = window.location.href;
+			url = removeQueryParamFromUrl(url, "listServiceForms");
+			window.location.href = url;
+		});
+		$(document).on('click', '#id_createServiceFormCancel', function(event){
+        	var url = window.location.href;
+			url = removeQueryParamFromUrl(url, "createServiceForm");
+			url = addQueryParamToUrl(url, 'listServiceForms', 'true');
+			window.location.href = url;
+		});
 	});
 	
 };
