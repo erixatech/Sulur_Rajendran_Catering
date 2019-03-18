@@ -11,6 +11,7 @@ OrderTab.prototype.init = function(){
 	_this.isNewOrder = getValueFromQueryParam('orderIsNew');
 	_this.orderId = getValueFromQueryParam('orderId');
 	_this.isListServiceForms = getValueFromQueryParam('listServiceForms') ? "true" : "false";
+	_this.isCreateServiceForm = getValueFromQueryParam('createServiceForm') ? "true" : "false";
 	_this.dummyRecipies = ["Kesari", "Badam Alwa", "Chicken Biriyani", "Sambar"];
 	_this.render();
 	_this.renderEvents();
@@ -19,11 +20,12 @@ OrderTab.prototype.render = function(){
 	var _this = this;
 	var renderHtml = [];
 	
-	if(_this.isNewOrder == 'true' && _this.isListServiceForms == 'true'){
-		_this.renderServiceForm();
+	if(_this.orderId && _this.orderId.length > 0 && _this.isListServiceForms == 'true') {
+		_this.renderServiceForms();
 	}
-	else if(_this.orderId && _this.orderId.length > 0 && _this.isListServiceForms == 'true') {
-		_this.renderServiceForm();
+	else if(_this.isCreateServiceForm && _this.isCreateServiceForm == "true") {
+		$("#id_orderContent_tab").append(_this.renderServiceFormCreateOrUpdate());
+		$("#id_createOrder").addClass("d-none");
 	}
 	else if(_this.isNewOrder == 'true'){
 		$("#id_orderContent_tab").append(_this.renderCreateOrUpdateOrder());
@@ -31,7 +33,6 @@ OrderTab.prototype.render = function(){
 	else if(_this.orderId && _this.orderId.length > 0){
 		showLoading();
 		var cbk = function(){
-			console.log("Clicked Order"+ _this.currentOrder);
 			if(_this.currentOrder && _this.currentOrder.length > 0){
 				var currentOrder = _this.currentOrder[0];
 				$("#id_orderContent_tab").append(_this.renderCreateOrUpdateOrder(currentOrder));
@@ -223,10 +224,10 @@ OrderTab.prototype.getOrderByIdFromDB = function(orderId, cbk){
 		}
 	});
 }
-OrderTab.prototype.renderServiceForm = function(){
+OrderTab.prototype.renderServiceForms = function(){
 	var _this = this;
 	$("#id_createOrder").attr('hidden', true);
-	var orderId = getValueFromQueryParam("orderid");
+	var orderId = getValueFromQueryParam("orderId");
 	_this.currentOrder = _this.ordersList && _this.ordersList[orderId];
 
 	var cbk = function(){
@@ -277,7 +278,13 @@ OrderTab.prototype.renderServiceFormList = function(){
 	}
 	renderHtml += '</div>'
 
-	renderHtml += '<form class="serviceFormDetails mb-2 d-none">'
+		return renderHtml;
+}
+
+OrderTab.prototype.renderServiceFormCreateOrUpdate = function(){
+	var _this = this;
+	var renderHtml = [];
+	renderHtml += '<form class="serviceFormDetails mb-2">'
 		+ '  <div class="form-group">'
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
@@ -352,6 +359,7 @@ OrderTab.prototype.renderServiceFormList = function(){
 
 		return renderHtml;
 }
+
 OrderTab.prototype.getReceipeMapRowForSF = function() {
 	var _this = this;
 	var renderHtmlMapRow = [];
@@ -410,13 +418,15 @@ OrderTab.prototype.renderEvents = function() {
 			_this.getServiceFormDataAndCreate();
 		});
 		
-		if(_this.isListServiceForms == "true") {
+		if(_this.isCreateServiceForm == "true") {
 			addOptionsToSelectViaElem(_this.dummyRecipies, $('.cls_receipeCategory_sf')[0]);
 		}
 
 		$(document).on("click", "#id_createService", function(){
-			$(".cls_orderServiceList").addClass("d-none");
-			$(".serviceFormDetails").removeClass("d-none");
+			var url = window.location.href;
+			url = removeQueryParamFromUrl(url, "listServiceForms");
+			url = addQueryParamToUrl(url, 'createServiceForm', "true");
+			window.location.href = url;
 		});
 
 		$(document).on('click', '.cls_deleteOrder', function(event){
@@ -497,7 +507,11 @@ OrderTab.prototype.getOrderDataAndCreate = function(){
 
 			$("#successPopup").find('.modal-title').text("Order Created Successfully");
     		$("#successPopup").modal('show');
-    		addQueryParamToUrlAndReload('orderid', orderMetaData.orderId);
+    		var url = window.location.href;
+			url = removeQueryParamFromUrl(url, "orderIsNew");
+			url = addQueryParamToUrl(url, 'orderId', orderMetaData.orderId);
+			url = addQueryParamToUrl(url, 'listServiceForms', "true");
+			window.location.href = url;
 		},
 		error: function(){
 			hideLoading();

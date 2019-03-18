@@ -12,6 +12,19 @@ function addQueryParamToUrlAndReload(param, value){
 	window.location.href = url;
 }
 
+function addQueryParamToUrl(url, param, value){
+	if(url.lastIndexOf('#') == (url.length-1))
+	{
+		url = url.substring(0, url.length-1)
+	}
+	if (url.indexOf('?') > -1){
+	   url += '&'+param+'='+value;
+	}else{
+	   url += '?'+param+'='+value;
+	}
+	return url;
+}
+
 function getValueFromQueryParam(paramName){
     var vars = [], hash;
     var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
@@ -387,7 +400,7 @@ function addUrlParam(url, paramNameToAdd, paramValueToAdd){
 	return toReturl;
 }
 
-function removeUrlParam(url, paramNameToRemove){
+function removeQueryParamFromUrl(url, paramNameToRemove){
 // url contains your data.
 	var qs = url.indexOf("?");
     if(qs==-1) return url;
