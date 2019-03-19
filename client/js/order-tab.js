@@ -218,7 +218,7 @@ OrderTab.prototype.getOrderByIdFromDB = function(orderId, cbk){
     	success: function(result){
     		hideLoading();
     		_this.currentOrder = result;
-    		cbk();
+    		cbk && cbk();
 		},
 		error: function(res){
 			hideLoading();
@@ -314,7 +314,7 @@ OrderTab.prototype.renderServiceFormCreateOrUpdate = function(){
 		+ '  <div class="form-group">'
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
-		+ '    			<label for="sessionVenue">Session Date and Time</label>'
+		+ '    			<label for="sessionVenue">Session Venue</label>'
 		+ '    			<input type="text" class="form-control" id="sessionVenue" placeholder="Enter Session Venue">'
 		+ '  		</div>'
 		+ '  		<div class="col"></div>' 
@@ -581,48 +581,54 @@ OrderTab.prototype.getServiceFormDataAndCreate = function(){
 	var _this= this;
 
 	var updateOrderData = {};
-	updateOrderData.orderId = getValueFromQueryParam("orderid"	);
+	updateOrderData.orderId = getValueFromQueryParam("orderId");
 	updateOrderData.serviceForms = [];
+	var cbk = function(){
+		updateOrderData.serviceForms = (_this.currentOrder && _this.currentOrder[0] && _this.currentOrder[0].serviceForms) ? _this.currentOrder[0].serviceForms : [];
+		var serviceForms = {};
+		serviceForms.serviceId = "serviceid_"+(new Date()).getTime();
+		serviceForms.sessionName = $("#sessionName").val();
+		serviceForms.sessionDateTime = $("#sessionDateTime").val();
+		serviceForms.sessionNotes = $("#sessionNotes").val();
+		serviceForms.sessionVenue = $("#sessionVenue").val();
 
-	var serviceForms = {};
-	serviceForms.serviceId = "serviceid_"+(new Date()).getTime();
-	serviceForms.sessionName = $("#sessionName").val();
-	serviceForms.sessionDateTime = $("#sessionDateTime").val();
-	serviceForms.sessionNotes = $("#sessionNotes").val();
-	serviceForms.sessionVenue = $("#sessionVenue").val();
-
-	var recipes = [];
-	var categoryList = {};
-	var category;
-	var categoryCount;
-	$(".recipeMapRowSf").each(function(index, element) {
-		category = $(".cls_receipeCategory_sf", this).val();
-		categoryCount = $(".cls_receipeCount_sf", this).val()
-		if(category && categoryCount){
-			categoryList.name = category;
-			categoryList.count = categoryCount;
-			recipes.push(categoryList);
-		}
-	});
-	serviceForms.recipes = recipes;
-	updateOrderData.serviceForms.push(serviceForms);
-	$.ajax({
-    	url: "/updateOrder",
-    	type: "post",
-    	contentType: 'application/json',
-    	data: JSON.stringify(updateOrderData),
-    	success: function(result){
-    		hideLoading();
-			$("#successPopup").find('.modal-title').text("Service form Created Successfully");
-    		$("#successPopup").modal('show');
-			calculatePL(recipes);
-			window.location.reload();
-		},
-		error: function(){
-			hideLoading();
-		    $("#errorPopup").find('.modal-title').text('Failed to Service form. Please Try again later.');
-    		$("#errorPopup").modal('show');
-		}
-	});
+		var recipes = [];
+		var categoryList = {};
+		var category;
+		var categoryCount;
+		$(".recipeMapRowSf").each(function(index, element) {
+			category = $(".cls_receipeCategory_sf", this).val();
+			categoryCount = $(".cls_receipeCount_sf", this).val()
+			if(category && categoryCount){
+				categoryList.name = category;
+				categoryList.count = categoryCount;
+				recipes.push(categoryList);
+			}
+		});
+		serviceForms.recipes = recipes;
+		updateOrderData.serviceForms.push(serviceForms);
+		$.ajax({
+	    	url: "/updateOrder",
+	    	type: "post",
+	    	contentType: 'application/json',
+	    	data: JSON.stringify(updateOrderData),
+	    	success: function(result){
+	    		hideLoading();
+				$("#successPopup").find('.modal-title').text("Service form Created Successfully");
+	    		$("#successPopup").modal('show');
+				calculatePL(recipes);
+				var url = window.location.href
+				url = addUrlParam(url, "listServiceForms", true);
+				url = removeQueryParamFromUrl(url, "createServiceForm");
+				window.location.href = url;
+			},
+			error: function(){
+				hideLoading();
+			    $("#errorPopup").find('.modal-title').text('Failed to Service form. Please Try again later.');
+	    		$("#errorPopup").modal('show');
+			}
+		});
+	};
+	_this.getOrderByIdFromDB(updateOrderData.orderId, cbk);	
 
 }
