@@ -10,6 +10,7 @@ OrderTab.prototype.init = function(){
 	var _this = this;
 	_this.isNewOrder = getValueFromQueryParam('orderIsNew');
 	_this.orderId = getValueFromQueryParam('orderId');
+	_this.serviceId= getValueFromQueryParam('serviceId');
 	_this.isListServiceForms = getValueFromQueryParam('listServiceForms') ? "true" : "false";
 	_this.isCreateServiceForm = getValueFromQueryParam('createServiceForm') ? "true" : "false";
 	_this.dummyRecipies = ["Kesari", "Badam Alwa", "Chicken Biriyani", "Sambar"];
@@ -30,6 +31,24 @@ OrderTab.prototype.render = function(){
 	else if(_this.isNewOrder == 'true'){
 		$("#id_orderContent_tab").append(_this.renderCreateOrUpdateOrder());
 		$(".backFromCreateOrder").removeClass("d-none");
+	}
+	else if(_this.orderId && _this.serviceId && _this.serviceId.length > 0){
+		showLoading();
+		var cbk = function(){
+			if(_this.currentOrder && _this.currentOrder.length > 0){
+				var serviceForms = _this.currentOrder[0] && _this.currentOrder[0].serviceForms;
+				var serviceObj = null;
+				for(var i=0; i<serviceForms.length; i++){
+					if(_this.serviceId == serviceForms[i].serviceId){
+						serviceObj = serviceForms[i];
+					}
+				}
+				$("#id_orderContent_tab").append(_this.renderServiceFormCreateOrUpdate(serviceObj));
+				$("#sessionNotes").val(serviceObj.sessionNotes);
+			}
+	    }
+	    _this.getOrderByIdFromDB(_this.orderId, cbk);
+	    $("#id_createOrder").addClass("d-none");
 	}
 	else if(_this.orderId && _this.orderId.length > 0){
 		showLoading();
@@ -264,7 +283,7 @@ OrderTab.prototype.renderServiceFormList = function(){
 			if(i%2 == 0){
 				renderHtml += "<div class='row'>"
 			}
-			renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_serviceDetails' style='cursor:pointer'>"
+			renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_serviceDetails' idx="+ serviceJson[i].serviceId +" style='cursor:pointer'>"
 								+ "<h6 class='card-header text-success bg-transparent border-secondary text-center cls_serviceName'>"+ serviceJson[i].sessionName +"</h6>"
 								+ "<div class='card-body text-secondary font-weight-bold'>"
 							 		+ "<div class='row'>"
@@ -284,18 +303,19 @@ OrderTab.prototype.renderServiceFormList = function(){
 	}
 	renderHtml += '</div>'
 
-		return renderHtml;
+	return renderHtml;
 }
 
-OrderTab.prototype.renderServiceFormCreateOrUpdate = function(){
+OrderTab.prototype.renderServiceFormCreateOrUpdate = function(serviceObj){
 	var _this = this;
 	var renderHtml = [];
+	var isUpdate = (serviceObj && !$.isEmptyObject(serviceObj)) ? true : false;
 	renderHtml += '<form class="serviceFormDetails mb-2">'
 		+ '  <div class="form-group">'
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
 		+ '    			<label for="serviceFormName">Session Name</label>'
-		+ '    			<input type="text" class="form-control" id="sessionName" placeholder="Enter Session Name">'
+		+ '    			<input type="text" class="form-control" id="sessionName" value="'+ (isUpdate ? serviceObj.sessionName : "")+'" placeholder="Enter Session Name">'
 		+ '  		</div>'
 		+ '  		<div class="col"></div>' 
 		+ '  		</div>'
@@ -305,7 +325,7 @@ OrderTab.prototype.renderServiceFormCreateOrUpdate = function(){
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
 		+ '    			<label for="serviceFormDateTime">Session Date and Time</label>'
-		+ '    			<input type="text" class="form-control" id="sessionDateTime" placeholder="Enter Session Date and Time">'
+		+ '    			<input type="text" class="form-control" id="sessionDateTime" value="'+ (isUpdate ? serviceObj.sessionDateTime : "")+'" placeholder="Enter Session Date and Time">'
 		+ '  		</div>'
 		+ '  		<div class="col"></div>' 
 		+ '  		</div>'
@@ -315,7 +335,7 @@ OrderTab.prototype.renderServiceFormCreateOrUpdate = function(){
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
 		+ '    			<label for="sessionVenue">Session Venue</label>'
-		+ '    			<input type="text" class="form-control" id="sessionVenue" placeholder="Enter Session Venue">'
+		+ '    			<input type="text" class="form-control" id="sessionVenue" value="'+ (isUpdate ? serviceObj.sessionVenue : "")+'" placeholder="Enter Session Venue">'
 		+ '  		</div>'
 		+ '  		<div class="col"></div>' 
 		+ '  		</div>'
@@ -325,7 +345,7 @@ OrderTab.prototype.renderServiceFormCreateOrUpdate = function(){
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
 		+ '    			<label for="serviceFormNotes">Session Notes</label>'
-		+ '    			<textarea class="form-control" id="sessionNotes" rows="3" placeholder="Enter Any Additional Session Notes"></textarea>'
+		+ '    			<textarea class="form-control" id="sessionNotes" rows="3" value="'+ (isUpdate ? serviceObj.sessionNotes : "")+'" placeholder="Enter Any Additional Session Notes"></textarea>'
 		+ '  		</div>'
 		+ '  		<div class="col"></div>' 
 		+ '  		</div>'
@@ -344,8 +364,15 @@ OrderTab.prototype.renderServiceFormCreateOrUpdate = function(){
 		+ '      		<div class="col">'
 		+ '      		</div>'
 		+ '    		</div>'
-		+ _this.getReceipeMapRowForSF()
-		+ '		 </div>'			
+		if(serviceObj && serviceObj.recipes){
+			for(var i=0; i<serviceObj.recipes.length; i++){
+				renderHtml += _this.getReceipeMapRowForSF(serviceObj.recipes[i]);
+			}
+		}
+		else{
+			renderHtml += _this.getReceipeMapRowForSF();
+		}
+		renderHtml += '		 </div>'			
 		+ '      <div class="row mt-4 mb-4">'
 		+ '      	<div class="col">'
 		+ '       	</div>'
@@ -358,7 +385,7 @@ OrderTab.prototype.renderServiceFormCreateOrUpdate = function(){
 		+ '  </div>'
 		//TODO : Add / Remove DOM rows plugin
 		+ '  <div class="col text-right mt-2">'
-		+ '      <button type="button" id="id_createServiceForm" class="btn btn-primary">Create Service Form</button>'
+		+ '      <button type="button" id="id_createServiceForm" class="btn btn-primary">Save</button>'
 		+ '      <button type="button" id="id_createServiceFormCancel" class="btn btn-secondary ml-3">Cancel</button>'
 		+ '  </div>'
 		+ '</form>';
@@ -366,19 +393,24 @@ OrderTab.prototype.renderServiceFormCreateOrUpdate = function(){
 		return renderHtml;
 }
 
-OrderTab.prototype.getReceipeMapRowForSF = function() {
+OrderTab.prototype.getReceipeMapRowForSF = function(recipeObj) {
 	var _this = this;
 	var renderHtmlMapRow = [];
+	var isUpdate = (recipeObj && !$.isEmptyObject(recipeObj)) ? true : false;
 	
 	renderHtmlMapRow += '<div class="row recipeMapRowSf mt-4">'
 			+ '      <div class="col">'
-			+ '        <select class="form-control cls_receipeCategory_sf" name="receipeCategory"></select>'
+			+ '        <select class="form-control cls_receipeCategory_sf" value="'+ (isUpdate ? recipeObj.name : "")+'" name="receipeCategory">'
+						for(var i=0; i<_this.dummyRecipies.length; i++){
+							renderHtmlMapRow += '<option "'+ ((isUpdate && recipeObj.name == _this.dummyRecipies[i])? "selected" : "")+'">' + _this.dummyRecipies[i] +'</option>'
+						}
+			renderHtmlMapRow += '</select>'
+			+ '</div>'
+			+ '      <div class="col">'
+			+ '        <input type="number" min="0" class="form-control cls_receipeCount_sf" required id="id_receipeCount_sf" value="'+ (isUpdate ? recipeObj.count : "")+'" placeholder="Enter Count / No. Of People" name="receipeCount">'
 			+ '      </div>'
 			+ '      <div class="col">'
-			+ '        <input type="number" min="0" class="form-control cls_receipeCount_sf" required id="id_receipeCount_sf" placeholder="Enter Count / No. Of People" name="receipeCount">'
-			+ '      </div>'
-			+ '      <div class="col">'
-			+ ($('.recipeMapRowSf').length>0 ? '<a role="button" class="btn p-0"> <i class="fa fa-minus-circle mt-2 cls_removeCurrentReceipeMap" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i></a>' : '')
+			+ ($('.recipeMapRowSf').length>0 ? '<a role="button" class="btn p-0"> <i class="fa fa-minus-circle mt-2 cls_removeCurrentReceipeMap title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i></a>' : '')
 			+ '      </div>'
 			+ '    </div>';
 			
@@ -393,9 +425,15 @@ OrderTab.prototype.renderEvents = function() {
 			addQueryParamToUrlAndReload('orderId', orderId);
 		});
 
-		$(document).on("click", "#id_createOrder", function(){
-			addQueryParamToUrlAndReload('orderIsNew', 'true');
+		$(document).on("click", ".cls_serviceDetails", function(){
+			var serviceId = $(this).attr("idx");
+			var url = window.location.href;
+			url = removeQueryParamFromUrl(url, "listServiceForms");
+			addQueryParamToUrlAndReload('serviceId', serviceId, url);
 		});
+
+		$(document).on("click", "#id_createOrder", function(){
+f		});
 		
 		$(document).on("click", "#id_listServiceForms", function(){
 			showLoading();
@@ -421,12 +459,12 @@ OrderTab.prototype.renderEvents = function() {
 
 		$(document).on("click", "#id_createServiceForm", function(){
 			showLoading();
-			_this.getServiceFormDataAndCreate();
+			_this.getServiceFormDataAndCreateAndUpdate();
 		});
 		
-		if(_this.isCreateServiceForm == "true") {
+		/*if(_this.isCreateServiceForm == "true") {
 			addOptionsToSelectViaElem(_this.dummyRecipies, $('.cls_receipeCategory_sf')[0]);
-		}
+		}*/
 
 		$(document).on("click", "#id_createService", function(){
 			var url = window.location.href;
@@ -577,14 +615,22 @@ OrderTab.prototype.getOrderDataAndUpdate = function(orderId){
 	});
 
 }
-OrderTab.prototype.getServiceFormDataAndCreate = function(){
+OrderTab.prototype.getServiceFormDataAndCreateAndUpdate = function(){
 	var _this= this;
 
+ 	var serviceId = getValueFromQueryParam("serviceId");
 	var updateOrderData = {};
 	updateOrderData.orderId = getValueFromQueryParam("orderId");
 	updateOrderData.serviceForms = [];
 	var cbk = function(){
 		updateOrderData.serviceForms = (_this.currentOrder && _this.currentOrder[0] && _this.currentOrder[0].serviceForms) ? _this.currentOrder[0].serviceForms : [];
+		if(serviceId && updateOrderData.serviceForms && updateOrderData.serviceForms.length >0){
+			for(var i=0; i<updateOrderData.serviceForms.length; i++){
+				if(serviceId == updateOrderData.serviceForms[i].serviceId)
+					updateOrderData.serviceForms.splice(i, 1);
+					break;
+			}
+		}
 		var serviceForms = {};
 		serviceForms.serviceId = "serviceid_"+(new Date()).getTime();
 		serviceForms.sessionName = $("#sessionName").val();

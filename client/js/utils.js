@@ -1,5 +1,5 @@
-function addQueryParamToUrlAndReload(param, value){
-	var url = window.location.href;
+function addQueryParamToUrlAndReload(param, value, url){
+	var url = url ? url :  window.location.href;
 	if(url.lastIndexOf('#') == (url.length-1))
 	{
 		url = url.substring(0, url.length-1)
