@@ -1,8 +1,4 @@
 function RecipeTab(){
-	this.recipeCategory = ["Sweet", "HomeSweet", "Kaaram", "Idly", "Dhosa", "Chattni", "Sambar", "Kulambu", "Gravy",
-		                  "Rotty", "Biriyani", "Pachadi", "Saadam", "Oorugaai", "Baanam", "Snacks"];
-	this.recipeFilters = ["All", "Sweet", "HomeSweet", "Kaaram", "Idly", "Dhosa", "Chattni", "Sambar", "Kulambu", "Gravy",
-		                  "Rotty", "Biriyani", "Pachadi", "Saadam", "Oorugaai", "Baanam", "Snacks"];		                  
 	this.init();
 }
 RecipeTab.prototype.init = function() {
@@ -14,13 +10,11 @@ RecipeTab.prototype.render = function() {
 	var _this = this;
 
 	var allIngredientNames = getIngredientNamesByCategory(ingredientJson);
-	addOptionsToSelect(_this.recipeFilters, "id_selectRecipeCategory");
-	addOptionsToSelect(_this.recipeCategory, "id_recipeCategory");
+	addOptionsToSelect(recipeFilters, "id_selectRecipeCategory");
+	addOptionsToSelect(recipeCategory, "id_recipeCategory");
 	addOptionsToSelect(ingredientCategories, "id_ingredientCategory_recipe");
 	addOptionsToSelect(allIngredientNames, "id_ingredientName_recipe");
 	addOptionsToSelect(ingredientUnits, "id_ingredientUnit_recipe");
-
-	_this.recipeJson = {};
 
 	showLoading();
 	$.ajax({
@@ -30,8 +24,7 @@ RecipeTab.prototype.render = function() {
     		hideLoading();
     		if(result && result[0] && result[0].Recipe && result[0].Recipe.length > 0)
     		{
-	    		_this.recipeJson = result[0].Recipe;
-	    		//delete _this.recipeJson["_id"];
+	    		recipeJson = result[0].Recipe;
 	    	}
 			_this.renderRecipe("All");
 		},
@@ -49,7 +42,7 @@ RecipeTab.prototype.renderRecipe = function(recipeCat) {
 
 	if(recipeCat!="All")
 	{
-		$(".cls_recipeList").append(_this.renderRecipeByCategory(recipeCat, getRecipeByCategory(_this.recipeJson, recipeCat)));
+		$(".cls_recipeList").append(_this.renderRecipeByCategory(recipeCat, getRecipeByCategory(recipeJson, recipeCat)));
 	}
 	else
 	{
@@ -61,10 +54,10 @@ RecipeTab.prototype.renderAllRecipe = function() {
 	var _this = this;
 
 	var renderHtml = [];
-		for (var i =0; i<_this.recipeCategory.length; i++ ) 
+		for (var i =0; i<recipeCategory.length; i++ ) 
 		{
-			var categoryName = _this.recipeCategory[i];
-			catagoryJson = getRecipeByCategory(_this.recipeJson, categoryName);
+			var categoryName = recipeCategory[i];
+			catagoryJson = getRecipeByCategory(recipeJson, categoryName);
 			renderHtml += _this.renderRecipeByCategory(categoryName, catagoryJson, true);
 		}
 		$(".cls_recipeList").append(renderHtml);
@@ -270,7 +263,7 @@ RecipeTab.prototype.registerEvents = function() {
 
 		$(document).on('click', '.cls_deleteRecipe', function(){
 			var idx = $(this).attr("idx");
-	        var curRecipeObj = getRecipeObjById(_this.recipeJson, idx);
+	        var curRecipeObj = getRecipeObjById(recipeJson, idx);
 	        if(curRecipeObj && !$.isEmptyObject(curRecipeObj))
 	        {
 	    	    var id = curRecipeObj.id;
@@ -298,7 +291,7 @@ RecipeTab.prototype.registerEvents = function() {
 	    	if(searchKeyword.length>0)
 	    	{
 		    	$(".cls_recipeList").html('');
-		    	var results = getRecipeByName(_this.recipeJson, searchKeyword);
+		    	var results = getRecipeByName(recipeJson, searchKeyword);
 		    	$(".cls_recipeList").append(_this.renderSearchResults(results));
 		    }
 		    else
@@ -315,7 +308,7 @@ RecipeTab.prototype.registerEvents = function() {
 	    	if(dialogName.indexOf("Edit")>-1)	//Edit Scenario
 	    	{
 	    		var recipeJsonToCreate = {};
-	    		var targetIndex = getIndexForIdForRecipe(_this.recipeJson, $("#recipeModal").data("idToEdit"));
+	    		var targetIndex = getIndexForIdForRecipe(recipeJson, $("#recipeModal").data("idToEdit"));
 	    		var reqKey = "Recipe."+targetIndex;
 
 	    		if(targetIndex != -1)
@@ -370,7 +363,7 @@ RecipeTab.prototype.registerEvents = function() {
 	    		var recipeJsonToCreate = {};
 	    		recipeJsonToCreate["Recipe"] =
 	    		{
-		    		"id": getNextId(_this.recipeJson, "Recipe"),
+		    		"id": getNextId(recipeJson, "Recipe"),
 			        "name": $("#id_recipeName").val(),
 			        "tamilName": $("#id_recipeTamilName").val(),
 			        "itemCategory": $("#id_recipeCategory").val(),
@@ -429,7 +422,7 @@ RecipeTab.prototype.registerEvents = function() {
 		$(document).on('click', '.cls_editRecipe', function(){
 			var modal = $("#recipeModal");	        
 		    var idx = $(this).attr("idx");
-	        var curRecipeObj = getRecipeObjById(_this.recipeJson, idx);
+	        var curRecipeObj = getRecipeObjById(recipeJson, idx);
 	        if(curRecipeObj && !$.isEmptyObject(curRecipeObj))
 	        {
 	    	    var name = curRecipeObj.name;
