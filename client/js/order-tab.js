@@ -43,7 +43,9 @@ OrderTab.prototype.render = function(){
 					}
 				}
 				$("#id_orderContent_tab").append(_this.renderServiceFormCreateOrUpdate(serviceObj));
-				$("#sessionNotes").val(serviceObj.sessionNotes);
+				if(serviceObj && serviceObj.sessionNotes) {
+					$("#sessionNotes").val(serviceObj.sessionNotes);
+				}
 			}
 	    }
 	    _this.getOrderByIdFromDB(_this.orderId, cbk);
