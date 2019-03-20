@@ -88,34 +88,41 @@ OrderTab.prototype.renderOrderList = function(ordersJsonArr){
 
 	$("#id_createOrder").attr('hidden', false);
 
-	for(var i=0; i< ordersJsonArr.length; i++){
-		if(i%2 == 0){
-			renderHtml += "<div class='row'>"
+	if(ordersJsonArr && ordersJsonArr.length > 0){
+		for(var i=0; i< ordersJsonArr.length; i++){
+			if(i%2 == 0){
+				renderHtml += "<div class='row'>"
+			}
+			var curOrderObj = ordersJsonArr[i];
+			renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_orderDetails' style='cursor:pointer' idx='"+curOrderObj.orderId+"'>"
+								+ "<h6 class='card-header text-success bg-transparent border-secondary text-center cls_orderName'>"+ curOrderObj.clientName +"</h6>"
+								+ "<div class='card-body text-secondary font-weight-bold'>"
+							 		+ "<div class='row'>"
+							   			+ "<div class='card-title cls_eventName col-6'>" + curOrderObj.eventName +"</div>"
+							    		+ "<div class='card-text cls_eventDate col-6 text-right'>"+ curOrderObj.eventDate +"</div>"
+							    	+ "</div>"
+							 	   	+ "<div class='row'>"
+							    		+ "<div class='card-title cls_eventVenue col-6'>"+ curOrderObj.eventVenue +"</div>"
+							    		+ "<div class='card-text cls_contactNumber col-6 text-right'>"+ curOrderObj.clientPhone +"</div>"
+							    	+ "</div>"
+							    	+ "<div class='row'>"
+							   			+ "<div class='card-title cls_clientAddress col'>"+ curOrderObj.clientAddress +"</div>"
+							    	+ "</div>"
+							  	+ "</div>"
+							  	+ "<div class='card-footer text-center bg-light border-secondary row p-0'>"
+							  		+ "<label class='col-6 border-right border-secondary m-0 p-2 cls_editOrder' style='cursor:pointer'>Edit</label>"
+							  		+ "<label class='col-6 m-0 p-2 cls_deleteOrder'  data-idx="+curOrderObj.orderId+" data-name='"+curOrderObj.eventName+"' style='cursor:pointer'>Delete</label>"
+							  	+ "</div>"
+							+ "</div>";
+			if(i%2 != 0){
+				renderHtml += "</div>"
+			}
 		}
-		var curOrderObj = ordersJsonArr[i];
-		renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_orderDetails' style='cursor:pointer' idx='"+curOrderObj.orderId+"'>"
-							+ "<h6 class='card-header text-success bg-transparent border-secondary text-center cls_orderName'>"+ curOrderObj.clientName +"</h6>"
-							+ "<div class='card-body text-secondary font-weight-bold'>"
-						 		+ "<div class='row'>"
-						   			+ "<div class='card-title cls_eventName col-6'>" + curOrderObj.eventName +"</div>"
-						    		+ "<div class='card-text cls_eventDate col-6 text-right'>"+ curOrderObj.eventDate +"</div>"
-						    	+ "</div>"
-						 	   	+ "<div class='row'>"
-						    		+ "<div class='card-title cls_eventVenue col-6'>"+ curOrderObj.eventVenue +"</div>"
-						    		+ "<div class='card-text cls_contactNumber col-6 text-right'>"+ curOrderObj.clientPhone +"</div>"
-						    	+ "</div>"
-						    	+ "<div class='row'>"
-						   			+ "<div class='card-title cls_clientAddress col'>"+ curOrderObj.clientAddress +"</div>"
-						    	+ "</div>"
-						  	+ "</div>"
-						  	+ "<div class='card-footer text-center bg-light border-secondary row p-0'>"
-						  		+ "<label class='col-6 border-right border-secondary m-0 p-2 cls_editOrder' style='cursor:pointer'>Edit</label>"
-						  		+ "<label class='col-6 m-0 p-2 cls_deleteOrder'  data-idx="+curOrderObj.orderId+" data-name='"+curOrderObj.eventName+"' style='cursor:pointer'>Delete</label>"
-						  	+ "</div>"
-						+ "</div>";
-		if(i%2 != 0){
-			renderHtml += "</div>"
-		}
+	}
+	else{
+		renderHtml += '<div class="cls_noDataFound text-center">'
+						+ '<h5> No Orders Found</h5>'
+					+ '</div>'
 	}
 	return renderHtml;
 };
@@ -299,6 +306,11 @@ OrderTab.prototype.renderServiceFormList = function(){
 				renderHtml += "</div>"
 			}
 		}
+	}
+	else{
+		renderHtml += '<div class="cls_noDataFound text-center">'
+						+ '<h5> No Service Found</h5>'
+					+ '</div>'
 	}
 	renderHtml += '</div>'
 
