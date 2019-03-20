@@ -25,6 +25,7 @@ RecipeTab.prototype.render = function() {
     		if(result && result[0] && result[0].Recipe && result[0].Recipe.length > 0)
     		{
 	    		recipeJson = result[0].Recipe;
+	    		recipeNames = _this.getAllRecipeNames(recipeJson);
 	    	}
 			_this.renderRecipe("All");
 		},
@@ -34,6 +35,15 @@ RecipeTab.prototype.render = function() {
 		}
 	});
 };
+
+RecipeTab.prototype.getAllRecipeNames = function(recipeJson) {
+	var _this = this;
+	var toRet = [];
+	$.each(recipeJson, function( index, recipeObj ) {
+		toRet.push(recipeObj.tamilName);
+	});
+	return toRet;
+}
 
 RecipeTab.prototype.renderRecipe = function(recipeCat) {
 	var _this = this;

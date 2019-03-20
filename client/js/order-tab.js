@@ -13,7 +13,6 @@ OrderTab.prototype.init = function(){
 	_this.serviceId= getValueFromQueryParam('serviceId');
 	_this.isListServiceForms = getValueFromQueryParam('listServiceForms') ? "true" : "false";
 	_this.isCreateServiceForm = getValueFromQueryParam('createServiceForm') ? "true" : "false";
-	_this.dummyRecipies = ["Kesari", "Badam Alwa", "Chicken Biriyani", "Sambar"];
 	_this.render();
 	_this.renderEvents();
 }
@@ -401,8 +400,8 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObj) {
 	renderHtmlMapRow += '<div class="row recipeMapRowSf mt-4">'
 			+ '      <div class="col">'
 			+ '        <select class="form-control cls_receipeCategory_sf" value="'+ (isUpdate ? recipeObj.name : "")+'" name="receipeCategory">'
-						for(var i=0; i<_this.dummyRecipies.length; i++){
-							renderHtmlMapRow += '<option "'+ ((isUpdate && recipeObj.name == _this.dummyRecipies[i])? "selected" : "")+'">' + _this.dummyRecipies[i] +'</option>'
+						for(var i=0; i<recipeNames.length; i++){
+							renderHtmlMapRow += '<option "'+ ((isUpdate && recipeObj.name == recipeNames[i])? "selected" : "")+'">' + recipeNames[i] +'</option>'
 						}
 			renderHtmlMapRow += '</select>'
 			+ '</div>'
@@ -433,7 +432,8 @@ OrderTab.prototype.renderEvents = function() {
 		});
 
 		$(document).on("click", "#id_createOrder", function(){
-f		});
+			addQueryParamToUrlAndReload('orderIsNew', 'true');
+        });
 		
 		$(document).on("click", "#id_listServiceForms", function(){
 			showLoading();
@@ -450,7 +450,7 @@ f		});
 		$(document).on("click", ".cls_addReceipe_sf", function(){
 			var elemToAdd = $(_this.getReceipeMapRowForSF());
 			cloneDOM(elemToAdd, $('.serviceFormReceipeMap'));
-			addOptionsToSelectViaElem(_this.dummyRecipies, $('.cls_receipeCategory_sf')[$('.cls_receipeCategory_sf').length-1]);
+			//addOptionsToSelectViaElem(recipeNames, $('.cls_receipeCategory_sf')[$('.cls_receipeCategory_sf').length-1]);
 		});
 
 		$(document).on("click", ".cls_removeCurrentReceipeMap", function(){
@@ -463,7 +463,7 @@ f		});
 		});
 		
 		/*if(_this.isCreateServiceForm == "true") {
-			addOptionsToSelectViaElem(_this.dummyRecipies, $('.cls_receipeCategory_sf')[0]);
+			addOptionsToSelectViaElem(recipeNames, $('.cls_receipeCategory_sf')[0]);
 		}*/
 
 		$(document).on("click", "#id_createService", function(){
