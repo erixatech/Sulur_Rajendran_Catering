@@ -109,7 +109,7 @@ OrderTab.prototype.renderOrderList = function(ordersJsonArr){
 						    	+ "</div>"
 						  	+ "</div>"
 						  	+ "<div class='card-footer text-center bg-light border-secondary row p-0'>"
-						  		+ "<label class='col-6 border-right border-secondary m-0 p-2' style='cursor:pointer'>Complete</label>"
+						  		+ "<label class='col-6 border-right border-secondary m-0 p-2 cls_editOrder' style='cursor:pointer'>Edit</label>"
 						  		+ "<label class='col-6 m-0 p-2 cls_deleteOrder'  data-idx="+curOrderObj.orderId+" data-name='"+curOrderObj.eventName+"' style='cursor:pointer'>Delete</label>"
 						  	+ "</div>"
 						+ "</div>";
@@ -419,9 +419,9 @@ OrderTab.prototype.renderEvents = function() {
 	var _this = this;
 	
 	$(document).ready(function(){
-		$(document).on("click", ".cls_orderDetails", function(){
-			var orderId = $(this).attr("idx");
-			addQueryParamToUrlAndReload('orderId', orderId);
+		$(document).on("click", ".cls_editOrder", function(){
+			var orderId = $(this).parents(".cls_orderDetails").attr("idx");
+			(orderId)? addQueryParamToUrlAndReload('orderId', orderId) : "";
 		});
 
 		$(document).on("click", ".cls_serviceDetails", function(){
@@ -433,6 +433,13 @@ OrderTab.prototype.renderEvents = function() {
 
 		$(document).on("click", "#id_createOrder", function(){
 			addQueryParamToUrlAndReload('orderIsNew', 'true');
+        });
+
+        $(document).on("click", ".cls_orderDetails", function(){
+        	var url = window.location.href;
+        	var orderId = $(this).attr("idx");
+			url = addQueryParamToUrl(url, "orderId", orderId);
+        	addQueryParamToUrlAndReload('listServiceForms', "true", url);
         });
 		
 		$(document).on("click", "#id_listServiceForms", function(){
