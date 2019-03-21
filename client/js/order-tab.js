@@ -300,8 +300,7 @@ OrderTab.prototype.renderServiceFormList = function(){
 							    	+ "</div>"
 							  	+ "</div>"
 							  	+ "<div class='card-footer text-center bg-light border-secondary row p-0'>"
-							  		+ "<label class='col-6 border-right border-secondary m-0 p-2' style='cursor:pointer'>Complete</label>"
-							  		+ "<label class='col-6 m-0 p-2' style='cursor:pointer'>Delete</label>"
+							  		+ "<label class='col m-0 p-2 cls_deleteService' data-name='"+ serviceJson[i].sessionName +"' style='cursor:pointer'>Delete</label>"
 							  	+ "</div>"
 							+ "</div>";
 			if(i%2 != 0 || (i == serviceJson.length-1)){
@@ -506,15 +505,32 @@ OrderTab.prototype.renderEvents = function() {
     			$("#confirmationPopup").data("module", "Order");
 	        }
 		});
+
+		$(document).on('click', '.cls_deleteService', function(event){
+			event.stopPropagation();
+
+			var idx = $(this).parents(".cls_serviceDetails").attr("idx");
+			var serviceName = $(this).data("name");
+	        if(idx !== undefined)
+	        {
+	    	    $("#confirmationPopup").find('.modal-title').text("Are you sure to delete this Service ("+ serviceName +")?");
+    			$("#confirmationPopup").modal('show');
+    			$("#confirmationPopup").data("idToDelete", idx);
+    			$("#confirmationPopup").data("module", "Service");
+	        }
+		});
 	
 		$(".cls_confirmPopupDelete").click(function() {
 
-			if($("#confirmationPopup").data("module") == "Order")
-			{
+			var $errorPopup = $("#errorPopup");
+			var $errModalTitle = $errorPopup.find('.modal-title');
+			var $confirmationPopup = $("#confirmationPopup");
+			var $successPopup = $("#successPopup");
+
+			if($confirmationPopup.data("module") == "Order"){
  				var orderJson = {};
- 				orderJson["orderId"] = $("#confirmationPopup").data("idToDelete");
-			    if(orderJson["orderId"] != undefined)
-			    {
+ 				orderJson["orderId"] = $confirmationPopup.data("idToDelete");
+			    if(orderJson["orderId"] != undefined){
 			    	showLoading();
 			        $.ajax({
 			        	url: "/deleteOrder",
@@ -523,25 +539,64 @@ OrderTab.prototype.renderEvents = function() {
 		            	data: JSON.stringify(orderJson),
 			        	success: function(result){
 			        		hideLoading();
-							$("#successPopup").find('.modal-title').text("Order" + result);
-			        		$("#successPopup").modal('show');
-			        		$("#confirmationPopup").modal('hide');
+							$successPopup.find('.modal-title').text("Order" + result);
+			        		$successPopup.modal('show');
+			        		$confirmationPopup.modal('hide');
 			        		showLoading();
 			        		location.reload();
 						},
 						error: function(){
 							hideLoading();
-						    $("#errorPopup").find('.modal-title').text('Failed to delete Order. Please Try again later.');
-			        		$("#errorPopup").modal('show');
-			        		$("#confirmationPopup").modal('hide');
+						    $errModalTitle.text('Failed to delete Order. Please Try again later.');
+			        		$errorPopup.modal('show');
+			        		$confirmationPopup.modal('hide');
 						}
 					});
 			    }
-			    else
-			    {
-			    	$("#errorPopup").find('.modal-title').text('Failed to delete Ingredient. Please Try again later.');
-			        $("#errorPopup").modal('show');
-			        $("#confirmationPopup").modal('hide');
+			    else{
+			    	$errModalTitle.text('Failed to delete Order. Please Try again later.');
+			        $errorPopup.modal('show');
+			        $confirmationPopup.modal('hide');
+			    }
+			}
+			else if($confirmationPopup.data("module") == "Service"){
+ 				var serviceId = $confirmationPopup.data("idToDelete");
+ 				var serviceForms = _this.currentOrder && _this.currentOrder[0] && _this.currentOrder[0].serviceForms;
+ 				for(var i=0; i < serviceForms.length; i++){
+ 					if(serviceForms[i].serviceId == serviceId){
+ 						serviceForms.splice(i, 1);
+ 					}
+ 				}
+ 				var serviceObj = {};
+ 				serviceObj.serviceForms = serviceForms;
+ 				serviceObj.orderId = _this.currentOrder[0].orderId;
+			    if(serviceId){
+			    	showLoading();
+			       $.ajax({
+			        	url: "/updateOrder",
+		            	type: "post",
+		            	contentType: 'application/json',
+		            	data: JSON.stringify(serviceObj),
+			        	success: function(result){
+			        		hideLoading();
+							$successPopup.find('.modal-title').text("Service" + result);
+			        		$successPopup.modal('show');
+			        		$confirmationPopup.modal('hide');
+			        		showLoading();
+			        		location.reload();
+						},
+						error: function(){
+							hideLoading();
+						    $errModalTitle.text('Failed to delete Service. Please Try again later.');
+			        		$errorPopup.modal('show');
+			        		$confirmationPopup.modal('hide');
+						}
+					});
+			    }
+			    else{
+			    	$errModalTitle.text('Failed to delete Service. Please Try again later.');
+			        $errorPopup.modal('show');
+			        $confirmationPopup.modal('hide');
 			    }
 			}
 	    });
