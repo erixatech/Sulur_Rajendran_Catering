@@ -82,46 +82,6 @@ function getFileValue(){
 
 }
 
-/*function loadFile(file, elem){
-
-	$.ajax({
-      crossOrigin: false,
-      url: file,
-      success: function(data) {
-        alert("asd");	
-      }
-    });
-
-	var headers = new Headers();
-	headers.append("Access-Control-Allow-Origin", "*");
-	headers.append("Access-Control-Allow-Credentials", true);
-	headers.append("Access-Control-Allow-Methods", "GET");
-	$.ajax({
-      type: "GET",
-	  xhrFields: {
-        withCredentials: true
-      },
-      dataType: 'json',
-	  headers: {"Access-Control-Allow-Origin": "*"},
-      url: file,
-      success: function(data) {
-        elem.html(data);
-      },
-      error: function(data) {
-      	console.log(data);
-      }
-    });
-
-	var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (this.readyState == 4) {
-          if (this.status == 200) {elmnt.innerHTML = this.responseText;}
-          if (this.status == 404) {elmnt.innerHTML = "Page not found.";}
-        }
-      }      
-      xhttp.open("GET", file, true);
-      xhttp.send();
-}*/
 function getIngredientNamesByCategory(ingredientJson, categoryName)
 {
 	var ingredientCategories = Object.keys(ingredientJson);
@@ -245,6 +205,21 @@ function getRecipeByCategory(recipeJson, catName) {
 	return toRet;
 }
 
+function getRecipeNamesByCategory(recipeJson, catName) {
+	var toRet = null;
+	var tempArr = [];
+	$.each(recipeJson, function( index, recipeObj ) {
+		if(recipeObj.itemCategory && recipeObj.itemCategory.toLowerCase() == catName.toLowerCase()) {
+			tempArr.push(recipeObj.name);
+		}
+	});
+	if(tempArr.length>0)
+	{
+		toRet = tempArr;
+	}
+	return toRet;
+}
+
 function getRecipeByName(recipeJson, recipeName) {		//For Search
 	var toRet = null;
 	var tempArr = [];
@@ -256,6 +231,25 @@ function getRecipeByName(recipeJson, recipeName) {		//For Search
 	if(tempArr.length>0)
 	{
 		toRet = tempArr;
+	}
+	return toRet;
+}
+
+function getRecipeIdByName(recipeJson, recipeName) {
+	var toRet = null;
+	var tempArr = [];
+	$.each(recipeJson, function( index, recipeObj ) {
+		if(recipeObj.name && recipeObj.name.toLowerCase() == recipeName.toLowerCase()) {
+			tempArr.push(recipeObj.id);
+		}
+	});
+	if(tempArr.length==1)
+	{
+		toRet = Number(tempArr[0]);
+	}
+	else
+	{
+		toRet = -1;
 	}
 	return toRet;
 }
@@ -449,3 +443,45 @@ function hideLoading()
 {
 	$('.loadingguage').modal('hide');
 }
+
+
+/*function loadFile(file, elem){
+
+	$.ajax({
+      crossOrigin: false,
+      url: file,
+      success: function(data) {
+        alert("asd");	
+      }
+    });
+
+	var headers = new Headers();
+	headers.append("Access-Control-Allow-Origin", "*");
+	headers.append("Access-Control-Allow-Credentials", true);
+	headers.append("Access-Control-Allow-Methods", "GET");
+	$.ajax({
+      type: "GET",
+	  xhrFields: {
+        withCredentials: true
+      },
+      dataType: 'json',
+	  headers: {"Access-Control-Allow-Origin": "*"},
+      url: file,
+      success: function(data) {
+        elem.html(data);
+      },
+      error: function(data) {
+      	console.log(data);
+      }
+    });
+
+	var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+          if (this.status == 200) {elmnt.innerHTML = this.responseText;}
+          if (this.status == 404) {elmnt.innerHTML = "Page not found.";}
+        }
+      }      
+      xhttp.open("GET", file, true);
+      xhttp.send();
+}*/

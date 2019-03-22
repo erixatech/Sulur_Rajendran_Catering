@@ -317,29 +317,34 @@ OrderTab.prototype.renderServiceFormCreateOrUpdate = function(serviceObj){
 		+ '  <div class="form-group receipeMapContainer">'
 		+ '  	<div class="serviceFormReceipeMap mt-4">'
 		+ '    		<div class="row">'
-		+ '      		<div class="col text-center">'
+		+ '      		<div class="col-3 text-center">'
 		+ '			        <label class="font-weight-bold">Category</label>'
 		+ '      		</div>'
-		+ '      		<div class="col text-center">'
+		+ '      		<div class="col-4 text-center">'
+		+ '			        <label class="font-weight-bold">Name</label>'
+		+ '      		</div>'		
+		+ '      		<div class="col-2 text-center">'
 		+ '        			<label class="font-weight-bold">No. Of People</label>'
 		+ '      		</div>'
-		+ '      		<div class="col">'
+		+ '      		<div class="col-1">'
 		+ '      		</div>'
 		+ '    		</div>'
 		if(serviceObj && serviceObj.recipes){
 			for(var i=0; i<serviceObj.recipes.length; i++){
-				renderHtml += _this.getReceipeMapRowForSF(serviceObj.recipes[i]);
+				renderHtml += _this.getReceipeMapRowForSF(serviceObj.recipes[i], i);
 			}
 		}
 		else{
-			renderHtml += _this.getReceipeMapRowForSF();
+			renderHtml += _this.getReceipeMapRowForSF("", 0);
 		}
 		renderHtml += '		 </div>'			
-		+ '      <div class="row mt-4 mb-4">'
+		+ '      <div class="row mt-5 mb-4">'
 		+ '      	<div class="col">'
 		+ '       	</div>'
 		+ '       	<div class="col">'
 		+ '      	</div>'
+		+ '       	<div class="col">'
+		+ '      	</div>'		
 		+ '      	<div class="col mt-3">'
 		+ '        		<button type="button" class="btn btn-success cls_addReceipe_sf">Add</button>'
 		+ '      	</div>'
@@ -355,26 +360,59 @@ OrderTab.prototype.renderServiceFormCreateOrUpdate = function(serviceObj){
 		return renderHtml;
 }
 
-OrderTab.prototype.getReceipeMapRowForSF = function(recipeObj) {
+OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, initialRowNum) {
 	var _this = this;
 	var renderHtmlMapRow = [];
-	var isUpdate = (recipeObj && !$.isEmptyObject(recipeObj)) ? true : false;
-	
-	renderHtmlMapRow += '<div class="row recipeMapRowSf mt-4">'
-			+ '      <div class="col">'
-			+ '        <select class="form-control cls_receipeCategory_sf" value="'+ (isUpdate ? recipeObj.name : "")+'" name="receipeCategory">'
-						for(var i=0; i<recipeNames.length; i++){
-							renderHtmlMapRow += '<option "'+ ((isUpdate && recipeObj.name == recipeNames[i])? "selected" : "")+'">' + recipeNames[i] +'</option>'
-						}
-			renderHtmlMapRow += '</select>'
-			+ '</div>'
-			+ '      <div class="col">'
-			+ '        <input type="number" min="0" class="form-control cls_receipeCount_sf" required id="id_receipeCount_sf" value="'+ (isUpdate ? recipeObj.count : "")+'" placeholder="Enter Count / No. Of People" name="receipeCount">'
-			+ '      </div>'
-			+ '      <div class="col">'
-			+ ($('.recipeMapRowSf').length>0 ? '<a role="button" class="btn p-0"> <i class="fa fa-minus-circle mt-2 cls_removeCurrentReceipeMap title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i></a>' : '')
-			+ '      </div>'
-			+ '    </div>';
+
+	if(recipeObjInServiceForm && !$.isEmptyObject(recipeObjInServiceForm))
+	{
+		var recipeObj = getRecipeObjById(recipeJson, recipeObjInServiceForm.id);
+		var isUpdate = (recipeObj && !$.isEmptyObject(recipeObj)) ? true : false;
+		var recipeInSameCategory = getRecipeByCategory(recipeJson, recipeObj.itemCategory);
+		
+		renderHtmlMapRow += '<div class="row recipeMapRowSf '+ (initialRowNum>0 ? 'mt-5"' : 'mt-4"') +'>'
+				+ '      <div class="col-3">'
+				+ '        <select class="form-control cls_receipeCategory_sf" name="receipeCategory">'
+							for(var i=0; i<recipeCategory.length; i++){
+								renderHtmlMapRow += '<option '+ ((isUpdate && recipeObj.itemCategory && recipeCategory[i] && recipeObj.itemCategory.toLowerCase() == recipeCategory[i].toLowerCase())? "selected" : "")+'>' + recipeCategory[i] +'</option>'
+							}
+				renderHtmlMapRow += '</select>'
+				+ '</div>'
+				+ '      <div class="col-4">'
+				+ '        <select class="form-control cls_receipeName_sf" name="receipeName">'
+							for(var i=0; i<recipeInSameCategory.length; i++){
+								renderHtmlMapRow += '<option '+ ((isUpdate && recipeObj.name && recipeInSameCategory[i].name && recipeObj.name.toLowerCase() == recipeInSameCategory[i].name.toLowerCase())? "selected" : "")+'>' + recipeInSameCategory[i].name +'</option>'
+							}
+				renderHtmlMapRow += '</select>'
+				+ '</div>'
+				+ '      <div class="col-2">'
+				+ '        <input type="number" min="0" class="form-control cls_receipeCount_sf" required id="id_receipeCount_sf" value="'+ (isUpdate ? recipeObjInServiceForm.count : "")+'" placeholder="Enter Head Count" name="receipeCount">'
+				+ '      </div>'
+				+ '      <div class="col-1">'
+				+ (initialRowNum>0 ? '<a role="button" class="btn p-0"> <i class="fa fa-minus-circle mt-2 cls_removeCurrentReceipeMap title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i></a>' : '')
+				+ '      </div>'
+				+ '    </div>';
+	}
+	else
+	{
+		renderHtmlMapRow += '<div class="row recipeMapRowSf '+ (initialRowNum>0 ? 'mt-5"' : 'mt-4"') +'>'
+				+ '      <div class="col-3">'
+				+ '        <select class="form-control cls_receipeCategory_sf" name="receipeCategory">'
+				+ '          <option>Choose Category</option>'
+				renderHtmlMapRow += '</select>'
+				+ '</div>'
+				+ '      <div class="col-4">'
+				+ '        <select class="form-control cls_receipeName_sf" name="receipeName">'
+				renderHtmlMapRow += '</select>'
+				+ '</div>'
+				+ '      <div class="col-2">'
+				+ '        <input type="number" min="0" class="form-control cls_receipeCount_sf" required id="id_receipeCount_sf" value="" placeholder="Enter Head Count" name="receipeCount">'
+				+ '      </div>'
+				+ '      <div class="col-1">'
+				+ (initialRowNum>0 ? '<a role="button" class="btn p-0"> <i class="fa fa-minus-circle mt-2 cls_removeCurrentReceipeMap title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i></a>' : '')
+				+ '      </div>'
+				+ '    </div>';
+	}
 			
 	return renderHtmlMapRow;
 };
@@ -418,9 +456,9 @@ OrderTab.prototype.renderEvents = function() {
 		});
 		
 		$(document).on("click", ".cls_addReceipe_sf", function(){
-			var elemToAdd = $(_this.getReceipeMapRowForSF());
+			var elemToAdd = $(_this.getReceipeMapRowForSF("", $('.recipeMapRowSf').length));
 			cloneDOM(elemToAdd, $('.serviceFormReceipeMap'));
-			//addOptionsToSelectViaElem(recipeNames, $('.cls_receipeCategory_sf')[$('.cls_receipeCategory_sf').length-1]);
+			addOptionsToSelectViaElem(recipeCategory, $('.cls_receipeCategory_sf')[$('.cls_receipeCategory_sf').length-1]);
 		});
 
 		$(document).on("click", ".cls_removeCurrentReceipeMap", function(){
@@ -431,10 +469,20 @@ OrderTab.prototype.renderEvents = function() {
 			showLoading();
 			_this.getServiceFormDataAndCreateAndUpdate();
 		});
+
+		$(document).on("change", ".cls_receipeCategory_sf", function(){
+			var recipeCategoryChosen = $(this).val();
+			var recipeNamesInCategory = getRecipeNamesByCategory(recipeJson, recipeCategoryChosen);
+			$(this).closest('.recipeMapRowSf').find(".cls_receipeName_sf option").remove();
+			if(recipeNamesInCategory && recipeNamesInCategory.length>0)
+			{				
+				addOptionsToSelectViaElem(recipeNamesInCategory, $($(this).closest('.recipeMapRowSf').find(".cls_receipeName_sf"))[0]);
+			}
+		});
 		
-		/*if(_this.isCreateServiceForm == "true") {
-			addOptionsToSelectViaElem(recipeNames, $('.cls_receipeCategory_sf')[0]);
-		}*/
+		if(_this.isCreateServiceForm == "true") {
+			addOptionsToSelectViaElem(recipeCategory, $('.cls_receipeCategory_sf')[0]);
+		}
 
 		$(document).on("click", "#id_createService", function(){
 			var url = window.location.href;
@@ -653,8 +701,10 @@ OrderTab.prototype.getServiceFormDataAndCreateAndUpdate = function(){
 		if(serviceId && updateOrderData.serviceForms && updateOrderData.serviceForms.length >0){
 			for(var i=0; i<updateOrderData.serviceForms.length; i++){
 				if(serviceId == updateOrderData.serviceForms[i].serviceId)
+				{
 					updateOrderData.serviceForms.splice(i, 1);
 					break;
+				}
 			}
 		}
 		var serviceForms = {};
@@ -665,15 +715,15 @@ OrderTab.prototype.getServiceFormDataAndCreateAndUpdate = function(){
 		serviceForms.sessionVenue = $("#sessionVenue").val();
 
 		var recipes = [];
-		var categoryList = {};
-		var category;
-		var categoryCount;
 		$(".recipeMapRowSf").each(function(index, element) {
-			category = $(".cls_receipeCategory_sf", this).val();
-			categoryCount = $(".cls_receipeCount_sf", this).val()
-			if(category && categoryCount){
-				categoryList.name = category;
-				categoryList.count = categoryCount;
+			var categoryList = {};
+			var recipeIdToStore;
+			var recipeHeadCount;
+			recipeIdToStore = getRecipeIdByName(recipeJson, $(".cls_receipeName_sf", this).val());
+			recipeHeadCount = $(".cls_receipeCount_sf", this).val()
+			if(recipeIdToStore && recipeIdToStore>-1 && recipeHeadCount){
+				categoryList.id = recipeIdToStore;
+				categoryList.count = recipeHeadCount;
 				recipes.push(categoryList);
 			}
 		});
