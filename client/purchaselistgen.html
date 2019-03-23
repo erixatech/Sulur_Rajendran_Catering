@@ -64,7 +64,8 @@
 
 		<script type="text/javascript">	
 	        $(document).on('ready', function() {
-	            new renderPL();
+	        	var dummy_PLData = {maligai : [{name: "sugar", quantity: 101, unit: "gram"}, {name: "oil", quantity: 404, unit: "ml"}, {name: "ulundhu", quantity: 808, unit: "gram"}], "kaikanigal" : [{name: "maavu", quantity: 20, unit: "kilo"}]};
+	            new renderPL(dummy_PLData);
 	        });
 	    </script>
 

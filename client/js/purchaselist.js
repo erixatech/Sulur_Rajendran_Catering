@@ -1,13 +1,13 @@
-function calculatePL(serviceFormReceipeMap){
-	var dummyReceipeList = [{"id":1, "name":"jelabi", "Ingredients":[{"tamilName":"sugar","quantity":100,"unit":"gram"},{"tamilName":"oil","quantity":200,"unit":"ml"}]},{"id":1, "name":"idly", "Ingredients":[{"tamilName":"ulundhu","quantity":800,"unit":"gram"},{"tamilName":"maavu","quantity":20,"unit":"kilo"},{"tamilName":"oil","quantity":200,"unit":"ml"}]}];
-	var dummyIngredientsList = [{"id": 1,"tamilName": "sugar", "category":"maligai", "unit":"gram"},{"id": 2,"tamilName": "oil", "category":"maligai", "unit":"ml"},{"id": 3,"tamilName": "ulundhu", "category":"maligai", "unit":"gram"},{"id": 4,"tamilName": "maavu", "category":"kaikanigal", "unit":"gram"}];
+function calculatePL(serviceFormReceipeMap, ingredientJson, recipeJson){
+	/*var dummyReceipeList = [{"id":1, "name":"jelabi", "Ingredients":[{"tamilName":"sugar","quantity":100,"unit":"gram"},{"tamilName":"oil","quantity":200,"unit":"ml"}]},{"id":1, "name":"idly", "Ingredients":[{"tamilName":"ulundhu","quantity":800,"unit":"gram"},{"tamilName":"maavu","quantity":20,"unit":"kilo"},{"tamilName":"oil","quantity":200,"unit":"ml"}]}];
+	var dummyIngredientsList = [{"id": 1,"tamilName": "sugar", "category":"maligai", "unit":"gram"},{"id": 2,"tamilName": "oil", "category":"maligai", "unit":"ml"},{"id": 3,"tamilName": "ulundhu", "category":"maligai", "unit":"gram"},{"id": 4,"tamilName": "maavu", "category":"kaikanigal", "unit":"gram"}];*/
 	
 	var PLToGenerate = [];
 
 	for(var i = 0; i < serviceFormReceipeMap.length; i++)
     {
-        var receipeToTake = serviceFormReceipeMap[i].name;
-        var currIngList = getIngredientsList(receipeToTake, dummyReceipeList);
+        var receipeId = serviceFormReceipeMap[i].id;
+        var currIngList = getIngredientsList(receipeId, recipeJson);
         for(var j = 0; j < currIngList.length; j++)
     	{
     		var currIngItem = currIngList[j];
@@ -47,22 +47,26 @@ function calculatePL(serviceFormReceipeMap){
     PLToGenerate = incByOnePrec(PLToGenerate);
     PLToGenerate = unitConversion(PLToGenerate);
     PLToGenerate = roundOffPL(PLToGenerate);
-    PLToGenerate = getCategorizedPL(PLToGenerate, dummyIngredientsList);
+    PLToGenerate = getCategorizedPL(PLToGenerate, ingredientJson);
     console.log(PLToGenerate);
     initiatePL(PLToGenerate);
 }
 
-function getIngredientsList(receipeToTake, receipeList)
+function getIngredientsList(receipeId, receipeData)
 {
-	for(var i = 0; i < receipeList.length; i++)
+    var currRecipe = getRecipeObjById(receipeData, receipeId);
+    
+    return (currRecipe && currRecipe.Ingredients) ? currRecipe.Ingredients : [];
+
+	/*for(var i = 0; i < receipeList.length; i++)
     {
-        if(receipeList[i].name == receipeToTake)
+        if(receipeList[i].id == receipeId)
         {
         	return receipeList[i].Ingredients;
         }
 
     }
-    return [];
+    return [];*/
 }
 
 function isAlreadyPresentInPL(ingItemForPL, PLToCheck)

@@ -489,6 +489,14 @@ OrderTab.prototype.renderEvents = function() {
 			$(this).parents('.recipeMapRowSf').remove();
 		});
 
+		$(document).on("click", ".purchaseListForEvent", function(){
+			var plWindow = window.open("purchaselistgen.html");
+		});
+
+		$(document).on("click", ".purchaseListForOrder", function(){
+			var plWindow = window.open("purchaselistgen.html");
+		});
+
 		$(document).on("click", "#id_createServiceForm", function(){
 			showLoading();
 			_this.getServiceFormDataAndCreateAndUpdate();
