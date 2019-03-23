@@ -27,10 +27,14 @@ OrderTab.prototype.render = function(){
 		$("#id_orderContent_tab").append(_this.renderServiceFormCreateOrUpdate());
 		$("#id_createOrder").addClass("d-none");
 		$(".backFromServiceFormEdit").removeClass("d-none");
+		$('.cls_orderPageTitle').removeClass('d-none');
+		$('.cls_orderPageTitle').text("Create Event");
 	}
 	else if(_this.isNewOrder == 'true'){
 		$("#id_orderContent_tab").append(_this.renderCreateOrUpdateOrder());
 		$(".backFromCreateOrder").removeClass("d-none");
+		$('.cls_orderPageTitle').removeClass('d-none');
+		$('.cls_orderPageTitle').text("Create Order");
 	}
 	else if(_this.orderId && _this.serviceId && _this.serviceId.length > 0){
 		showLoading();
@@ -52,6 +56,8 @@ OrderTab.prototype.render = function(){
 	    _this.getOrderByIdFromDB(_this.orderId, cbk);
 	    $("#id_createOrder").addClass("d-none");
 	    $(".backFromServiceFormEdit").removeClass("d-none");
+	    $('.cls_orderPageTitle').removeClass('d-none');
+	    $('.cls_orderPageTitle').text("Edit Event");
 	}
 	else if(_this.orderId && _this.orderId.length > 0){
 		showLoading();
@@ -63,12 +69,15 @@ OrderTab.prototype.render = function(){
 				$("#clientAddress").val(currentOrder.clientAddress);
 				$("#clientNotes").val(currentOrder.clientNotes);
 				$(".backFromCreateOrder").removeClass("d-none");
+				$('.cls_orderPageTitle').removeClass('d-none');
+				$('.cls_orderPageTitle').text("Edit Order");
 			}
 	    }
 	    _this.getOrderByIdFromDB(_this.orderId, cbk);
 	}
 	else{
 		_this.getOrderListFromDB();
+		$('.cls_orderPageTitle').text("Orders List");
 	}
 };
 OrderTab.prototype.getOrderListFromDB = function(){
@@ -223,13 +232,16 @@ OrderTab.prototype.getOrderByIdFromDB = function(orderId, cbk){
 }
 OrderTab.prototype.renderServiceForms = function(){
 	var _this = this;
+	$('.cls_orderPageTitle').addClass('d-none');
 	$("#id_createOrder").attr('hidden', true);
+
 	var orderId = getValueFromQueryParam("orderId");
 	_this.currentOrder = _this.ordersList && _this.ordersList[orderId];
 
 	var cbk = function(){
 		$("#id_orderContent_tab").append(_this.renderServiceFormList());
 		$(".backFromServiceList").removeClass("d-none");
+		$(".cls_serviceListTitle").removeClass("d-none");
 	}
 	if(!_this.currentOrder){
 		_this.getOrderByIdFromDB(orderId, cbk);
@@ -244,10 +256,11 @@ OrderTab.prototype.renderServiceFormList = function(){
 
 	var serviceJson = _this.currentOrder && _this.currentOrder[0] && _this.currentOrder[0].serviceForms;
 	renderHtml += '<div class="cls_orderServiceList">'
-					+ '<div class="row">'
-						+ '<div class="text-right col-11 pb-4">'
-							+ '<a id="id_createService" class="btn btn-primary btn-md mr-3 col-2 text-white">'
-					          + '<i class="fa fa-plus-circle" aria-hidden="true"></i> Create New Service'
+					+ '<div class="row pb-4">'
+						+ '<h4 class="col-5 cls_serviceListTitle text-secondary d-none">Events List</h4>'
+						+ '<div class="text-right col-7">'
+							+ '<a id="id_createService" class="btn btn-primary btn-md mr-3 text-white">'
+					          + '<i class="fa fa-plus-circle" aria-hidden="true"></i> Create New Event'
 					        + '</a>'
 					        + '<a id="id_back" class="btn btn-primary btn-md mr-3 col-1 text-white backFromServiceList d-none">'
 					          + '<i aria-hidden="true"></i> Back'
