@@ -124,7 +124,7 @@ OrderTab.prototype.renderOrderList = function(ordersJsonArr){
 							  	+ "</div>"
 							  	+ "<div class='card-footer text-center bg-light border-secondary row p-0'>"
 							  		+ "<label class='col-6 border-right border-secondary m-0 p-2 cls_editOrder' style='cursor:pointer'>Edit</label>"
-							  		+ "<label class='col-6 m-0 p-2 cls_deleteOrder'  data-idx="+curOrderObj.orderId+" data-name='"+curOrderObj.eventName+"' style='cursor:pointer'>Delete</label>"
+							  		+ "<label class='col-6 m-0 p-2 cls_deleteOrder'  data-idx="+curOrderObj.orderId+" data-name='"+curOrderObj.clientName+"' style='cursor:pointer'>Delete</label>"
 							  	+ "</div>"
 							+ "</div>";
 			if(i%2 != 0){
@@ -165,8 +165,8 @@ OrderTab.prototype.renderCreateOrUpdateOrder = function(orderObj){
 		+ '    			<textarea class="form-control" id="clientAddress" rows="3" placeholder="Enter Address" value="'+ (isUpdate ? orderObj.clientAddress : "")+'"></textarea>'
 		+ '  		</div>'
 		+ '         <div class="col">'
-		+ '    			<label for="eventName">Event Name</label>'
-		+ '    			<input type="text" class="form-control" id="eventName" placeholder="Enter Event Name" value="'+ (isUpdate ? orderObj.eventName : "")+'">'
+		+ '    			<label for="eventName">Function Name</label>'
+		+ '    			<input type="text" class="form-control" id="eventName" placeholder="Enter Function Name" value="'+ (isUpdate ? orderObj.eventName : "")+'">'
 		+ '  		</div>'
 		+ '  		</div>'
 		+ '  	</div>'
@@ -174,12 +174,12 @@ OrderTab.prototype.renderCreateOrUpdateOrder = function(orderObj){
 		+ '  <div class="form-group">'
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
-		+ '    			<label for="eventDate">Event Date</label>'
-		+ '    			<input type="text" class="form-control" id="eventDate" placeholder="Enter Event Date" value="'+ (isUpdate ? orderObj.eventDate : "")+'">'
+		+ '    			<label for="eventDate">Function Date</label>'
+		+ '    			<input type="text" class="form-control" id="eventDate" placeholder="Enter Function Date" value="'+ (isUpdate ? orderObj.eventDate : "")+'">'
 		+ '  		</div>'
 		+'          <div class="col">'
-		+ '    			<label for="eventVenue">Event Venue</label>'
-		+ '    			<input type="text" class="form-control" id="eventVenue" placeholder="Enter Event Venue" value="'+ (isUpdate ? orderObj.eventVenue : "")+'">'
+		+ '    			<label for="eventVenue">Function Venue</label>'
+		+ '    			<input type="text" class="form-control" id="eventVenue" placeholder="Enter Function Venue" value="'+ (isUpdate ? orderObj.eventVenue : "")+'">'
 		+ '  		</div>'
 		+ '  		</div>'
 		+ '  	</div>'
