@@ -56,6 +56,7 @@ OrderTab.prototype.render = function(){
 	    _this.getOrderByIdFromDB(_this.orderId, cbk);
 	    $("#id_createOrder").addClass("d-none");
 	    $(".backFromServiceFormEdit").removeClass("d-none");
+	    $('.purchaseListForEvent').removeClass('d-none');
 	    $('.cls_orderPageTitle').removeClass('d-none');
 	    $('.cls_orderPageTitle').text("Edit Event");
 	}
@@ -288,10 +289,16 @@ OrderTab.prototype.renderServiceFormList = function(){
 				renderHtml += "</div>"
 			}
 		}
+
+		renderHtml += "<div class='row'>"
+						+"<div class='text-right col-12'>"
+							+"<a id='id_plForOrder' class='btn btn-success btn-md text-white purchaseListForOrder'><i aria-hidden='true'></i>Generate Purchase List For Order</a>"
+						+"</div>"
+					+"</div>";
 	}
 	else{
 		renderHtml += '<div class="cls_noDataFound text-center">'
-						+ '<h5> No Service Found</h5>'
+						+ '<h5> No Events Found</h5>'
 					+ '</div>'
 	}
 	renderHtml += '</div>'
@@ -757,7 +764,7 @@ OrderTab.prototype.getServiceFormDataAndCreateAndUpdate = function(){
 	    		hideLoading();
 				$("#successPopup").find('.modal-title').text("Service form Created Successfully");
 	    		$("#successPopup").modal('show');
-				calculatePL(recipes);
+				//calculatePL(recipes);
 				var url = window.location.href
 				url = addUrlParam(url, "listServiceForms", true);
 				url = removeQueryParamFromUrl(url, "createServiceForm");
