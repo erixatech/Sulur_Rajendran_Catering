@@ -383,6 +383,37 @@
 				{
 					window.location.href = window.location.origin + "?tab=recipe";
 				}
+				else if($("#id_order-tab").hasClass("active") == true && $(this).parents('#successPopup').data('toRedirect') == 'listservice')
+				{
+					var url = window.location.href;
+					url = addUrlParam(url, "listServiceForms", true);
+					url = removeQueryParamFromUrl(url, "createServiceForm");
+					url = removeQueryParamFromUrl(url, "serviceId");
+					window.location.href = url;
+				}
+				else if($("#id_order-tab").hasClass("active") == true && $(this).parents('#successPopup').data('toRedirect') == 'listservice_from_ordercreate')
+				{
+					if($(this).parents('#successPopup').data('orderIdToAppend')  && $(this).parents('#successPopup').data('orderIdToAppend').length>0)
+					{
+						var url = window.location.href;
+						url = removeQueryParamFromUrl(url, "orderIsNew");
+						url = addQueryParamToUrl(url, 'orderId', $(this).parents('#successPopup').data('orderIdToAppend'));
+						url = addQueryParamToUrl(url, 'listServiceForms', "true");
+						window.location.href = url;
+					}
+					else
+					{
+						window.location.href = window.location.origin;
+					}
+				}
+				else if($("#id_order-tab").hasClass("active") == true && $(this).parents('#successPopup').data('toRedirect') == 'listservice_from_orderupdate')
+				{
+					addQueryParamToUrlAndReload('listServiceForms', "true");
+				}
+				else
+				{
+					window.location.reload();
+				}
 		    });
 
 			$(".cls_confirmPopupDelete").click(function() {

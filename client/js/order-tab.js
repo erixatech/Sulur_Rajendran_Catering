@@ -197,7 +197,7 @@ OrderTab.prototype.renderCreateOrUpdateOrder = function(orderObj){
 		+ '  <div class="row mt-4">'
 		+ '  	<div class="col"></div>'
 		+ '  	<div class="col text-right">'
-		+ '     	<button type="button" id="id_listServiceForms" class="btn btn-primary" isupdate="'+isUpdate+'" orderid="'+ (isUpdate ? orderObj.orderId : "")+'">Save and Proceed To Service Form</button>'
+		+ '     	<button type="button" id="id_listServiceForms" class="btn btn-primary" isupdate="'+isUpdate+'" orderid="'+ (isUpdate ? orderObj.orderId : "")+'">Save and Proceed To Events</button>'
 		+ '       	<button type="button" id="id_listServiceFormsCancel" class="btn btn-secondary ml-3">Cancel</button>'
 		+ '  	</div>'		
 		+ '  </div>'
@@ -268,7 +268,7 @@ OrderTab.prototype.renderServiceFormList = function(){
 					        + '</a>'
 						+ '</div>'
 				   	+ '</div>'
-	if(serviceJson){
+	if(serviceJson && serviceJson.length > 0){
 		for(var i=0; i< serviceJson.length; i++){
 			if(i%2 == 0){
 				renderHtml += "<div class='row'>"
@@ -335,7 +335,7 @@ OrderTab.prototype.renderServiceFormCreateOrUpdate = function(serviceObj){
 		+ '  		</div>'
 		+ '  	</div>'
 		+ '  </div>'
-		+ '  <h5><u>Add Receipes to Service Form</u></h5>'
+		+ '  <h5><u>Add Receipes to Event</u></h5>'
 		+ '  <div class="form-group receipeMapContainer">'
 		+ '  	<div class="serviceFormReceipeMap mt-4">'
 		+ '    		<div class="row">'
@@ -535,7 +535,7 @@ OrderTab.prototype.renderEvents = function() {
 			var serviceName = $(this).data("name");
 	        if(idx !== undefined)
 	        {
-	    	    $("#confirmationPopup").find('.modal-title').text("Are you sure to delete this Service ("+ serviceName +")?");
+	    	    $("#confirmationPopup").find('.modal-title').text("Are you sure to delete this Event ("+ serviceName +")?");
     			$("#confirmationPopup").modal('show');
     			$("#confirmationPopup").data("idToDelete", idx);
     			$("#confirmationPopup").data("module", "Service");
@@ -561,11 +561,11 @@ OrderTab.prototype.renderEvents = function() {
 		            	data: JSON.stringify(orderJson),
 			        	success: function(result){
 			        		hideLoading();
-							$successPopup.find('.modal-title').text("Order" + result);
+							$successPopup.find('.modal-title').text("Order deleted successfully");
 			        		$successPopup.modal('show');
 			        		$confirmationPopup.modal('hide');
-			        		showLoading();
-			        		location.reload();
+			        		/*showLoading();		//not needed - success popup ok - will reload page
+			        		location.reload();*/
 						},
 						error: function(){
 							hideLoading();
@@ -601,11 +601,11 @@ OrderTab.prototype.renderEvents = function() {
 		            	data: JSON.stringify(serviceObj),
 			        	success: function(result){
 			        		hideLoading();
-							$successPopup.find('.modal-title').text("Service" + result);
+							$successPopup.find('.modal-title').text("Event deleted successfully");
 			        		$successPopup.modal('show');
 			        		$confirmationPopup.modal('hide');
-			        		showLoading();
-			        		location.reload();
+			        		/*showLoading();		//not needed - success popup ok - will reload page
+			        		location.reload();*/
 						},
 						error: function(){
 							hideLoading();
@@ -665,14 +665,10 @@ OrderTab.prototype.getOrderDataAndCreate = function(){
     	data: JSON.stringify(orderMetaData),
     	success: function(result){
     		hideLoading();
-
 			$("#successPopup").find('.modal-title').text("Order Created Successfully");
     		$("#successPopup").modal('show');
-    		var url = window.location.href;
-			url = removeQueryParamFromUrl(url, "orderIsNew");
-			url = addQueryParamToUrl(url, 'orderId', orderMetaData.orderId);
-			url = addQueryParamToUrl(url, 'listServiceForms', "true");
-			window.location.href = url;
+    		$("#successPopup").data('toRedirect','listservice_from_ordercreate');
+    		$("#successPopup").data('orderIdToAppend',orderMetaData.orderId);
 		},
 		error: function(){
 			hideLoading();
@@ -702,10 +698,9 @@ OrderTab.prototype.getOrderDataAndUpdate = function(orderId){
     	data: JSON.stringify(orderMetaData),
     	success: function(result){
     		hideLoading();
-
 			$("#successPopup").find('.modal-title').text("Order Updated Successfully");
     		$("#successPopup").modal('show');
-    		addQueryParamToUrlAndReload('listServiceForms', "true");
+    		$("#successPopup").data('toRedirect','listservice_from_orderupdate');
 		},
 		error: function(){
 			hideLoading();
@@ -762,17 +757,14 @@ OrderTab.prototype.getServiceFormDataAndCreateAndUpdate = function(){
 	    	data: JSON.stringify(updateOrderData),
 	    	success: function(result){
 	    		hideLoading();
-				$("#successPopup").find('.modal-title').text("Service form Created Successfully");
+				$("#successPopup").find('.modal-title').text("Event updated Successfully");
 	    		$("#successPopup").modal('show');
+	    		$("#successPopup").data('toRedirect','listservice');
 				//calculatePL(recipes);
-				var url = window.location.href
-				url = addUrlParam(url, "listServiceForms", true);
-				url = removeQueryParamFromUrl(url, "createServiceForm");
-				window.location.href = url;
 			},
 			error: function(){
 				hideLoading();
-			    $("#errorPopup").find('.modal-title').text('Failed to Service form. Please Try again later.');
+			    $("#errorPopup").find('.modal-title').text('Failed to update Event. Please Try again later.');
 	    		$("#errorPopup").modal('show');
 			}
 		});
