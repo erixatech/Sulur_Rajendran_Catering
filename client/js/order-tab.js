@@ -26,6 +26,7 @@ OrderTab.prototype.render = function(){
 	else if(_this.isCreateServiceForm && _this.isCreateServiceForm == "true") {
 		$("#id_orderContent_tab").append(_this.renderServiceFormCreateOrUpdate());
 		$("#id_createOrder").addClass("d-none");
+		$(".backFromServiceFormEdit").removeClass("d-none");
 	}
 	else if(_this.isNewOrder == 'true'){
 		$("#id_orderContent_tab").append(_this.renderCreateOrUpdateOrder());
@@ -50,6 +51,7 @@ OrderTab.prototype.render = function(){
 	    }
 	    _this.getOrderByIdFromDB(_this.orderId, cbk);
 	    $("#id_createOrder").addClass("d-none");
+	    $(".backFromServiceFormEdit").removeClass("d-none");
 	}
 	else if(_this.orderId && _this.orderId.length > 0){
 		showLoading();
@@ -183,11 +185,11 @@ OrderTab.prototype.renderCreateOrUpdateOrder = function(orderObj){
 		+ '  	</div>'
 		+ '  </div>'
 		+ '  <div class="row mt-4">'
+		+ '  	<div class="col"></div>'
 		+ '  	<div class="col text-right">'
 		+ '     	<button type="button" id="id_listServiceForms" class="btn btn-primary" isupdate="'+isUpdate+'" orderid="'+ (isUpdate ? orderObj.orderId : "")+'">Save and Proceed To Service Form</button>'
 		+ '       	<button type="button" id="id_listServiceFormsCancel" class="btn btn-secondary ml-3">Cancel</button>'
-		+ '  	</div>'
-		+ '  	<div class="col"></div>' 
+		+ '  	</div>'		
 		+ '  </div>'
 		+ '</div>'
 		+ '</form>';
@@ -436,9 +438,11 @@ OrderTab.prototype.renderEvents = function() {
 			addQueryParamToUrlAndReload('orderIsNew', 'true');
         });
 
-        $(document).on("click", ".cls_orderDetails", function(){
+        //$(document).on("click", ".cls_orderDetails", function(){
+		$(document).on("click", ".cls_orderDetails .card-header, .cls_orderDetails .card-body", function(){        	
         	var url = window.location.href;
-        	var orderId = $(this).attr("idx");
+        	//var orderId = $(this).attr("idx");
+        	var orderId = $(this).parent('.cls_orderDetails').attr("idx");
 			url = addQueryParamToUrl(url, "orderId", orderId);
         	addQueryParamToUrlAndReload('listServiceForms', "true", url);
         });
@@ -608,10 +612,12 @@ OrderTab.prototype.renderEvents = function() {
 		$(document).on('click', '.backFromServiceList', function(event){
         	var url = window.location.href;
 			url = removeQueryParamFromUrl(url, "listServiceForms");
+			url = removeQueryParamFromUrl(url, "orderId");
 			window.location.href = url;
 		});
-		$(document).on('click', '#id_createServiceFormCancel', function(event){
+		$(document).on('click', '.backFromServiceFormEdit, #id_createServiceFormCancel', function(event){
         	var url = window.location.href;
+			url = removeQueryParamFromUrl(url, "serviceId");
 			url = removeQueryParamFromUrl(url, "createServiceForm");
 			url = addQueryParamToUrl(url, 'listServiceForms', 'true');
 			window.location.href = url;
