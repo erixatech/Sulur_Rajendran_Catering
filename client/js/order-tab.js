@@ -90,6 +90,7 @@ OrderTab.prototype.getOrderListFromDB = function(){
     		hideLoading();
     		_this.setOrderbyId(result);
     		$("#id_orderContent_tab").append(_this.renderOrderList(result));
+    		ordersJsonMain = result;
 		},
 		error: function(){
 			hideLoading();
@@ -494,7 +495,24 @@ OrderTab.prototype.renderEvents = function() {
 		});
 
 		$(document).on("click", ".purchaseListForOrder", function(){
-			var plWindow = window.open("purchaselistgen.html");
+			//var plWindow = window.open("purchaselistgen.html");
+			var $errorPopup = $("#errorPopup");
+			var $errModalTitle = $errorPopup.find('.modal-title');
+			
+			if(_this.currentOrder && _this.currentOrder[0] && _this.currentOrder[0].serviceForms)
+	    	{
+				new renderPL(_this.currentOrder[0]);
+			}
+			else if(_this.currentOrder && _this.currentOrder[0])
+			{
+				$errModalTitle.text('No Events added for this Order');
+				$errorPopup.modal('show');
+			}
+			else
+			{
+				$errModalTitle.text('Could not find the specified Order to Generate purchase list');
+				$errorPopup.modal('show');
+			}
 		});
 
 		$(document).on("click", "#id_createServiceForm", function(){

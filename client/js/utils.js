@@ -147,7 +147,7 @@ function getIngredientsByName(ingredientJson, name) {		//For Search
 function getIngredientIdByNameAndCat(ingredientJson, name, category) {
 	var toRet = -1;
 	$.each( ingredientJson, function( catName, ingArr ) {
-		if(catName!="_id" && catName!="name" && category == catName)
+		if(catName!="_id" && catName!="name" && category.toLowerCase() == catName.toLowerCase())
 		{
 			$.each(ingArr, function( index, ingredientObj ) {
 			  	if(ingredientObj.name.toLowerCase() == name.toLowerCase()) {
@@ -301,6 +301,16 @@ function getIndexForIdForRecipe(recipeJson, id) {
 	  	}
 	});
 
+	return toRet;
+}
+
+function getOrderObjById(ordersJson, idToFind) {
+	var toRet = null;
+	$.each(ordersJson, function( index, orderObj ) {
+		if(orderObj.orderId == idToFind) {
+			toRet = orderObj;
+		}
+	});
 	return toRet;
 }
 
