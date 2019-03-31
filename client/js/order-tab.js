@@ -5,6 +5,7 @@ function OrderTab(){
 	var dummyRecipies = null;
 	var ordersList = {};
 	var currentOrder = null;
+	var isOrdersTabLoaded = false;
 }
 OrderTab.prototype.init = function(){
 	var _this = this;
@@ -15,9 +16,23 @@ OrderTab.prototype.init = function(){
 	_this.isCreateServiceForm = getValueFromQueryParam('createServiceForm') ? "true" : "false";
 	_this.isPurchaseList = getValueFromQueryParam('purchaseList') ? "true" : "false";
 	_this.purchaseListCategory = getValueFromQueryParam('purchaseListCategory');
-	_this.render();
-	_this.renderEvents();
-}
+	_this.waitForDataLoad();
+};
+OrderTab.prototype.waitForDataLoad = function(){
+	var _this = this;
+	if(!$.isEmptyObject(ingredientJson) && !$.isEmptyObject(recipeJson) && !_this.isOrdersTabLoaded)
+	{
+		_this.isOrdersTabLoaded = true;
+		_this.render();
+		_this.renderEvents();
+	}
+	else
+	{
+		setTimeout(function(){
+            _this.waitForDataLoad();
+        }, 100);
+	}
+};	
 OrderTab.prototype.render = function(){
 	var _this = this;
 	var renderHtml = [];

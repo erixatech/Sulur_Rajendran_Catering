@@ -28,7 +28,6 @@ RecipeTab.prototype.render = function() {
 	    		recipeNames = _this.getAllRecipeNames(recipeJson);
 	    	}
 			_this.renderRecipe("All");
-			new OrderTab();
 		},
 		error: function(){
 			hideLoading();
