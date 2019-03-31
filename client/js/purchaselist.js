@@ -99,6 +99,7 @@ renderPL.prototype.render = function(plToRender) {
             renderHtml += "<div class='col-12 text-center'>"
                         + "<div class='col-12 text-center font-weight-bold'>தேதி <input type='text' class='form-control col-2 mx-3' style='display:inline'> மாலை <input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு தேவை, இடம் <input type='text' class='form-control col-3 ml-3' style='display:inline'></div><br>"
                         + "<div class='col-12 text-center text-danger font-weight-bold'><u>மளிகை சாமான்கள் மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
+                        + _this.renderPoojaTable()
                         + "</div>"
                             + "<div class='row col-12'>"
                                 + "<div class='col-1'></div>"
@@ -227,6 +228,36 @@ renderPL.prototype.render = function(plToRender) {
             var plWindow2 = window.open(addUrlParam(window.location.href, "purchaseListCategory", "KaaiKanigal"));
         }, 1000);
     }*/
+};
+
+renderPL.prototype.renderPoojaTable = function() {
+    var renderHtml = [];
+    renderHtml += "<div class='row col-12'>"
+                    + "<div class='col-1'></div>"
+                    + "<div class='list-group col-10 text-center'>"
+                        + '<table class="table table-bordered">'
+                            + '<tbody>'
+                                + '<tr>'
+                                    + '<td class="font-weight-bold text-center"><u>பூஜை சாமான்கள்</u></td>'
+                                    + '<td><span>3. சந்தனம்</span>   <span class="float-right">- 1 பாக்கட்</span> </td>'
+                                    + '<td><span>6. தேங்காய்</span>  <span class="float-right">- 2 காய்</span> </td>'
+                                + '</tr>'
+                                + '<tr>'
+                                    + '<td><span>1. மஞ்சத்தூள்</span>    <span class="float-right">- 50 கிராம்</span> </td>'
+                                    + '<td><span>4. குங்குமம்</span>   <span class="float-right">- 1 பாக்கட்</span> </td>'
+                                    + '<td><span>7. பழம்</span>  <span class="float-right">- 4 பழம்</span> </td>'
+                                + '</tr>'
+                                + '<tr>'
+                                    + '<td><span>2. விபூதி</span>    <span class="float-right">-  1 பாக்கட்</span> </td>'
+                                    + '<td><span>5. ஊதுபத்தி</span>   <span class="float-right">- 1 பாக்கட்</span> </td>'
+                                    + '<td><span>8. வெற்றிழைபாக்கு</span>  <span class="float-right">- 5 ரூபாய்</span> </td>'
+                                + '</tr>'
+                            + '</tbody>'
+                        + '</table>'
+                    + "</div>"
+                    + "<div class='col-1'></div>"
+                + "</div>"
+    return renderHtml;
 };
 
 renderPL.prototype.registerEvents = function() {
