@@ -21,13 +21,14 @@ RecipeTab.prototype.render = function() {
     	url: "/getRecipe?category=all",
     	type: "get",
     	success: function(result){
-    		hideLoading();
+    		//hideLoading();
     		if(result && result[0] && result[0].Recipe && result[0].Recipe.length > 0)
     		{
 	    		recipeJson = result[0].Recipe;
 	    		recipeNames = _this.getAllRecipeNames(recipeJson);
 	    	}
 			_this.renderRecipe("All");
+			new OrderTab();
 		},
 		error: function(){
 			hideLoading();

@@ -264,6 +264,13 @@ function getRecipeObjById(recipeJson, idToFind) {
 	return toRet;
 }
 
+function getIngredientsListOfRecipe(receipeId, receipeData)
+{
+    var currRecipe = getRecipeObjById(receipeData, receipeId);
+    
+    return (currRecipe && currRecipe.Ingredients) ? currRecipe.Ingredients : [];
+}
+
 function getIndexForIdForIng(ingredientJson, category, id) {
 	var indexToRet = 0;
 	var toRet = -1;

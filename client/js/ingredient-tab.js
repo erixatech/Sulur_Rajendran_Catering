@@ -17,7 +17,7 @@ IngredientTab.prototype.render = function() {
     	url: "/getIngredients?category=all",
     	type: "get",
     	success: function(result){
-    		hideLoading();
+    		//hideLoading();
     		if(result && result.length == 1)
     		{	    		
 	    		ingredientJson = result[0];

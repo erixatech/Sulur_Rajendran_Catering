@@ -13,14 +13,22 @@ OrderTab.prototype.init = function(){
 	_this.serviceId= getValueFromQueryParam('serviceId');
 	_this.isListServiceForms = getValueFromQueryParam('listServiceForms') ? "true" : "false";
 	_this.isCreateServiceForm = getValueFromQueryParam('createServiceForm') ? "true" : "false";
+	_this.isPurchaseList = getValueFromQueryParam('purchaseList') ? "true" : "false";
+	_this.purchaseListCategory = getValueFromQueryParam('purchaseListCategory');
 	_this.render();
 	_this.renderEvents();
 }
 OrderTab.prototype.render = function(){
 	var _this = this;
 	var renderHtml = [];
-	
-	if(_this.orderId && _this.orderId.length > 0 && _this.isListServiceForms == 'true') {
+
+	if(_this.orderId && _this.orderId.length > 0 && _this.isPurchaseList == 'true' && _this.purchaseListCategory && _this.purchaseListCategory.length > 0) {		
+		var cbk = function(){
+			new renderPL(_this.currentOrder[0]);
+		}
+		_this.currentOrder = (_this.ordersList && _this.ordersList[_this.orderId]) ? _this.ordersList[_this.orderId] : _this.getOrderByIdFromDB(_this.orderId,cbk);
+	}
+	else if(_this.orderId && _this.orderId.length > 0 && _this.isListServiceForms == 'true') {
 		_this.renderServiceForms();
 	}
 	else if(_this.isCreateServiceForm && _this.isCreateServiceForm == "true") {
@@ -459,6 +467,16 @@ OrderTab.prototype.renderEvents = function() {
 			addQueryParamToUrlAndReload('orderIsNew', 'true');
         });
 
+        $(document).on("click", "#id_order-tab", function(){
+			var ifTabbed = getValueFromQueryParam('tab');
+			if(ifTabbed && ifTabbed.length>0)
+			{
+				var url = window.location.href;
+				url = removeQueryParamFromUrl(url, "tab");
+				window.location.href = url;
+			}
+        });
+
         //$(document).on("click", ".cls_orderDetails", function(){
 		$(document).on("click", ".cls_orderDetails .card-header, .cls_orderDetails .card-body", function(){        	
         	var url = window.location.href;
@@ -501,7 +519,17 @@ OrderTab.prototype.renderEvents = function() {
 			
 			if(_this.currentOrder && _this.currentOrder[0] && _this.currentOrder[0].serviceForms)
 	    	{
-				new renderPL(_this.currentOrder[0]);
+				//new renderPL(_this.currentOrder[0]);
+				var plWindow = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Maligai");
+				setTimeout(function(){
+		            var plWindow2 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=KaaiKanigal");
+		        }, 100);
+		        setTimeout(function(){
+		            var plWindow3= window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Extras");
+		        }, 200);
+		        setTimeout(function(){
+		            var plWindow4 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Suppliments");
+		        }, 300);
 			}
 			else if(_this.currentOrder && _this.currentOrder[0])
 			{
