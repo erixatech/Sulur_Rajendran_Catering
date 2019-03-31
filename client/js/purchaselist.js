@@ -96,21 +96,30 @@ renderPL.prototype.render = function(plToRender) {
     if(purchaseListCategory == "Maligai")
     {
         if(cat_maligai && cat_maligai.length>0){
-            renderHtml += "<div class='list-group col-9 text-center'>"
-                            + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
-                                + "Maligai"
+            renderHtml += "<div class='col-12 text-center'>"
+                        + "<div class='col-12 text-center font-weight-bold'>தேதி <input type='text' class='form-control col-2 mx-3' style='display:inline'> மாலை <input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு தேவை, இடம் <input type='text' class='form-control col-3 ml-3' style='display:inline'></div><br>"
+                        + "<div class='col-12 text-center text-danger font-weight-bold'><u>மளிகை சாமான்கள் மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
+                        + "</div>"
+                            + "<div class='row col-12'>"
+                                + "<div class='col-1'></div>"
+                                + "<div class='list-group col-9 text-center ml-5 pl-4'>"
+                                    + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
+                                        + "Maligai"
 
-                        for(var j=0; j<cat_maligai.length ; j++){
-                            renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_maligai_"+ j +"'>"
-                                            + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
-                                            + "<span class='col-4 px-3'><input type='text' class='col-4 form-control' name='name' value='"+cat_maligai[j].name+"' style='display:inline'></span>"
-                                            + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='quantity' value='"+cat_maligai[j].quantity+"' style='display:inline'></span>"
-                                            + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='unit' value='"+cat_maligai[j].unit+"' style='display:inline'></span>"
-                                            + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
-                                        + "</a>"
-                        }
-            renderHtml += "</a>"
-                       + "</div><br><br>"
+                                    for(var j=0; j<cat_maligai.length ; j++){
+                                        renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_maligai_"+ j +"'>"
+                                                        + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
+                                                        + "<span class='col-4 px-3'><input type='text' class='col-4 form-control' name='name' value='"+cat_maligai[j].name+"' style='display:inline'></span>"
+                                                        + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='quantity' value='"+cat_maligai[j].quantity+"' style='display:inline'></span>"
+                                                        + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='unit' value='"+cat_maligai[j].unit+"' style='display:inline'></span>"
+                                                        + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
+                                                    + "</a>"
+                                    }
+                        renderHtml += "</a>"
+                           + "</div>"
+                           + "<div class='col-1'></div>"
+                       + "</div>"
+                       +"<br><br>"
         }
         else
         {
@@ -121,21 +130,26 @@ renderPL.prototype.render = function(plToRender) {
     if(purchaseListCategory == "KaaiKanigal")
     {
         if(cat_kaikanigal && cat_kaikanigal.length>0){
-            renderHtml += "<div class='list-group col-9 text-center'>"
-                            + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
-                                + "Kaai Kanigal"
+            renderHtml += "<br><div class='row col-12'>"
+                                + "<div class='col-1'></div>"
+                                +"<div class='list-group col-9 text-center'>"
+                                    + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
+                                        + "Kaai Kanigal"
 
-                        for(var j=0; j<cat_kaikanigal.length ; j++){
-                            renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_kaikanigal_"+ j +"'>"
-                                            + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
-                                            + "<span class='col-4 px-3'><input type='text' class='col-4 form-control' name='name' value='"+cat_kaikanigal[j].name+"' style='display:inline'></span>"
-                                            + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='quantity' value='"+cat_kaikanigal[j].quantity+"' style='display:inline'></span>"
-                                            + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='unit' value='"+cat_kaikanigal[j].unit+"' style='display:inline'></span>"
-                                            + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
-                                        + "</a>"
-                        }
-            renderHtml += "</a>"
-                       + "</div><br><br>"
+                                    for(var j=0; j<cat_kaikanigal.length ; j++){
+                                        renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_kaikanigal_"+ j +"'>"
+                                                        + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
+                                                        + "<span class='col-4 px-3'><input type='text' class='col-4 form-control' name='name' value='"+cat_kaikanigal[j].name+"' style='display:inline'></span>"
+                                                        + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='quantity' value='"+cat_kaikanigal[j].quantity+"' style='display:inline'></span>"
+                                                        + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='unit' value='"+cat_kaikanigal[j].unit+"' style='display:inline'></span>"
+                                                        + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
+                                                    + "</a>"
+                                    }
+                        renderHtml += "</a>"
+                            + "</div>"
+                           + "<div class='col-1'></div>"
+                       + "</div>"
+                       + "<br><br>"
         }
         else
         {
@@ -146,21 +160,26 @@ renderPL.prototype.render = function(plToRender) {
     if(purchaseListCategory == "Extras")
     {
         if(cat_extras && cat_extras.length>0){
-            renderHtml += "<div class='list-group col-9 text-center'>"
-                            + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
-                                + "extras"
+            renderHtml += "<br><div class='row col-12'>"
+                            + "<div class='col-1'></div>"
+                            + "<div class='list-group col-9 text-center'>"
+                                + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
+                                    + "Extras"
 
-                        for(var j=0; j<cat_extras.length ; j++){
-                            renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_extras_"+ j +"'>"
-                                            + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
-                                            + "<span class='col-4 px-3'><input type='text' class='col-4 form-control' name='name' value='"+cat_extras[j].name+"' style='display:inline'></span>"
-                                            + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='quantity' value='"+cat_extras[j].quantity+"' style='display:inline'></span>"
-                                            + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='unit' value='"+cat_extras[j].unit+"' style='display:inline'></span>"
-                                            + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
-                                        + "</a>"
-                        }
-            renderHtml += "</a>"
-                       + "</div><br><br>"
+                                for(var j=0; j<cat_extras.length ; j++){
+                                    renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_extras_"+ j +"'>"
+                                                    + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
+                                                    + "<span class='col-4 px-3'><input type='text' class='col-4 form-control' name='name' value='"+cat_extras[j].name+"' style='display:inline'></span>"
+                                                    + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='quantity' value='"+cat_extras[j].quantity+"' style='display:inline'></span>"
+                                                    + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='unit' value='"+cat_extras[j].unit+"' style='display:inline'></span>"
+                                                    + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
+                                                + "</a>"
+                                }
+                    renderHtml += "</a>"
+                            + "</div>"
+                           + "<div class='col-1'></div>"
+                       + "</div>"
+                       + "<br><br>"
         }
         else
         {
@@ -171,21 +190,26 @@ renderPL.prototype.render = function(plToRender) {
     if(purchaseListCategory == "Suppliments")
     {
         if(cat_suppliments && cat_suppliments.length>0){
-            renderHtml += "<div class='list-group col-9 text-center'>"
-                            + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
-                                + "suppliments"
+            renderHtml += "<br><div class='row col-12'>"
+                            + "<div class='col-1'></div>" 
+                            + "<div class='list-group col-9 text-center'>"
+                                + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
+                                    + "Suppliments"
 
-                        for(var j=0; j<cat_suppliments.length ; j++){
-                            renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_suppliments_"+ j +"'>"
-                                            + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
-                                            + "<span class='col-4 px-3'><input type='text' class='col-4 form-control' name='name' value='"+cat_suppliments[j].name+"' style='display:inline'></span>"
-                                            + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='quantity' value='"+cat_suppliments[j].quantity+"' style='display:inline'></span>"
-                                            + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='unit' value='"+cat_suppliments[j].unit+"' style='display:inline'></span>"
-                                            + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
-                                        + "</a>"
-                        }
-            renderHtml += "</a>"
-                       + "</div><br><br>"
+                                for(var j=0; j<cat_suppliments.length ; j++){
+                                    renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_suppliments_"+ j +"'>"
+                                                    + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
+                                                    + "<span class='col-4 px-3'><input type='text' class='col-4 form-control' name='name' value='"+cat_suppliments[j].name+"' style='display:inline'></span>"
+                                                    + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='quantity' value='"+cat_suppliments[j].quantity+"' style='display:inline'></span>"
+                                                    + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='unit' value='"+cat_suppliments[j].unit+"' style='display:inline'></span>"
+                                                    + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
+                                                + "</a>"
+                                }
+                    renderHtml += "</a>"
+                            + "</div>"
+                           + "<div class='col-1'></div>"
+                       + "</div>"
+                       + "<br><br>"
         }
         else
         {
