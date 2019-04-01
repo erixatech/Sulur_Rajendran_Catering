@@ -170,9 +170,16 @@ RecipeTab.prototype.renderIngListForRecipe = function(IngredientsListForRecipe) 
 
 			if(curIngredientObj && !$.isEmptyObject(curIngredientObj))
 			{
+				var currQty = _this.getCurrentQty(IngredientsListForRecipe[j].quantity);
+				var currFrac = _this.getCurrentFraction(IngredientsListForRecipe[j].quantity);
+
 				$($('.cls_ingredientCategory_recipe')[j]).val(curIngredientObj.categoryName).trigger('change');
 				$($('.cls_ingredientName_recipe')[j]).val(curIngredientObj.name).trigger('change');
-				$($('.cls_ingredientQunatity_recipe')[j]).val(IngredientsListForRecipe[j].quantity);
+				$($('.cls_ingredientQunatity_recipe')[j]).val(currQty);
+				if(currFrac && currFrac.length>0)
+				{
+					$($('.cls_ingredientFraction_recipe')[j]).val(currFrac).trigger('change');
+				}
 				$($('.cls_ingredientUnit_recipe')[j]).val(IngredientsListForRecipe[j].unit).trigger('change');
 				/*var ingredientUnits = getIngredientUnitsByName(ingredientJson, curIngredientObj.name);
 				var unitToPopulate = getSuitableUnit(ingredientUnits, curIngredientObj);
@@ -182,12 +189,48 @@ RecipeTab.prototype.renderIngListForRecipe = function(IngredientsListForRecipe) 
 	}
 };
 
+RecipeTab.prototype.getCurrentQty = function(qty) {
+	var qtyToRet = qty;
+
+	if(qty.toString().indexOf(".")>-1)
+	{
+		qtyToRet = qty.toString().split(".")[0];
+	}
+	
+	return Number(qtyToRet);
+};
+
+RecipeTab.prototype.getCurrentFraction = function(qty) {
+	var fracToRet = "";
+	var currFraction = "";
+
+	if(qty.toString().indexOf(".")>-1)
+	{
+		currFraction = qty.toString().split(".")[1];
+	}
+
+	if(currFraction == 25)
+	{
+		fracToRet = "¼";
+	}
+	else if(currFraction == 5)
+	{
+		fracToRet = "½";
+	}
+	else if(currFraction == 75)
+	{
+		fracToRet = "¾";
+	}
+
+	return fracToRet;
+};
+
 RecipeTab.prototype.getIngredientMapRow = function() {
 	var _this = this;
 	var renderHtmlMapRow = [];
 	
 	renderHtmlMapRow += '    <div class="row cls_ingredientMapRow mt-2 mb-1">'
-		              + '        <div class="col-3">'
+		              + '        <div class="col-2">'
 		              + '                <select class="form-control cls_ingredientCategory_recipe" id="id_ingredientCategory_recipe" name="ingredientCategory">'
 		              +'                     <option>Choose Category</option>'
 		              +'                 </select>'
@@ -195,8 +238,11 @@ RecipeTab.prototype.getIngredientMapRow = function() {
 		              + '        <div class="col-4">'
 		              + '            <select class="form-control cls_ingredientName_recipe" id="id_ingredientName_recipe" name="ingredientName"></select>'
 		              + '        </div>'
-		              + '		 <div class="col-2">'
+		              + '		 <div class="cls_onehalfcol">'
 		              + '			 <input type="text" class="form-control cls_ingredientQunatity_recipe" required id="id_ingredientQunatity_recipe" placeholder="Enter Quantity" name="qunatity">'
+		              + '		 </div>'
+		              + '		 <div class="cls_onehalfcol">'
+		              + '			 <select class="form-control cls_ingredientFraction_recipe" id="id_ingredientFraction_recipe" name="ingredientFraction"></select>'
 		              + '		 </div>'
 		              + '        <div class="col-2">'
 		              + '            <select class="form-control cls_ingredientUnit_recipe" id="id_ingredientUnit_recipe" name="ingredientUnit"></select>'
@@ -225,7 +271,7 @@ RecipeTab.prototype.constructIngArrForRecipe = function() {
 				currIngRow["category"] = currElem.find('#id_ingredientCategory_recipe').val();
 				currIngRow["name"] = currElem.find('#id_ingredientName_recipe').val();
 				currIngRow["id"] = getIngredientIdByNameAndCat(ingredientJson, currIngRow["name"], currIngRow["category"]);
-				currIngRow["quantity"] = currElem.find('#id_ingredientQunatity_recipe').val();
+				currIngRow["quantity"] = _this.calculateQtyWithFraction(currElem);	
 				currIngRow["unit"] = currElem.find('#id_ingredientUnit_recipe').val();
 				ingMapToReturn.push(currIngRow);
 			});
@@ -233,6 +279,26 @@ RecipeTab.prototype.constructIngArrForRecipe = function() {
 	}
 			
 	return ingMapToReturn;
+};
+
+RecipeTab.prototype.calculateQtyWithFraction = function(currElem) {
+	var currQty = currElem.find('#id_ingredientQunatity_recipe').val();
+	var currFraction = currElem.find('#id_ingredientFraction_recipe').val();
+
+	if(currFraction == "¼")
+	{
+		currQty = Number(currQty) + Number(.25);
+	}
+	else if(currFraction == "½")
+	{
+		currQty = Number(currQty) + Number(.5);
+	}
+	else if(currFraction == "¾")
+	{
+		currQty = Number(currQty) + Number(.75);
+	}
+
+	return Number(currQty);
 };
 
 RecipeTab.prototype.registerEvents = function() {
@@ -245,6 +311,7 @@ RecipeTab.prototype.registerEvents = function() {
 			cloneDOM(elemToAdd, $('.createRecipeIngredientMap'));
 			addOptionsToSelectViaElem(ingredientCategories, $('.cls_ingredientCategory_recipe')[$('.cls_ingredientCategory_recipe').length-1]);
 			addOptionsToSelectViaElem(ingredientUnits, $('.cls_ingredientUnit_recipe')[$('.cls_ingredientUnit_recipe').length-1]);
+			addOptionsToSelectViaElemHtml(fractions, $('.cls_ingredientFraction_recipe')[$('.cls_ingredientFraction_recipe').length-1]);
 		}); 
 		
 		$(document).on("change", ".cls_ingredientCategory_recipe", function(){

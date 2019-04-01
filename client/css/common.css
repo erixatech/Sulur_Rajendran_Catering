@@ -18,3 +18,17 @@ input, select, button, textarea{
 .loadingguage{
     z-index: 99999 !important;
 }
+
+.cls_recipeCreateModal{
+	width: 900px;
+  	margin: auto;
+}
+
+.cls_onehalfcol{
+	width: 12.5% !important;
+	position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}

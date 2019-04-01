@@ -23,7 +23,8 @@
 		    var ingredientCategories = ["Maligai", "KaaiKanigal", "Extras", "Suppliments"];
 		    var ingredientUnits = ["gram", "ml", "nos", "kattu", "kowli", "pocket", "meter"];
 		    var recipeCategory = ["Sweet", "HomeSweet", "Kaaram", "Idly", "Dhosa", "Chattni", "Sambar", "Kulambu", "Gravy", "Rotty", "Biriyani", "Pachadi", "Saadam", "Oorugaai", "Baanam", "Snacks"];
-			var recipeFilters = ["All", "Sweet", "HomeSweet", "Kaaram", "Idly", "Dhosa", "Chattni", "Sambar", "Kulambu", "Gravy", "Rotty", "Biriyani", "Pachadi", "Saadam", "Oorugaai", "Baanam", "Snacks"];	
+			var recipeFilters = ["All", "Sweet", "HomeSweet", "Kaaram", "Idly", "Dhosa", "Chattni", "Sambar", "Kulambu", "Gravy", "Rotty", "Biriyani", "Pachadi", "Saadam", "Oorugaai", "Baanam", "Snacks"];
+			var fractions = ["", "&frac14;", "&frac12;", "&frac34;"];
 		    var ingredientJson = {};
 		    var recipeJson = {};
 		    var recipeNames = {};
@@ -199,9 +200,9 @@
 	     
 	     <!--Recipe Modal -->
 	 <div class="modal fade" id="recipeModal" role="dialog">
-	   <div class="modal-dialog">
+	   <div class="modal-dialog modal-lg">
 	     <!-- Modal content-->
-	     <div class="modal-content cls_recipeCreateModal" style="width: 800px;">
+	     <div class="modal-content cls_recipeCreateModal">
 	       <div class="modal-header">
 	       <h4 class="modal-title">Create Recipe</h4>
 	         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -228,7 +229,7 @@
 				<div class="form-group">
 				    <div class="createRecipeIngredientMap">
 					    <div class="row cls_ingredientMapRow">
-						    <div class="col-3">
+						    <div class="col-2">
 							  	<label for="ingredientCategory">Category</label>
 			                    <select class="form-control cls_ingredientCategory_recipe" id="id_ingredientCategory_recipe" name="ingredientCategory">
 			                    <option>Choose Category</option></select>
@@ -237,9 +238,18 @@
 							  	<label for="ingredientName">Name</label>
 			                    <select class="form-control cls_ingredientName_recipe" id="id_ingredientName_recipe" name="ingredientName"></select>
 		                    </div>
-		                    <div class="col-2">
+		                    <div class="cls_onehalfcol">
 						      <label for="qunatity">Quantity</label>
 						      <input type="text" class="form-control cls_ingredientQunatity_recipe" required id="id_ingredientQunatity_recipe" placeholder="Enter Quantity" name="qunatity">
+						    </div>
+						    <div class="cls_onehalfcol">
+						      <label for="fraction">Fraction</label>
+						      <select class="form-control cls_ingredientFraction_recipe" id="id_ingredientFraction_recipe" name="ingredientFraction">
+						      	<option></option>
+						      	<option>&frac14;</option>
+						      	<option>&frac12;</option>
+						      	<option>&frac34;</option>
+						      </select>
 						    </div>
 		                    <div class="col-2">
 							  	<label for="ingredientUnit">Unit</label>

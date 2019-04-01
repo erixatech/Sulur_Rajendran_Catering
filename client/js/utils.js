@@ -58,6 +58,16 @@ function addOptionsToSelectViaElem(optionsArray, elem){
 	}
 }
 
+function addOptionsToSelectViaElemHtml(optionsArray, elem){
+	if(optionsArray && optionsArray.length > 0) {
+		for(var i=0; i<optionsArray.length; i++) {
+			var option = document.createElement("option");
+			$(option).html(optionsArray[i]);
+			elem.add(option);
+	    }
+	}
+}
+
 function cloneDOM(elemToClone, parentElem){
 	parentElem.append(elemToClone.clone());
 }
