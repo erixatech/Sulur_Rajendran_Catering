@@ -103,6 +103,7 @@ OrderTab.prototype.render = function(){
 		_this.getOrderListFromDB();
 		$('.cls_orderPageTitle').text("Orders List");
 	}
+	hideLoading();
 };
 OrderTab.prototype.getOrderListFromDB = function(){
 	var _this = this;
@@ -294,47 +295,39 @@ OrderTab.prototype.renderServiceFormList = function(){
 				   	+ '</div>'
 	if(serviceJson && serviceJson.length > 0){
 		for(var i=0; i< serviceJson.length; i++){
-			if(i%2 == 0){
-				renderHtml += "<div class='row'>"
-			}
-			renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_serviceDetails' idx="+ serviceJson[i].serviceId +" style='cursor:pointer'>"
-								+ "<h6 class='card-header text-success bg-transparent border-secondary text-center cls_serviceName'>"+ serviceJson[i].sessionName +"</h6>"
-								+ "<div class='card-body text-secondary font-weight-bold'>"
-							 		+ "<div class='row'>"
-							 		    + "<div class='card-title cls_eventVenue col-6'>"+ serviceJson[i].sessionVenue +"</div>"
-							    		+ "<div class='card-text cls_eventDate col-6'>"+ serviceJson[i].sessionDateTime +"</div>"
-							    	+ "</div>"
-							  	+ "</div>"
-							  	+ "<div class='card-footer text-center bg-light border-secondary row p-0'>"
-							  		+ "<label class='col m-0 p-2 cls_deleteService' data-name='"+ serviceJson[i].sessionName +"' style='cursor:pointer'>Delete</label>"
-							  	+ "</div>"
-							+ "</div>";
-			if(i%2 != 0 || (i == serviceJson.length-1)){
-				renderHtml += "</div>"
-			}
+			var isLast = (i == serviceJson.length -1) ? true : false;
+			renderHtml += _this.renderServiceFormCreateOrUpdate(serviceJson[i], isLast)
 		}
 
-		renderHtml += "<div class='row'>"
-						+"<div class='text-right col-12'>"
-							+"<a id='id_plForOrder' class='btn btn-success btn-md text-white purchaseListForOrder'><i aria-hidden='true'></i>Generate Purchase List For Order</a>"
-						+"</div>"
-					+"</div>";
 	}
 	else{
 		renderHtml += '<div class="cls_noDataFound text-center">'
 						+ '<h5> No Events Found</h5>'
 					+ '</div>'
 	}
+	
+	renderHtml += "<div class='row ml-3'>"
+                    + '<button type="button" id="id_updateOrderEvents" class="btn btn-primary">Save</button>'
+                    + '<button type="button" id="id_updateOrderEventsCancel" class="btn btn-secondary ml-3">Cancel</button>'
+			        +"<div class='text-right col-12'>"
+				        +"<a id='id_plForOrder' class='btn btn-success btn-md text-white purchaseListForOrder mb-3'><i aria-hidden='true'></i>Generate Purchase List For Order</a>"
+			        +"</div>"
+		          +"</div>";
+	
 	renderHtml += '</div>'
 
 	return renderHtml;
 }
 
-OrderTab.prototype.renderServiceFormCreateOrUpdate = function(serviceObj){
+OrderTab.prototype.renderServiceFormCreateOrUpdate = function(serviceObj, isLast){
 	var _this = this;
 	var renderHtml = [];
+	if($(".serviceFormDetails_last") && $(".serviceFormDetails_last").length > 0) {
+		$(".serviceFormDetails").removeClass("serviceFormDetails_last");
+	}
+
 	var isUpdate = (serviceObj && !$.isEmptyObject(serviceObj)) ? true : false;
-	renderHtml += '<form class="serviceFormDetails mb-2">'
+	renderHtml += '<form class="serviceFormDetails border border-success p-2 mb-3 '+(isLast ? "serviceFormDetails_last" : "")+'">'
 		+ '  <div class="form-group">'
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
@@ -397,10 +390,12 @@ OrderTab.prototype.renderServiceFormCreateOrUpdate = function(serviceObj){
 		+ '      </div>'
 		+ '  </div>'
 		//TODO : Add / Remove DOM rows plugin
-		+ '  <div class="col text-right mt-2">'
-		+ '      <button type="button" id="id_createServiceForm" class="btn btn-primary">Save</button>'
-		+ '      <button type="button" id="id_createServiceFormCancel" class="btn btn-secondary ml-3">Cancel</button>'
-		+ '  </div>'
+		if(_this.isCreateServiceForm == "true") {
+			renderHtml += + '  <div class="col text-right mt-2">'
+			+ '      <button type="button" id="id_createServiceForm" class="btn btn-primary">Save</button>'
+			+ '      <button type="button" id="id_createServiceFormCancel" class="btn btn-secondary ml-3">Cancel</button>'
+			+ '  </div>'
+		}
 		+ '</form>';
 
 		return renderHtml;
@@ -578,10 +573,18 @@ OrderTab.prototype.renderEvents = function() {
 		}
 
 		$(document).on("click", "#id_createService", function(){
-			var url = window.location.href;
+			/*var url = window.location.href;
 			url = removeQueryParamFromUrl(url, "listServiceForms");
 			url = addQueryParamToUrl(url, 'createServiceForm', "true");
-			window.location.href = url;
+			window.location.href = url;*/
+			$(".cls_noDataFound").remove();
+			if($(".serviceFormDetails_last") && $(".serviceFormDetails_last").length > 1)
+			{ 
+				$(".serviceFormDetails_last").after(_this.renderServiceFormCreateOrUpdate(null, true));
+			}
+			else {
+				$(".cls_orderServiceList").append(_this.renderServiceFormCreateOrUpdate(null, true));
+			}
 		});
 		$(document).on('click', '.cls_deleteOrder', function(event){
 			event.stopPropagation();
