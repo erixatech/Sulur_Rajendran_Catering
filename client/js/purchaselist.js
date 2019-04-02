@@ -103,16 +103,16 @@ renderPL.prototype.render = function(plToRender) {
                         + "</div>"
                             + "<div class='row col-12'>"
                                 + "<div class='col-1'></div>"
-                                + "<div class='list-group col-9 text-center ml-5 pl-4'>"
+                                + "<div class='list-group col-10 text-center'>"
                                     + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
                                         + "Maligai"
 
                                     for(var j=0; j<cat_maligai.length ; j++){
-                                        renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_maligai_"+ j +"'>"
+                                        renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_maligai_"+ j +" mx-0 px-0'>"
                                                         + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
-                                                        + "<span class='col-4 px-3'><input type='text' class='col-4 form-control' name='name' value='"+cat_maligai[j].name+"' style='display:inline'></span>"
-                                                        + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='quantity' value='"+cat_maligai[j].quantity+"' style='display:inline'></span>"
-                                                        + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='unit' value='"+cat_maligai[j].unit+"' style='display:inline'></span>"
+                                                        + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='"+cat_maligai[j].name+"' style='display:inline'></span>"
+                                                        + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='"+_this.getQtyToRender(cat_maligai[j].quantity)+"' style='display:inline'></span>"
+                                                        + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='"+cat_maligai[j].unit+"' style='display:inline'></span>"
                                                         + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
                                                     + "</a>"
                                     }
@@ -133,16 +133,16 @@ renderPL.prototype.render = function(plToRender) {
         if(cat_kaikanigal && cat_kaikanigal.length>0){
             renderHtml += "<br><div class='row col-12'>"
                                 + "<div class='col-1'></div>"
-                                +"<div class='list-group col-9 text-center'>"
+                                +"<div class='list-group col-10 text-center'>"
                                     + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
                                         + "Kaai Kanigal"
 
                                     for(var j=0; j<cat_kaikanigal.length ; j++){
-                                        renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_kaikanigal_"+ j +"'>"
+                                        renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_kaikanigal_"+ j +" mx-0 px-0'>"
                                                         + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
-                                                        + "<span class='col-4 px-3'><input type='text' class='col-4 form-control' name='name' value='"+cat_kaikanigal[j].name+"' style='display:inline'></span>"
-                                                        + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='quantity' value='"+cat_kaikanigal[j].quantity+"' style='display:inline'></span>"
-                                                        + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='unit' value='"+cat_kaikanigal[j].unit+"' style='display:inline'></span>"
+                                                        + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='"+cat_kaikanigal[j].name+"' style='display:inline'></span>"
+                                                        + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='"+_this.getQtyToRender(cat_kaikanigal[j].quantity)+"' style='display:inline'></span>"
+                                                        + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='"+cat_kaikanigal[j].unit+"' style='display:inline'></span>"
                                                         + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
                                                     + "</a>"
                                     }
@@ -163,16 +163,16 @@ renderPL.prototype.render = function(plToRender) {
         if(cat_extras && cat_extras.length>0){
             renderHtml += "<br><div class='row col-12'>"
                             + "<div class='col-1'></div>"
-                            + "<div class='list-group col-9 text-center'>"
+                            + "<div class='list-group col-10 text-center'>"
                                 + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
                                     + "Extras"
 
                                 for(var j=0; j<cat_extras.length ; j++){
-                                    renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_extras_"+ j +"'>"
+                                    renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_extras_"+ j +" mx-0 px-0'>"
                                                     + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
-                                                    + "<span class='col-4 px-3'><input type='text' class='col-4 form-control' name='name' value='"+cat_extras[j].name+"' style='display:inline'></span>"
-                                                    + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='quantity' value='"+cat_extras[j].quantity+"' style='display:inline'></span>"
-                                                    + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='unit' value='"+cat_extras[j].unit+"' style='display:inline'></span>"
+                                                    + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='"+cat_extras[j].name+"' style='display:inline'></span>"
+                                                    + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='"+_this.getQtyToRender(cat_extras[j].quantity)+"' style='display:inline'></span>"
+                                                    + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='"+cat_extras[j].unit+"' style='display:inline'></span>"
                                                     + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
                                                 + "</a>"
                                 }
@@ -193,16 +193,16 @@ renderPL.prototype.render = function(plToRender) {
         if(cat_suppliments && cat_suppliments.length>0){
             renderHtml += "<br><div class='row col-12'>"
                             + "<div class='col-1'></div>" 
-                            + "<div class='list-group col-9 text-center'>"
+                            + "<div class='list-group col-10 text-center'>"
                                 + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
                                     + "Suppliments"
 
                                 for(var j=0; j<cat_suppliments.length ; j++){
-                                    renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_suppliments_"+ j +"'>"
+                                    renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_suppliments_"+ j +" mx-0 px-0'>"
                                                     + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
-                                                    + "<span class='col-4 px-3'><input type='text' class='col-4 form-control' name='name' value='"+cat_suppliments[j].name+"' style='display:inline'></span>"
-                                                    + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='quantity' value='"+cat_suppliments[j].quantity+"' style='display:inline'></span>"
-                                                    + "<span class='col-2 px-3'><input type='text' class='col-2 form-control' name='unit' value='"+cat_suppliments[j].unit+"' style='display:inline'></span>"
+                                                    + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='"+cat_suppliments[j].name+"' style='display:inline'></span>"
+                                                    + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='"+_this.getQtyToRender(cat_suppliments[j].quantity)+"' style='display:inline'></span>"
+                                                    + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='"+cat_suppliments[j].unit+"' style='display:inline'></span>"
                                                     + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
                                                 + "</a>"
                                 }
@@ -228,6 +228,35 @@ renderPL.prototype.render = function(plToRender) {
             var plWindow2 = window.open(addUrlParam(window.location.href, "purchaseListCategory", "KaaiKanigal"));
         }, 1000);
     }*/
+};
+
+renderPL.prototype.getQtyToRender = function(qty) {
+    var qtyToRet = qty;
+    var fracToRet = "";
+    var currFraction = "";
+
+    if(qty.toString().indexOf(".")>-1)
+    {
+        qtyToRet = qty.toString().split(".")[0];
+        currFraction = qty.toString().split(".")[1];
+
+        if(currFraction == 25)
+        {
+            fracToRet = "&frac14;";
+        }
+        else if(currFraction == 5)
+        {
+            fracToRet = "&frac12;";
+        }
+        else if(currFraction == 75)
+        {
+            fracToRet = "&frac34;";
+        }
+
+        qtyToRet = qtyToRet + " " + fracToRet;
+    }
+    
+    return qtyToRet;
 };
 
 renderPL.prototype.renderPoojaTable = function() {
@@ -323,16 +352,29 @@ function roundOffPL(PLToRoundOff)
         {
         	if(String(PLToRoundOff[i].quantity).split('.').length == 2)
         	{
-        		var qtyToRound = Number(String(PLToRoundOff[i].quantity).split('.')[0]);
+        		var qtyToRound = Number(String(PLToRoundOff[i].quantity).split('.')[0]);                
+                var fracval = Number((String(PLToRoundOff[i].quantity).split('.')[1]).charAt(0));
 
-        		if(Number((String(PLToRoundOff[i].quantity).split('.')[1]).charAt(0)) > 4)
+        		if(fracval > 1 && fracval <4)
         		{
-        			PLToRoundOff[i].quantity = qtyToRound + 1;
+        			PLToRoundOff[i].quantity = qtyToRound + 0.25;
         		}
-        		else
+        		else if(fracval > 3 && fracval <6)
         		{
-        			PLToRoundOff[i].quantity = qtyToRound;
+        			PLToRoundOff[i].quantity = qtyToRound + 0.5;
         		}
+                else if(fracval > 5 && fracval <8)
+                {
+                    PLToRoundOff[i].quantity = qtyToRound + 0.75;
+                }
+                else if(fracval > 7)
+                {
+                    PLToRoundOff[i].quantity = qtyToRound + 1;
+                }
+                else
+                {
+                    PLToRoundOff[i].quantity = qtyToRound;
+                }
         	}
         }
     }
