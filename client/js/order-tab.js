@@ -326,18 +326,34 @@ OrderTab.prototype.renderServiceFormCreateOrUpdate = function(serviceObj, isLast
 		$(".serviceFormDetails").removeClass("serviceFormDetails_last");
 	}
 
+	renderHtml += '<form class="serviceFormDetails">'
+		renderHtml += _this.addMoreEvent(serviceObj, isLast);
+		//TODO : Add / Remove DOM rows plugin
+		if(_this.isCreateServiceForm == "true") {
+			renderHtml += + '  <div class="col text-right mt-2">'
+			+ '      <button type="button" id="id_createServiceForm" class="btn btn-primary">Save</button>'
+			+ '      <button type="button" id="id_createServiceFormCancel" class="btn btn-secondary ml-3">Cancel</button>'
+			+ '  </div>'
+		}
+		+ '</form>';
+
+		return renderHtml;
+}
+OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
+	var _this = this;
+	var renderHtml = [];
 	var isUpdate = (serviceObj && !$.isEmptyObject(serviceObj)) ? true : false;
-	renderHtml += '<form class="serviceFormDetails border border-success p-2 mb-3 '+(isLast ? "serviceFormDetails_last" : "")+'">'
-		+ '  <div class="form-group">'
+	renderHtml += ' <div class="cls_orderEvent border border-success p-2 mb-3 '+(isLast ? "cls_orderEvent_last" : "")+'"> '
+		+ ' <div class="form-group">'
 		+ '  	<div class="row">'
 		+ '  		<div class="col">'
 		+ '    			<label for="serviceFormName">Session</label>'
-		+ '    			<select class="form-control" id="id_session" value="'+ (isUpdate ? serviceObj.session : "")+'">'
+		+ '    			<select class="form-control" id="id_session">'
 		+ '                 <option '+ ( !isUpdate  ? "selected" : "")+ '> Select </option>'
-		+ '                 <option '+ ((isUpdate & serviceObj.session == "Morning")  ? "selected" : "")+ '> Morning </option>'
-		+ '                 <option '+ ((isUpdate & serviceObj.session == "Afternoon")  ? "selected" : "")+ '> Afternoon </option>'
-		+ '                 <option '+ ((isUpdate & serviceObj.session == "Evening")  ? "selected" : "")+ '> Evening </option>'
-		+ '                 <option '+ ((isUpdate & serviceObj.session == "Night")  ? "selected" : "")+ '> Night </option>'
+		+ '                 <option '+ ((isUpdate && serviceObj.session == "Morning")  ? "selected" : "")+ '> Morning </option>'
+		+ '                 <option '+ ((isUpdate && serviceObj.session == "Afternoon")  ? "selected" : "")+ '> Afternoon </option>'
+		+ '                 <option '+ ((isUpdate && serviceObj.session == "Evening")  ? "selected" : "")+ '> Evening </option>'
+		+ '                 <option '+ ((isUpdate && serviceObj.session == "Night")  ? "selected" : "")+ '> Night </option>'
 		+ '             </select>'
 		+ '  		</div>'
 		+ '  		<div class="col">'
@@ -395,18 +411,9 @@ OrderTab.prototype.renderServiceFormCreateOrUpdate = function(serviceObj, isLast
 		+ '      	</div>'
 		+ '      </div>'
 		+ '  </div>'
-		//TODO : Add / Remove DOM rows plugin
-		if(_this.isCreateServiceForm == "true") {
-			renderHtml += + '  <div class="col text-right mt-2">'
-			+ '      <button type="button" id="id_createServiceForm" class="btn btn-primary">Save</button>'
-			+ '      <button type="button" id="id_createServiceFormCancel" class="btn btn-secondary ml-3">Cancel</button>'
-			+ '  </div>'
-		}
-		+ '</form>';
-
-		return renderHtml;
+		+ '</div>'
+	return renderHtml;
 }
-
 OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, initialRowNum) {
 	var _this = this;
 	var renderHtmlMapRow = [];
@@ -584,9 +591,9 @@ OrderTab.prototype.renderEvents = function() {
 			url = addQueryParamToUrl(url, 'createServiceForm', "true");
 			window.location.href = url;*/
 			$(".cls_noDataFound").remove();
-			if($(".serviceFormDetails_last") && $(".serviceFormDetails_last").length > 1)
+			if($(".cls_orderEvent_last") && $(".cls_orderEvent_last").length > 0)
 			{ 
-				$(".serviceFormDetails_last").after(_this.renderServiceFormCreateOrUpdate(null, true));
+				$(".cls_orderEvent_last:last").after(_this.addMoreEvent(null, true));
 			}
 			else {
 				$(".cls_orderServiceList").append(_this.renderServiceFormCreateOrUpdate(null, true));
