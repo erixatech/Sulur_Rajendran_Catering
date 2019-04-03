@@ -343,10 +343,17 @@ OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
 	var _this = this;
 	var renderHtml = [];
 	var isUpdate = (serviceObj && !$.isEmptyObject(serviceObj)) ? true : false;
-	renderHtml += ' <div class="cls_orderEvent border border-success p-2 mb-3 '+(isLast ? "cls_orderEvent_last" : "")+'"> '
+	renderHtml += ' <div class="cls_orderEvent border border-success p-2 mb-3 pl-4 '+(isLast ? "cls_orderEvent_last" : "")+'"> '
 		+ ' <div class="form-group">'
+		+ '     <div class="row">'
+		+ ' 		<div class="col text-right mt-2">'
+		+ '         	<a id="id_deleteEvent" class="btn btn-danger btn-md mr-3 text-white">'
+		+ '					<i class="fa fa-remove" aria-hidden="true"></i> Delete'
+		+ '				</a>'
+		+ ' 		</div>'
+		+ ' 	</div>'
 		+ '  	<div class="row">'
-		+ '  		<div class="col">'
+		+ '  		<div class="col-4">'
 		+ '    			<label for="serviceFormName">Session</label>'
 		+ '    			<select class="form-control" id="id_session">'
 		+ '                 <option '+ ( !isUpdate  ? "selected" : "")+ '> Select </option>'
@@ -356,21 +363,11 @@ OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
 		+ '                 <option '+ ((isUpdate && serviceObj.session == "Night")  ? "selected" : "")+ '> Night </option>'
 		+ '             </select>'
 		+ '  		</div>'
-		+ '  		<div class="col">'
+		+ '         <div class="col-2">'
+		+ '         </div>'
+		+ '  		<div class="col-4">'
 		+ '    			<label for="serviceFormDateTime">Session Date and Time</label>'
 		+ '    			<input type="text" class="form-control" id="sessionDateTime" value="'+ (isUpdate ? serviceObj.sessionDateTime : "")+'" placeholder="Enter Session Date and Time">'
-		+ '  		</div>'
-		+ '  	</div>'
-		+ '  </div>'
-		+ '  <div class="form-group">'
-		+ '  	<div class="row">'
-		+ '  		<div class="col">'
-		+ '    			<label for="sessionVenue">Session Venue</label>'
-		+ '    			<input type="text" class="form-control" id="sessionVenue" value="'+ (isUpdate ? serviceObj.sessionVenue : "")+'" placeholder="Enter Session Venue">'
-		+ '  		</div>'
-		+ '  		<div class="col">'
-		+ '    			<label for="serviceFormNotes">Session Notes</label>'
-		+ '    			<input type="text" class="form-control" id="sessionNotes" rows="2" value="'+ (isUpdate ? serviceObj.sessionNotes : "")+'" placeholder="Enter Any Additional Session Notes">'
 		+ '  		</div>'
 		+ '  	</div>'
 		+ '  </div>'
@@ -569,6 +566,10 @@ OrderTab.prototype.renderEvents = function() {
 		$(document).on("click", "#id_createServiceForm", function(){
 			showLoading();
 			_this.getServiceFormDataAndCreateAndUpdate();
+		});
+
+		$(document).on("click", "#id_deleteEvent", function(){
+			$(this).parents(".cls_orderEvent").remove();
 		});
 
 		$(document).on("change", ".cls_receipeCategory_sf", function(){
@@ -815,10 +816,8 @@ OrderTab.prototype.getServiceFormDataAndCreateAndUpdate = function(){
 		}
 		var serviceForms = {};
 		serviceForms.serviceId = "serviceid_"+(new Date()).getTime();
-		serviceForms.sessionName = $("#sessionName").val();
+		serviceForms.session = $("#id_session").val();
 		serviceForms.sessionDateTime = $("#sessionDateTime").val();
-		serviceForms.sessionNotes = $("#sessionNotes").val();
-		serviceForms.sessionVenue = $("#sessionVenue").val();
 
 		var recipes = [];
 		$(".recipeMapRowSf").each(function(index, element) {
