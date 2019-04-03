@@ -266,11 +266,13 @@ OrderTab.prototype.renderServiceForms = function(){
 
 	var cbk = function(){
 		if(_this.currentOrder && !$.isEmptyObject(_this.currentOrder)) {
-		    $(".cls_orderName").val(_this.currentOrder[0].clientName);
-		    $(".cls_orderVenue").val(_this.currentOrder[0].eventVenue);
-		    $(".cls_orderDate").val(_this.currentOrder[0].eventDate);
-		    $(".cls_orderMobileNumber").val(_this.currentOrder[0].clientPhone);
+			$(".cls_orderMetadataCont, .cls_orderBtnsCont").removeClass("d-none");
+		    $(".cls_curOrderName").val(_this.currentOrder[0].clientName);
+		    $(".cls_curOrderVenue").val(_this.currentOrder[0].eventVenue);
+		    $(".cls_curOrderDate").val(_this.currentOrder[0].eventDate);
+		    $(".cls_curOrderMobileNumber").val(_this.currentOrder[0].clientPhone);
 		}
+
 		$("#id_orderContent_tab").append(_this.renderServiceFormList());
 		$(".backFromServiceList").removeClass("d-none");
 		$(".cls_serviceListTitle").removeClass("d-none");
