@@ -265,6 +265,12 @@ OrderTab.prototype.renderServiceForms = function(){
 	_this.currentOrder = _this.ordersList && _this.ordersList[orderId];
 
 	var cbk = function(){
+		if(_this.currentOrder && !$.isEmptyObject(_this.currentOrder)) {
+		    $(".cls_orderName").val(_this.currentOrder[0].clientName);
+		    $(".cls_orderVenue").val(_this.currentOrder[0].eventVenue);
+		    $(".cls_orderDate").val(_this.currentOrder[0].eventDate);
+		    $(".cls_orderMobileNumber").val(_this.currentOrder[0].clientPhone);
+		}
 		$("#id_orderContent_tab").append(_this.renderServiceFormList());
 		$(".backFromServiceList").removeClass("d-none");
 		$(".cls_serviceListTitle").removeClass("d-none");
