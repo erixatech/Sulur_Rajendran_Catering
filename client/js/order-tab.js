@@ -47,17 +47,19 @@ OrderTab.prototype.render = function(){
 		_this.renderServiceForms();
 	}
 	else if(_this.isCreateServiceForm && _this.isCreateServiceForm == "true") {
-		$("#id_orderContent_tab").append(_this.renderServiceFormCreateOrUpdate());
+		$(".cls_orderDataCont").append(_this.renderServiceFormCreateOrUpdate());
 		$("#id_createOrder").addClass("d-none");
 		$(".backFromServiceFormEdit").removeClass("d-none");
 		$('.cls_orderPageTitle').removeClass('d-none');
 		$('.cls_orderPageTitle').text("Create Event");
 	}
 	else if(_this.isNewOrder == 'true'){
-		$("#id_orderContent_tab").append(_this.renderCreateOrUpdateOrder());
-		$(".backFromCreateOrder").removeClass("d-none");
+		$(".cls_orderMetadataCont, .cls_orderBtnsCont").removeClass("d-none");
+		$(".cls_orderDataCont").append(_this.renderServiceFormCreateOrUpdate());
+		$("#id_createOrder").addClass("d-none");
+		$(".backFromServiceFormEdit").removeClass("d-none");
 		$('.cls_orderPageTitle').removeClass('d-none');
-		$('.cls_orderPageTitle').text("Create Order");
+		$('.cls_orderPageTitle').text("Create Event");
 	}
 	else if(_this.orderId && _this.serviceId && _this.serviceId.length > 0){
 		showLoading();
@@ -70,7 +72,7 @@ OrderTab.prototype.render = function(){
 						serviceObj = serviceForms[i];
 					}
 				}
-				$("#id_orderContent_tab").append(_this.renderServiceFormCreateOrUpdate(serviceObj));
+				$(".cls_orderDataCont").append(_this.renderServiceFormCreateOrUpdate(serviceObj));
 				if(serviceObj && serviceObj.sessionNotes) {
 					$("#sessionNotes").val(serviceObj.sessionNotes);
 				}
@@ -143,9 +145,6 @@ OrderTab.prototype.renderOrderList = function(ordersJsonArr){
 							 	   	+ "<div class='row'>"
 							    		+ "<div class='card-title cls_eventVenue col-6'>"+ curOrderObj.eventVenue +"</div>"
 							    		+ "<div class='card-text cls_contactNumber col-6 text-right'>"+ curOrderObj.clientPhone +"</div>"
-							    	+ "</div>"
-							    	+ "<div class='row'>"
-							   			+ "<div class='card-title cls_clientAddress col'>"+ curOrderObj.clientAddress +"</div>"
 							    	+ "</div>"
 							  	+ "</div>"
 							  	+ "<div class='card-footer text-center bg-light border-secondary row p-0'>"
@@ -274,7 +273,7 @@ OrderTab.prototype.renderServiceForms = function(){
 		    $(".cls_curOrderNotes").val(_this.currentOrder[0].clientNotes);
 		}
 
-		$("#id_orderContent_tab").append(_this.renderServiceFormList());
+		$(".cls_orderDataCont").append(_this.renderServiceFormList());
 		$(".backFromServiceList").removeClass("d-none");
 		$(".cls_serviceListTitle").removeClass("d-none");
 	}
@@ -312,16 +311,6 @@ OrderTab.prototype.renderServiceFormList = function(){
 	renderHtml += '<div class="cls_noDataFound text-center ' + ((serviceJson && serviceJson.length > 0) ? "d-none" : "") +  '">'
 					+ '<h5> No Events Found</h5>'
 				+ '</div>'
-	
-	renderHtml += "<div class='row cls_eventAction " + (!(serviceJson && serviceJson.length > 0) ? "d-none" : "") + "'>"
-					+ '<div class="col-6">'
-                    	+ '<button type="button" id="id_updateOrderEvents" class="btn btn-primary">Save</button>'
-                    	+ '<button type="button" id="id_updateOrderEventsCancel" class="btn btn-secondary ml-3">Cancel</button>'
-                    + '</div>'
-			        + "<div class='text-right col-6'>"
-				        +"<a id='id_plForOrder' class='btn btn-success btn-md text-white purchaseListForOrder mb-3'><i aria-hidden='true'></i>Save & Generate Purchase List</a>"
-			        + "</div>"
-		          + "</div>";
 	
 	renderHtml += '</div>'
 
@@ -522,6 +511,18 @@ OrderTab.prototype.renderEvents = function() {
 			var isUpdate = $(this).attr("isupdate") == "true" ? true : false;
 			if(isUpdate) {
 				var orderId = $(this).attr("orderid");
+				_this.getOrderDataAndUpdate(orderId);
+			}
+			else {
+				_this.getOrderDataAndCreate();
+			}
+		});
+		
+		$(document).on("click", "#id_updateOrderData", function(){
+			showLoading();
+			var orderId = getValueFromQueryParam("orderId");
+			var isUpdate = orderId ? true : false;
+			if(isUpdate) {
 				_this.getOrderDataAndUpdate(orderId);
 			}
 			else {
@@ -751,13 +752,11 @@ OrderTab.prototype.getOrderDataAndCreate = function(){
 
 	var orderMetaData = {};
 	orderMetaData.orderId = "orderid_"+(new Date()).getTime();
-	orderMetaData.clientName = $("#clientName").val();
-	orderMetaData.clientPhone = $("#clientPhone").val();
-	orderMetaData.clientAddress = $("#clientAddress").val();
-	orderMetaData.eventName = $("#eventName").val();
-	orderMetaData.eventDate = $("#eventDate").val();
-	orderMetaData.eventVenue = $("#eventVenue").val();
-	orderMetaData.clientNotes = $("#clientNotes").val();
+	orderMetaData.eventName = $("#id_orderName").val();
+	orderMetaData.clientPhone = $("#id_orderMobileNumber").val();
+	orderMetaData.eventDate = $("#id_orderDate").val();
+	orderMetaData.eventVenue = $("#id_orderVenue").val();
+	orderMetaData.clientNotes = $("#id_orderNotes").val();
 
 	$.ajax({
     	url: "/createOrder",

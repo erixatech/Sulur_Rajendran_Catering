@@ -104,7 +104,7 @@
 						    </div>
 						    <div class="row p-3">
 						        <div class="col-4">
-						            <input type="text" class="form-control cls_curOrderMobileNumber" id="id_orderName" placeholder="Enter Mobile Number">
+						            <input type="text" class="form-control cls_curOrderMobileNumber" id="id_orderMobileNumber" placeholder="Enter Mobile Number">
 						        </div>
 						        <div class="col-8">
 						            <textarea class="form-control cls_curOrderNotes" id="id_orderNotes" placeholder="Enter Notes"></textarea>
@@ -127,6 +127,16 @@
 						          <i aria-hidden="true"></i> Back
 						        </a>
 							</div>
+						</div>
+						<div class="cls_orderDataCont pb-4"></div>
+						<div class="row cls_orderBtnsCont d-none">
+						    <div class="col-6">
+							    <button type="button" id="id_updateOrderData" class="btn btn-primary">Save</button>'
+							    <button type="button" id="id_updateOrderDataCancel" class="btn btn-secondary ml-3">Cancel</button>'
+						    </div>
+						    <div class='text-right col-6'>
+						        <a id='id_plForOrder' class='btn btn-success btn-md text-white purchaseListForOrder mb-3'><i aria-hidden='true'></i>Save & Generate Purchase List</a>
+						    </div>
 						</div>
 					</div>
 
@@ -443,7 +453,10 @@
 				}
 				else if($("#id_order-tab").hasClass("active") == true && $(this).parents('#successPopup').data('toRedirect') == 'listservice_from_orderupdate')
 				{
-					addQueryParamToUrlAndReload('listServiceForms', "true");
+					var url = window.location.href;
+					url = removeQueryParamFromUrl(url, "listServiceForms");
+					url = addQueryParamToUrl(url, 'listServiceForms', "true");
+					window.location.href = url;
 				}
 				else
 				{
