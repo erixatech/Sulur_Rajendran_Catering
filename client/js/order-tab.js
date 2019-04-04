@@ -271,6 +271,7 @@ OrderTab.prototype.renderServiceForms = function(){
 		    $(".cls_curOrderVenue").val(_this.currentOrder[0].eventVenue);
 		    $(".cls_curOrderDate").val(_this.currentOrder[0].eventDate);
 		    $(".cls_curOrderMobileNumber").val(_this.currentOrder[0].clientPhone);
+		    $(".cls_curOrderNotes").val(_this.currentOrder[0].clientNotes);
 		}
 
 		$("#id_orderContent_tab").append(_this.renderServiceFormList());
@@ -296,8 +297,8 @@ OrderTab.prototype.renderServiceFormList = function(){
 							+ '<a id="id_createService" class="btn btn-primary btn-md mr-3 text-white">'
 					          + '<i class="fa fa-plus-circle" aria-hidden="true"></i> Create New Event'
 					        + '</a>'
-					        + '<a id="id_back" class="btn btn-primary btn-md mr-3 col-1 text-white backFromServiceList d-none">'
-					          + '<i aria-hidden="true"></i> Back'
+					        + '<a id="id_back" class="btn btn-secondary btn-md text-white backFromServiceList d-none">'
+					          + '<i class="fa fa-arrow-left" aria-hidden="true"></i> Back'
 					        + '</a>'
 						+ '</div>'
 				   	+ '</div>'
@@ -729,7 +730,7 @@ OrderTab.prototype.renderEvents = function() {
 			url = removeQueryParamFromUrl(url, "orderId");
 			window.location.href = url;
 		});
-		$(document).on('click', '.backFromServiceList', function(event){
+		$(document).on('click', '.backFromServiceList, #id_updateOrderEventsCancel', function(event){
         	var url = window.location.href;
 			url = removeQueryParamFromUrl(url, "listServiceForms");
 			url = removeQueryParamFromUrl(url, "orderId");
