@@ -381,6 +381,7 @@
 
 			$('#successPopup').on('hidden.bs.modal', function () {
 			    $(this).find('.modal-title').text("Successfully Done !!");
+			    window.location.reload();
 			});
 			$('#confirmationPopup').on('hidden.bs.modal', function () {
 			    $(this).find('.modal-title').text("Are you sure?");

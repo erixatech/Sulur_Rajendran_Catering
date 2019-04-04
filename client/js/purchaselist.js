@@ -109,7 +109,7 @@ renderPL.prototype.render = function(plToRender) {
 
                                     for(var j=0; j<cat_maligai.length ; j++){
                                         renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_maligai_"+ j +" mx-0 px-0'>"
-                                                        + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
+                                                        + "<span class='col-1 px-3 cls_rowIndex'>"+Number(j+1)+" . </span>"
                                                         + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='"+cat_maligai[j].name+"' style='display:inline'></span>"
                                                         + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='"+_this.getQtyToRender(cat_maligai[j].quantity)+"' style='display:inline'></span>"
                                                         + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='"+cat_maligai[j].unit+"' style='display:inline'></span>"
@@ -143,7 +143,7 @@ renderPL.prototype.render = function(plToRender) {
 
                                     for(var j=0; j<cat_kaikanigal.length ; j++){
                                         renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_kaikanigal_"+ j +" mx-0 px-0'>"
-                                                        + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
+                                                        + "<span class='col-1 px-3 cls_rowIndex'>"+Number(j+1)+" . </span>"
                                                         + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='"+cat_kaikanigal[j].name+"' style='display:inline'></span>"
                                                         + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='"+_this.getQtyToRender(cat_kaikanigal[j].quantity)+"' style='display:inline'></span>"
                                                         + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='"+cat_kaikanigal[j].unit+"' style='display:inline'></span>"
@@ -177,7 +177,7 @@ renderPL.prototype.render = function(plToRender) {
 
                                 for(var j=0; j<cat_extras.length ; j++){
                                     renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_extras_"+ j +" mx-0 px-0'>"
-                                                    + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
+                                                    + "<span class='col-1 px-3 cls_rowIndex'>"+Number(j+1)+" . </span>"
                                                     + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='"+cat_extras[j].name+"' style='display:inline'></span>"
                                                     + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='"+_this.getQtyToRender(cat_extras[j].quantity)+"' style='display:inline'></span>"
                                                     + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='"+cat_extras[j].unit+"' style='display:inline'></span>"
@@ -210,8 +210,8 @@ renderPL.prototype.render = function(plToRender) {
                                     + "Suppliments"
 
                                 for(var j=0; j<cat_suppliments.length ; j++){
-                                    renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_suppliments_"+ j +" mx-0 px-0'>"
-                                                    + "<span class='col-1 px-3'>"+Number(j+1)+" . </span>"
+                                    renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont mx-0 px-0'>"
+                                                    + "<span class='col-1 px-3 cls_rowIndex'>"+Number(j+1)+" . </span>"
                                                     + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='"+cat_suppliments[j].name+"' style='display:inline'></span>"
                                                     + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='"+_this.getQtyToRender(cat_suppliments[j].quantity)+"' style='display:inline'></span>"
                                                     + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='"+cat_suppliments[j].unit+"' style='display:inline'></span>"
@@ -233,6 +233,7 @@ renderPL.prototype.render = function(plToRender) {
     $("#id_purchaseListContainer").append(renderHtml);
     $("#id_purchaseListContainer").removeClass("d-none");
     $("#id_mainContentContainer").addClass("d-none");
+    _this.renderAddRowToPL();
 
     /*if(purchaseListCategory == "Maligai")
     {
@@ -240,6 +241,51 @@ renderPL.prototype.render = function(plToRender) {
             var plWindow2 = window.open(addUrlParam(window.location.href, "purchaseListCategory", "KaaiKanigal"));
         }, 1000);
     }*/
+};
+
+renderPL.prototype.renderAddRowToPL = function() {
+    var _this = this;
+    var renderHtml = [];
+
+    renderHtml  += "<div class='row col-12'>"
+                        +"<span class='col-7'></span>"
+                            +"<span class='col-5'>"
+                                +"<span class='cls_addRowPLContainer float-right d-none'>"
+                                    +"Add row below number "
+                                    +"<input type='text' class='form-control col-2 mx-3 cls_addLineAfterNum' style='display:inline'> "
+                                    +"<a class='btn btn-success btn-md text-white cls_addRowInPL'><i class='fa fa-plus-circle'></i>Add </a>"
+                                +"</span>"                                
+                            +"</span>"
+                            +"<br>"
+                        +"</span>"
+                    +"</div>"
+                    +"<i class='fa fa-plus-circle mr-5 pr-5 float-right cls_addRowPLAction' style='font-size:24px;color:green'></i><br><br>"
+
+    $("#id_purchaseListContainer").append(renderHtml);
+};
+
+renderPL.prototype.addNewRowToPL = function(addAfterIndex) {
+    var _this = this;
+    var renderHtml = [];
+    var currIndex = Number(addAfterIndex)+1;
+
+    renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont mx-0 px-0'>"
+                    + "<span class='col-1 px-3 cls_rowIndex'>"+currIndex+" . </span>"
+                    + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='' style='display:inline'></span>"
+                    + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='' style='display:inline'></span>"
+                    + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='' style='display:inline'></span>"
+                    + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
+                + "</a>"
+
+    $("#id_purchaseListContainer .list-group-item:nth-child("+currIndex+")").after(renderHtml);
+    _this.reIndexPL();
+};
+
+renderPL.prototype.reIndexPL = function() {
+    var elem = $('.cls_rowIndex');
+    for(var j=0; j<elem.length ; j++){
+        $(elem[j]).text(Number(j+1)+" . ");
+    }
 };
 
 renderPL.prototype.getQtyToRender = function(qty) {
@@ -307,7 +353,24 @@ renderPL.prototype.registerEvents = function() {
     $(document).ready(function(){
         $(document).on("click", ".cls_removeCurrentIngMap", function(){
             $(this).parents('.cls_ingredientCont').remove();
+            _this.reIndexPL();
         });
+
+        $(document).on("click", ".cls_addRowPLAction", function(){
+            if($('.cls_addRowPLContainer').hasClass('d-none'))
+            {
+                $('.cls_addRowPLContainer').removeClass('d-none');
+            }
+            else
+            {
+                $('.cls_addRowPLContainer').addClass('d-none');
+            }            
+        });
+
+        $(document).on("click", ".cls_addRowInPL", function(){
+            _this.addNewRowToPL($('.cls_addLineAfterNum').val());
+        });
+
     });
     
 };
