@@ -58,6 +58,17 @@ function addOptionsToSelectViaElem(optionsArray, elem){
 	}
 }
 
+function addOptionsToDatalistViaElem(optionsArray, elem){
+	$(elem).find("option").remove();
+	if(optionsArray && optionsArray.length > 0) {
+		for(var i=0; i<optionsArray.length; i++) {
+			var option = document.createElement("option");
+			option.value = optionsArray[i]; 
+			elem.append(option);
+	    }
+	}
+}
+
 function addOptionsToSelectViaElemHtml(optionsArray, elem){
 	if(optionsArray && optionsArray.length > 0) {
 		for(var i=0; i<optionsArray.length; i++) {

@@ -32,3 +32,7 @@ input, select, button, textarea{
     padding-right: 15px;
     padding-left: 15px;
 }
+
+datalist.cls_dl_ingredientName_recipe{
+	display: none;
+}

@@ -231,12 +231,13 @@ RecipeTab.prototype.getIngredientMapRow = function() {
 	
 	renderHtmlMapRow += '    <div class="row cls_ingredientMapRow mt-2 mb-1">'
 		              + '        <div class="col-2">'
-		              + '                <select class="form-control cls_ingredientCategory_recipe" id="id_ingredientCategory_recipe" name="ingredientCategory">'
+		              + '                <select class="form-control cls_ingredientCategory_recipe" id="id_ingredientCategory_recipe_'+$('.cls_ingredientCategory_recipe').length+'" name="ingredientCategory">'
 		              +'                     <option>Choose Category</option>'
 		              +'                 </select>'
 		              + '        </div>'
 		              + '        <div class="col-4">'
-		              + '            <select class="form-control cls_ingredientName_recipe" id="id_ingredientName_recipe" name="ingredientName"></select>'
+		              + '            <input class="form-control cls_ingredientName_recipe" list="id_ingredientName_recipe_'+$('.cls_ingredientName_recipe').length+'">'
+		              + '			 <datalist class="cls_dl_ingredientName_recipe" id="id_ingredientName_recipe_'+$('.cls_ingredientName_recipe').length+'" name="ingredientName"></datalist>'
 		              + '        </div>'
 		              + '		 <div class="cls_onehalfcol">'
 		              + '			 <input type="text" class="form-control cls_ingredientQunatity_recipe" required id="id_ingredientQunatity_recipe" placeholder="Enter Quantity" name="qunatity">'
@@ -245,7 +246,7 @@ RecipeTab.prototype.getIngredientMapRow = function() {
 		              + '			 <select class="form-control cls_ingredientFraction_recipe" id="id_ingredientFraction_recipe" name="ingredientFraction"></select>'
 		              + '		 </div>'
 		              + '        <div class="col-2">'
-		              + '            <select class="form-control cls_ingredientUnit_recipe" id="id_ingredientUnit_recipe" name="ingredientUnit"></select>'
+		              + '            <select class="form-control cls_ingredientUnit_recipe" id="id_ingredientUnit_recipe_'+$('.cls_ingredientUnit_recipe').length+'" name="ingredientUnit"></select>'
 		              + '        </div>'
 		              + '        <div class="col-1">'
 		  			  +             ($('.cls_ingredientMapRow').length>0 ? '<i class="fa fa-minus-circle cls_removeCurrentIngredientMap" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>' : '')
@@ -268,11 +269,11 @@ RecipeTab.prototype.constructIngArrForRecipe = function() {
 			$.each( elems, function( index, elem ) {
 				var currIngRow = {};
 				var currElem = $(elem);
-				currIngRow["category"] = currElem.find('#id_ingredientCategory_recipe').val();
-				currIngRow["name"] = currElem.find('#id_ingredientName_recipe').val();
+				currIngRow["category"] = currElem.find('.cls_ingredientCategory_recipe').val();
+				currIngRow["name"] = currElem.find('.cls_ingredientName_recipe').val();
 				currIngRow["id"] = getIngredientIdByNameAndCat(ingredientJson, currIngRow["name"], currIngRow["category"]);
 				currIngRow["quantity"] = _this.calculateQtyWithFraction(currElem);	
-				currIngRow["unit"] = currElem.find('#id_ingredientUnit_recipe').val();
+				currIngRow["unit"] = currElem.find('.cls_ingredientUnit_recipe').val();
 				ingMapToReturn.push(currIngRow);
 			});
 		}
@@ -315,18 +316,19 @@ RecipeTab.prototype.registerEvents = function() {
 		}); 
 		
 		$(document).on("change", ".cls_ingredientCategory_recipe", function(){
+			$(this).parents('.cls_ingredientMapRow').find("input.cls_ingredientName_recipe").val("");
 			var category = $(this).val();
 			var ingredientNames = getIngredientNamesByCategory(ingredientJson, category);
-			$(this).closest('.cls_ingredientMapRow').find("#id_ingredientName_recipe option").remove();
-			addOptionsToSelectViaElem(ingredientNames, $($(this).closest('.cls_ingredientMapRow').find("#id_ingredientName_recipe"))[0]);
-			$($(this).closest('.cls_ingredientMapRow').find("#id_ingredientName_recipe")).trigger("change");
+			$(this).closest('.cls_ingredientMapRow').find(".cls_ingredientName_recipe option").remove();
+			addOptionsToDatalistViaElem(ingredientNames, $(this).closest('.cls_ingredientMapRow').find(".cls_dl_ingredientName_recipe")[0]);
+			$($(this).closest('.cls_ingredientMapRow').find(".cls_ingredientName_recipe")).trigger("change");
 		});
 		
-		$(document).on("change", ".cls_ingredientName_recipe", function(){
+		$(document).on("input, change", ".cls_ingredientName_recipe", function(){
 			var name = $(this).val();
 			var ingredientUnits = getIngredientUnitsByName(ingredientJson, name);
-			$(this).closest('.cls_ingredientMapRow').find("#id_ingredientUnit_recipe option").remove();
-			addOptionsToSelectViaElem(ingredientUnits, $($(this).closest('.cls_ingredientMapRow').find("#id_ingredientUnit_recipe"))[0]);
+			$(this).closest('.cls_ingredientMapRow').find(".cls_ingredientUnit_recipe option").remove();
+			addOptionsToSelectViaElem(ingredientUnits, $(this).closest('.cls_ingredientMapRow').find('.cls_ingredientUnit_recipe')[0]);
 		});
 		
 		$(document).on("click", ".cls_removeCurrentIngredientMap", function(){
