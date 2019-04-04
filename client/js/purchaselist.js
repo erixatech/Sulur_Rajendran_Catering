@@ -131,7 +131,11 @@ renderPL.prototype.render = function(plToRender) {
     if(purchaseListCategory == "KaaiKanigal")
     {
         if(cat_kaikanigal && cat_kaikanigal.length>0){
-            renderHtml += "<br><div class='row col-12'>"
+            renderHtml += "<div class='row col-12 text-center'>"
+                            + "<div class='col-12 text-center font-weight-bold'>தேதி <input type='text' class='form-control col-2 mx-3' style='display:inline'> மாலை <input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு தேவை, இடம் <input type='text' class='form-control col-3 ml-3' style='display:inline'></div><br>"
+                            + "<div class='col-12 text-center text-danger font-weight-bold'><u>மளிகை சாமான்கள் மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
+                        + "</div><br>"
+                        + "<div class='row col-12'>"
                                 + "<div class='col-1'></div>"
                                 +"<div class='list-group col-10 text-center'>"
                                     + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
@@ -161,7 +165,11 @@ renderPL.prototype.render = function(plToRender) {
     if(purchaseListCategory == "Extras")
     {
         if(cat_extras && cat_extras.length>0){
-            renderHtml += "<br><div class='row col-12'>"
+            renderHtml += "<div class='row col-12 text-center'>"
+                            + "<div class='col-12 text-center font-weight-bold'>தேதி <input type='text' class='form-control col-2 mx-3' style='display:inline'> மாலை <input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு தேவை, இடம் <input type='text' class='form-control col-3 ml-3' style='display:inline'></div><br>"
+                            + "<div class='col-12 text-center text-danger font-weight-bold'><u>மளிகை சாமான்கள் மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
+                        + "</div><br>"
+                        + "<div class='row col-12'>"
                             + "<div class='col-1'></div>"
                             + "<div class='list-group col-10 text-center'>"
                                 + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
@@ -191,7 +199,11 @@ renderPL.prototype.render = function(plToRender) {
     if(purchaseListCategory == "Suppliments")
     {
         if(cat_suppliments && cat_suppliments.length>0){
-            renderHtml += "<br><div class='row col-12'>"
+            renderHtml += "<div class='row col-12 text-center'>"
+                            + "<div class='col-12 text-center font-weight-bold'>தேதி <input type='text' class='form-control col-2 mx-3' style='display:inline'> மாலை <input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு தேவை, இடம் <input type='text' class='form-control col-3 ml-3' style='display:inline'></div><br>"
+                            + "<div class='col-12 text-center text-danger font-weight-bold'><u>மளிகை சாமான்கள் மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
+                        + "</div><br>"
+                        + "<div class='row col-12'>"
                             + "<div class='col-1'></div>" 
                             + "<div class='list-group col-10 text-center'>"
                                 + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
@@ -352,28 +364,43 @@ function roundOffPL(PLToRoundOff)
         {
         	if(String(PLToRoundOff[i].quantity).split('.').length == 2)
         	{
-        		var qtyToRound = Number(String(PLToRoundOff[i].quantity).split('.')[0]);                
+                var qtyToRound = Number(String(PLToRoundOff[i].quantity).split('.')[0]);                
                 var fracval = Number((String(PLToRoundOff[i].quantity).split('.')[1]).charAt(0));
+                var unitsToCheckForNonFraction = ["nos", "kattu", "kowli", "pocket"];
 
-        		if(fracval > 1 && fracval <4)
-        		{
-        			PLToRoundOff[i].quantity = qtyToRound + 0.25;
-        		}
-        		else if(fracval > 3 && fracval <6)
-        		{
-        			PLToRoundOff[i].quantity = qtyToRound + 0.5;
-        		}
-                else if(fracval > 5 && fracval <8)
-                {
-                    PLToRoundOff[i].quantity = qtyToRound + 0.75;
-                }
-                else if(fracval > 7)
-                {
-                    PLToRoundOff[i].quantity = qtyToRound + 1;
+                if(!isInList(PLToRoundOff[i].unit, unitsToCheckForNonFraction))
+                {            		
+            		if(fracval > 1 && fracval <4)
+            		{
+            			PLToRoundOff[i].quantity = qtyToRound + 0.25;
+            		}
+            		else if(fracval > 3 && fracval <6)
+            		{
+            			PLToRoundOff[i].quantity = qtyToRound + 0.5;
+            		}
+                    else if(fracval > 5 && fracval <8)
+                    {
+                        PLToRoundOff[i].quantity = qtyToRound + 0.75;
+                    }
+                    else if(fracval > 7)
+                    {
+                        PLToRoundOff[i].quantity = qtyToRound + 1;
+                    }
+                    else
+                    {
+                        PLToRoundOff[i].quantity = qtyToRound;
+                    }
                 }
                 else
                 {
-                    PLToRoundOff[i].quantity = qtyToRound;
+                    if(fracval > 4)
+                    {
+                        PLToRoundOff[i].quantity = qtyToRound + 1;
+                    }
+                    else
+                    {
+                        PLToRoundOff[i].quantity = qtyToRound;
+                    }
                 }
         	}
         }
