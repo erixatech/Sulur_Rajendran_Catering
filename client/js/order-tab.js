@@ -271,6 +271,7 @@ OrderTab.prototype.renderServiceForms = function(){
 		    $(".cls_curOrderVenue").val(_this.currentOrder[0].eventVenue);
 		    $(".cls_curOrderDate").val(_this.currentOrder[0].eventDate);
 		    $(".cls_curOrderMobileNumber").val(_this.currentOrder[0].clientPhone);
+		    $(".cls_curOrderNotes").val(_this.currentOrder[0].clientNotes);
 		}
 
 		$("#id_orderContent_tab").append(_this.renderServiceFormList());
