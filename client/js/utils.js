@@ -472,6 +472,22 @@ function removeTrailingCharIf(value, ifChar)
 	return toRet;
 }
 
+function isInList(itemToCheck, listToCheck)
+{
+	var toRet = false;
+
+	for(var i=0; i<listToCheck.length; i++)
+	{
+		if(itemToCheck.toLowerCase() == listToCheck[i].toLowerCase())
+		{
+			toRet = true;
+			break;
+		}
+	}
+
+	return toRet;
+}
+
 function showLoading()
 {
 	$('.loadingguage').modal('show');
