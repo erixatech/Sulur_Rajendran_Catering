@@ -290,7 +290,7 @@ OrderTab.prototype.renderServiceFormList = function(){
 
 	var serviceJson = _this.currentOrder && _this.currentOrder[0] && _this.currentOrder[0].serviceForms;
 	renderHtml += '<div class="cls_orderServiceList">'
-					+ '<div class="row pb-4">'
+					+ '<div class="row pb-4" id="id_createEventContainer">'
 						+ '<h4 class="col-5 cls_serviceListTitle text-secondary d-none">Events List</h4>'
 						+ '<div class="text-right col-7">'
 							+ '<a id="id_createService" class="btn btn-primary btn-md mr-3 text-white">'
@@ -308,19 +308,19 @@ OrderTab.prototype.renderServiceFormList = function(){
 		}
 
 	}
-	else{
-		renderHtml += '<div class="cls_noDataFound text-center">'
-						+ '<h5> No Events Found</h5>'
-					+ '</div>'
-	}
+	renderHtml += '<div class="cls_noDataFound text-center ' + ((serviceJson && serviceJson.length > 0) ? "d-none" : "") +  '">'
+					+ '<h5> No Events Found</h5>'
+				+ '</div>'
 	
-	renderHtml += "<div class='row ml-3'>"
-                    + '<button type="button" id="id_updateOrderEvents" class="btn btn-primary">Save</button>'
-                    + '<button type="button" id="id_updateOrderEventsCancel" class="btn btn-secondary ml-3">Cancel</button>'
-			        +"<div class='text-right col-12'>"
-				        +"<a id='id_plForOrder' class='btn btn-success btn-md text-white purchaseListForOrder mb-3'><i aria-hidden='true'></i>Generate Purchase List For Order</a>"
-			        +"</div>"
-		          +"</div>";
+	renderHtml += "<div class='row cls_eventAction " + (!(serviceJson && serviceJson.length > 0) ? "d-none" : "") + "'>"
+					+ '<div class="col-6">'
+                    	+ '<button type="button" id="id_updateOrderEvents" class="btn btn-primary">Save</button>'
+                    	+ '<button type="button" id="id_updateOrderEventsCancel" class="btn btn-secondary ml-3">Cancel</button>'
+                    + '</div>'
+			        + "<div class='text-right col-6'>"
+				        +"<a id='id_plForOrder' class='btn btn-success btn-md text-white purchaseListForOrder mb-3'><i aria-hidden='true'></i>Save & Generate Purchase List</a>"
+			        + "</div>"
+		          + "</div>";
 	
 	renderHtml += '</div>'
 
@@ -412,7 +412,9 @@ OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
 		+ '       	<div class="col">'
 		+ '      	</div>'		
 		+ '      	<div class="col mt-3">'
-		+ '        		<button type="button" class="btn btn-success cls_addReceipe_sf">Add</button>'
+		+ '        		<a class="btn btn-success btn-md mr-3 text-white cls_addReceipe_sf">'
+		+ '					<i class="fa fa-plus-circle" aria-hidden="true"></i> Add'
+		+ '				</a>'
 		+ '      	</div>'
 		+ '      </div>'
 		+ '  </div>'
@@ -448,7 +450,7 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 				+ '        <input type="number" min="0" class="form-control cls_receipeCount_sf" required id="id_receipeCount_sf" value="'+ (isUpdate ? recipeObjInServiceForm.count : "")+'" placeholder="Enter Head Count" name="receipeCount">'
 				+ '      </div>'
 				+ '      <div class="col-1">'
-				+ (initialRowNum>0 ? '<a role="button" class="btn p-0"> <i class="fa fa-minus-circle mt-2 cls_removeCurrentReceipeMap title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i></a>' : '')
+				+ (initialRowNum>0 ? '<a role="button" class="btn p-0"> <i class="fa fa-minus-circle mt-2 cls_removeCurrentReceipeMap text-danger" title= "Remove" style="font-size:25px;cursor:pointer"></i></a>' : '')
 				+ '      </div>'
 				+ '    </div>';
 	}
@@ -468,7 +470,7 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 				+ '        <input type="number" min="0" class="form-control cls_receipeCount_sf" required id="id_receipeCount_sf" value="" placeholder="Enter Head Count" name="receipeCount">'
 				+ '      </div>'
 				+ '      <div class="col-1">'
-				+ (initialRowNum>0 ? '<a role="button" class="btn p-0"> <i class="fa fa-minus-circle mt-2 cls_removeCurrentReceipeMap title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i></a>' : '')
+				+ (initialRowNum>0 ? '<a role="button" class="btn p-0"> <i class="fa fa-minus-circle mt-2 cls_removeCurrentReceipeMap text-danger" title= "Remove" style="font-size:25px;cursor:pointer"></i></a>' : '')
 				+ '      </div>'
 				+ '    </div>';
 	}
@@ -578,6 +580,10 @@ OrderTab.prototype.renderEvents = function() {
 
 		$(document).on("click", "#id_deleteEvent", function(){
 			$(this).parents(".cls_orderEvent").remove();
+			if(!($(".cls_orderEvent_last") && $(".cls_orderEvent_last").length > 0)){
+				$(".cls_eventAction").addClass("d-none");
+				$(".cls_noDataFound").removeClass("d-none");
+			}
 		});
 
 		$(document).on("change", ".cls_receipeCategory_sf", function(){
@@ -599,14 +605,14 @@ OrderTab.prototype.renderEvents = function() {
 			url = removeQueryParamFromUrl(url, "listServiceForms");
 			url = addQueryParamToUrl(url, 'createServiceForm', "true");
 			window.location.href = url;*/
-			$(".cls_noDataFound").remove();
-			if($(".cls_orderEvent_last") && $(".cls_orderEvent_last").length > 0)
-			{ 
+			$(".cls_noDataFound").addClass("d-none");
+			if($(".cls_orderEvent_last") && $(".cls_orderEvent_last").length > 0){ 
 				$(".cls_orderEvent_last:last").after(_this.addMoreEvent(null, true));
 			}
 			else {
-				$(".cls_orderServiceList").append(_this.renderServiceFormCreateOrUpdate(null, true));
+				$("#id_createEventContainer").after(_this.renderServiceFormCreateOrUpdate(null, true));
 			}
+			$(".cls_eventAction").removeClass("d-none");
 		});
 		$(document).on('click', '.cls_deleteOrder', function(event){
 			event.stopPropagation();
