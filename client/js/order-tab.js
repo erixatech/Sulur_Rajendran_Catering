@@ -136,7 +136,7 @@ OrderTab.prototype.renderOrderList = function(ordersJsonArr){
 			}
 			var curOrderObj = ordersJsonArr[i];
 			renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_orderDetails' style='cursor:pointer' idx='"+curOrderObj.orderId+"'>"
-								+ "<h6 class='card-header text-success bg-transparent border-secondary text-center cls_orderName'>"+ curOrderObj.clientName +"</h6>"
+								+ "<h6 class='card-header text-success bg-transparent border-secondary text-center cls_orderName'>"+ curOrderObj.eventName +"</h6>"
 								+ "<div class='card-body text-secondary font-weight-bold'>"
 							 		+ "<div class='row'>"
 							   			+ "<div class='card-title cls_eventName col-6'>" + curOrderObj.eventName +"</div>"
@@ -149,7 +149,7 @@ OrderTab.prototype.renderOrderList = function(ordersJsonArr){
 							  	+ "</div>"
 							  	+ "<div class='card-footer text-center bg-light border-secondary row p-0'>"
 							  		+ "<label class='col-6 border-right border-secondary m-0 p-2 cls_editOrder' style='cursor:pointer'>Edit</label>"
-							  		+ "<label class='col-6 m-0 p-2 cls_deleteOrder'  data-idx="+curOrderObj.orderId+" data-name='"+curOrderObj.clientName+"' style='cursor:pointer'>Delete</label>"
+							  		+ "<label class='col-6 m-0 p-2 cls_deleteOrder'  data-idx="+curOrderObj.orderId+" data-name='"+curOrderObj.eventName+"' style='cursor:pointer'>Delete</label>"
 							  	+ "</div>"
 							+ "</div>";
 			if(i%2 != 0){
@@ -267,7 +267,7 @@ OrderTab.prototype.renderServiceForms = function(){
 		if(_this.currentOrder && !$.isEmptyObject(_this.currentOrder)) {
 			$(".cls_orderMetadataCont, .cls_orderBtnsCont").removeClass("d-none");
 			$(".cls_orderMetadataCont, .cls_createEventRow").removeClass("d-none");
-		    $(".cls_curOrderName").val(_this.currentOrder[0].clientName);
+		    $(".cls_curOrderName").val(_this.currentOrder[0].eventName);
 		    $(".cls_curOrderVenue").val(_this.currentOrder[0].eventVenue);
 		    $(".cls_curOrderDate").val(_this.currentOrder[0].eventDate);
 		    $(".cls_curOrderMobileNumber").val(_this.currentOrder[0].clientPhone);
@@ -762,6 +762,7 @@ OrderTab.prototype.getOrderDataAndCreate = function(){
 	orderMetaData.eventDate = $("#id_orderDate").val();
 	orderMetaData.eventVenue = $("#id_orderVenue").val();
 	orderMetaData.clientNotes = $("#id_orderNotes").val();
+	orderMetaData.serviceForms = _this.getEventsData();;
 
 	$.ajax({
     	url: "/createOrder",
@@ -783,8 +784,36 @@ OrderTab.prototype.getOrderDataAndCreate = function(){
 	});
 
 }
+OrderTab.prototype.getEventsData = function(){
+	var eventsArray = [];
+	$(".cls_orderEvent").each(function(index, element) {
+		var serviceForms = {};
+		serviceForms.serviceId = "serviceid_"+(new Date()).getTime();
+		serviceForms.session = $("#id_session",$(element)).val();
+		serviceForms.sessionDateTime = $("#sessionDateTime",$(element)).val();
+
+		var recipes = [];
+		$(".recipeMapRowSf",$(element)).each(function(index, rowElement) {
+			var categoryList = {};
+			var recipeIdToStore;
+			var recipeHeadCount;
+			recipeIdToStore = getRecipeIdByName(recipeJson, $(".cls_receipeName_sf", this).val());
+			recipeHeadCount = $(".cls_receipeCount_sf", this).val()
+			if(recipeIdToStore && recipeIdToStore>-1 && recipeHeadCount){
+				categoryList.id = recipeIdToStore;
+				categoryList.count = recipeHeadCount;
+				recipes.push(categoryList);
+			}
+		});
+		serviceForms.recipes = recipes;
+		eventsArray.push(serviceForms);
+	});
+	return eventsArray;
+	
+}
 OrderTab.prototype.getOrderDataAndUpdate = function(orderId){
 	var _this= this;
+	var eventsArray = [];
 
 	var orderMetaData = {};
 	orderMetaData.orderId = orderId;
@@ -795,6 +824,8 @@ OrderTab.prototype.getOrderDataAndUpdate = function(orderId){
 	orderMetaData.eventDate = $("#eventDate").val();
 	orderMetaData.eventVenue = $("#eventVenue").val();
 	orderMetaData.clientNotes = $("#clientNotes").val();
+	orderMetaData.serviceForms = _this.getEventsData();;
+	
 
 	$.ajax({
     	url: "/updateOrder",

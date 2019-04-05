@@ -291,7 +291,7 @@ function getRecipeIdByName(recipeJson, recipeName) {
 	var toRet = null;
 	var tempArr = [];
 	$.each(recipeJson, function( index, recipeObj ) {
-		if(recipeObj.name && recipeObj.name.toLowerCase() == recipeName.toLowerCase()) {
+		if(recipeObj.name && recipeName && recipeObj.name.toLowerCase() == recipeName.toLowerCase()) {
 			tempArr.push(recipeObj.id);
 		}
 	});
