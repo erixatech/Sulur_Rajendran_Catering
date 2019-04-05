@@ -48,6 +48,17 @@ function addOptionsToSelect(optionsArray, parentId){
 	}
 }
 
+function renderOptionsToSelectViaElem(optionsArray, elem){
+	var options = [];
+	options += "<option value=''> Select </option>"
+	if(optionsArray && optionsArray.length > 0) {
+		for(var i=0; i<optionsArray.length; i++) {
+			options += "<option value=" + optionsArray[i] + ">" + optionsArray[i] + " </option>"
+	    }
+	}
+	elem.html(options);
+}
+
 function addOptionsToSelectViaElem(optionsArray, elem){
 	if(optionsArray && optionsArray.length > 0) {
 		for(var i=0; i<optionsArray.length; i++) {
@@ -224,6 +235,26 @@ function getRecipeByCategory(recipeJson, catName) {
 		toRet = tempArr;
 	}
 	return toRet;
+}
+
+function getCategoryBySession(session){
+	var categories= [];
+	if(session == "Morning"){
+		categories = morning_recipe_category;
+	}
+	else if(session == "Afternoon"){
+		categories = lunch_recipe_category;	
+	}
+	else if(session == "Night"){
+		categories = night_recipe_category;
+	}
+	else if(session == "Evening"){
+		categories = evening_recipe_category;
+	}
+	else{
+		categories = recipeCategory;
+	}
+	return categories;
 }
 
 function getRecipeNamesByCategory(recipeJson, catName) {

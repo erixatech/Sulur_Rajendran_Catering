@@ -20,14 +20,12 @@ OrderTab.prototype.init = function(){
 };
 OrderTab.prototype.waitForDataLoad = function(){
 	var _this = this;
-	if(!$.isEmptyObject(ingredientJson) && !$.isEmptyObject(recipeJson) && !_this.isOrdersTabLoaded)
-	{
+	if(!$.isEmptyObject(ingredientJson) && !$.isEmptyObject(recipeJson) && !_this.isOrdersTabLoaded){
 		_this.isOrdersTabLoaded = true;
 		_this.render();
 		_this.renderEvents();
 	}
-	else
-	{
+	else{
 		setTimeout(function(){
             _this.waitForDataLoad();
         }, 100);
@@ -354,11 +352,11 @@ OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
 		+ '  		<div class="col-4">'
 		+ '    			<label for="serviceFormName">Session</label>'
 		+ '    			<select class="form-control" id="id_session">'
-		+ '                 <option '+ ( !isUpdate  ? "selected" : "")+ '> Select </option>'
-		+ '                 <option '+ ((isUpdate && serviceObj.session == "Morning")  ? "selected" : "")+ '> Morning </option>'
-		+ '                 <option '+ ((isUpdate && serviceObj.session == "Afternoon")  ? "selected" : "")+ '> Afternoon </option>'
-		+ '                 <option '+ ((isUpdate && serviceObj.session == "Evening")  ? "selected" : "")+ '> Evening </option>'
-		+ '                 <option '+ ((isUpdate && serviceObj.session == "Night")  ? "selected" : "")+ '> Night </option>'
+		+ '                 <option value="" '+ ( !isUpdate  ? "selected" : "")+ '> Select </option>'
+		+ '                 <option value="Morning" '+ ((isUpdate && serviceObj.session == "Morning")  ? "selected" : "")+ '> Morning </option>'
+		+ '                 <option value="Afternoon" '+ ((isUpdate && serviceObj.session == "Afternoon")  ? "selected" : "")+ '> Afternoon </option>'
+		+ '                 <option value="Evening" '+ ((isUpdate && serviceObj.session == "Evening")  ? "selected" : "")+ '> Evening </option>'
+		+ '                 <option value="Night" '+ ((isUpdate && serviceObj.session == "Night")  ? "selected" : "")+ '> Night </option>'
 		+ '             </select>'
 		+ '  		</div>'
 		+ '         <div class="col-2">'
@@ -449,7 +447,7 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 		renderHtmlMapRow += '<div class="row recipeMapRowSf '+ (initialRowNum>0 ? 'mt-5"' : 'mt-4"') +'>'
 				+ '      <div class="col-3">'
 				+ '        <select class="form-control cls_receipeCategory_sf" name="receipeCategory">'
-				+ '          <option>Choose Category</option>'
+				+ '          <option>Select</option>'
 				renderHtmlMapRow += '</select>'
 				+ '</div>'
 				+ '      <div class="col-4">'
@@ -533,7 +531,10 @@ OrderTab.prototype.renderEvents = function() {
 		$(document).on("click", ".cls_addReceipe_sf", function(){
 			var elemToAdd = $(_this.getReceipeMapRowForSF("", $('.recipeMapRowSf').length));
 			cloneDOM(elemToAdd, $('.serviceFormReceipeMap'));
-			addOptionsToSelectViaElem(recipeCategory, $('.cls_receipeCategory_sf')[$('.cls_receipeCategory_sf').length-1]);
+			var $thisParentContainer = $(this).parents(".cls_orderEvent");
+			var session = $thisParentContainer.find("#id_session").val();
+			var categories = getCategoryBySession(session);
+			addOptionsToSelectViaElem(categories, $('.cls_receipeCategory_sf')[$('.cls_receipeCategory_sf').length-1]);
 		});
 
 		$(document).on("click", ".cls_removeCurrentReceipeMap", function(){
@@ -615,6 +616,14 @@ OrderTab.prototype.renderEvents = function() {
 				$("#id_createEventContainer").after(_this.renderServiceFormCreateOrUpdate(null, true));
 			}
 			$(".cls_eventAction").removeClass("d-none");
+			var categories = getCategoryBySession("");
+			addOptionsToSelectViaElem(categories, $('.cls_receipeCategory_sf')[$('.cls_receipeCategory_sf').length-1]);
+		});
+		$(document).on("change", "#id_session", function(){
+			var session = $(this).val();
+			var $thisParent = $(this).parents('.cls_orderEvent');
+			var categories = getCategoryBySession(session);
+			renderOptionsToSelectViaElem(categories, $thisParent.find('.cls_receipeCategory_sf'));
 		});
 		$(document).on('click', '.cls_deleteOrder', function(event){
 			event.stopPropagation();
