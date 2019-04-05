@@ -47,15 +47,17 @@ OrderTab.prototype.render = function(){
 	else if(_this.isCreateServiceForm && _this.isCreateServiceForm == "true") {
 		$(".cls_orderDataCont").append(_this.renderServiceFormCreateOrUpdate());
 		$("#id_createOrder").addClass("d-none");
-		$(".backFromServiceFormEdit").removeClass("d-none");
+		//$(".backFromServiceFormEdit").removeClass("d-none");
 		$('.cls_orderPageTitle').removeClass('d-none');
 		$('.cls_orderPageTitle').text("Create Event");
 	}
 	else if(_this.isNewOrder == 'true'){
 		$(".cls_orderMetadataCont, .cls_orderBtnsCont").removeClass("d-none");
-		$(".cls_orderDataCont").append(_this.renderServiceFormCreateOrUpdate());
+		$(".cls_orderMetadataCont, .cls_createEventRow").removeClass("d-none");
+		$(".backFromServiceList").removeClass("d-none");
+		$(".cls_orderDataCont").append(_this.renderServiceFormCreateOrUpdate(null, true));
 		$("#id_createOrder").addClass("d-none");
-		$(".backFromServiceFormEdit").removeClass("d-none");
+		//$(".backFromServiceFormEdit").removeClass("d-none");
 		$('.cls_orderPageTitle').removeClass('d-none');
 		$('.cls_orderPageTitle').text("Create Event");
 	}
@@ -78,7 +80,7 @@ OrderTab.prototype.render = function(){
 	    }
 	    _this.getOrderByIdFromDB(_this.orderId, cbk);
 	    $("#id_createOrder").addClass("d-none");
-	    $(".backFromServiceFormEdit").removeClass("d-none");
+	    //$(".backFromServiceFormEdit").removeClass("d-none");
 	    $('.purchaseListForEvent').removeClass('d-none');
 	    $('.cls_orderPageTitle').removeClass('d-none');
 	    $('.cls_orderPageTitle').text("Edit Event");
@@ -264,6 +266,7 @@ OrderTab.prototype.renderServiceForms = function(){
 	var cbk = function(){
 		if(_this.currentOrder && !$.isEmptyObject(_this.currentOrder)) {
 			$(".cls_orderMetadataCont, .cls_orderBtnsCont").removeClass("d-none");
+			$(".cls_orderMetadataCont, .cls_createEventRow").removeClass("d-none");
 		    $(".cls_curOrderName").val(_this.currentOrder[0].clientName);
 		    $(".cls_curOrderVenue").val(_this.currentOrder[0].eventVenue);
 		    $(".cls_curOrderDate").val(_this.currentOrder[0].eventDate);
@@ -289,15 +292,7 @@ OrderTab.prototype.renderServiceFormList = function(){
 	var serviceJson = _this.currentOrder && _this.currentOrder[0] && _this.currentOrder[0].serviceForms;
 	renderHtml += '<div class="cls_orderServiceList">'
 					+ '<div class="row pb-4" id="id_createEventContainer">'
-						+ '<h4 class="col-5 cls_serviceListTitle text-secondary d-none">Events List</h4>'
-						+ '<div class="text-right col-7">'
-							+ '<a id="id_createService" class="btn btn-primary btn-md mr-3 text-white">'
-					          + '<i class="fa fa-plus-circle" aria-hidden="true"></i> Create New Event'
-					        + '</a>'
-					        + '<a id="id_back" class="btn btn-secondary btn-md text-white backFromServiceList d-none">'
-					          + '<i class="fa fa-arrow-left" aria-hidden="true"></i> Back'
-					        + '</a>'
-						+ '</div>'
+						+ '<h4 class="col-12 cls_serviceListTitle text-secondary d-none">Events List</h4>'
 				   	+ '</div>'
 	if(serviceJson && serviceJson.length > 0){
 		for(var i=0; i< serviceJson.length; i++){
@@ -740,10 +735,11 @@ OrderTab.prototype.renderEvents = function() {
 			url = removeQueryParamFromUrl(url, "orderId");
 			window.location.href = url;
 		});
-		$(document).on('click', '.backFromServiceList, #id_updateOrderEventsCancel', function(event){
+		$(document).on('click', '.backFromServiceList, #id_updateOrderDataCancel', function(event){
         	var url = window.location.href;
 			url = removeQueryParamFromUrl(url, "listServiceForms");
 			url = removeQueryParamFromUrl(url, "orderId");
+			url = removeQueryParamFromUrl(url, "orderIsNew");
 			window.location.href = url;
 		});
 		$(document).on('click', '.backFromServiceFormEdit, #id_createServiceFormCancel', function(event){
