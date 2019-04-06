@@ -371,7 +371,11 @@ OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
 		+ '  		</div>'
 		+ '  	</div>'
 		+ '  </div>'
-		+ '  <div class="cls_categoriesInEventContainer"></div>'
+		+ '  <div class="cls_categoriesInEventContainer">'
+		if(isUpdate) {
+			renderHtml += _this.renderSessionTemplate(serviceObj.session);
+		}
+	    renderHtml += '</div>'
 		//+ '  <h5><u>Add Receipes to Event</u></h5>'		
 		+ '</div>'
 	return renderHtml;
@@ -863,7 +867,7 @@ OrderTab.prototype.getOrderDataAndCreate = function(){
 	orderMetaData.eventDate = $("#id_orderDate").val();
 	orderMetaData.eventVenue = $("#id_orderVenue").val();
 	orderMetaData.clientNotes = $("#id_orderNotes").val();
-	orderMetaData.serviceForms = _this.getEventsData();;
+	orderMetaData.serviceForms = _this.getEventsData();
 
 	$.ajax({
     	url: "/createOrder",
@@ -918,14 +922,12 @@ OrderTab.prototype.getOrderDataAndUpdate = function(orderId){
 
 	var orderMetaData = {};
 	orderMetaData.orderId = orderId;
-	orderMetaData.clientName = $("#clientName").val();
-	orderMetaData.clientPhone = $("#clientPhone").val();
-	orderMetaData.clientAddress = $("#clientAddress").val();
-	orderMetaData.eventName = $("#eventName").val();
-	orderMetaData.eventDate = $("#eventDate").val();
-	orderMetaData.eventVenue = $("#eventVenue").val();
-	orderMetaData.clientNotes = $("#clientNotes").val();
-	orderMetaData.serviceForms = _this.getEventsData();;
+	orderMetaData.eventName = $("#id_orderName").val();
+	orderMetaData.clientPhone = $("#id_orderMobileNumber").val();
+	orderMetaData.eventDate = $("#id_orderDate").val();
+	orderMetaData.eventVenue = $("#id_orderVenue").val();
+	orderMetaData.clientNotes = $("#id_orderNotes").val();
+	orderMetaData.serviceForms = _this.getEventsData();
 	
 
 	$.ajax({
