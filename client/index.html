@@ -5,12 +5,15 @@
 
 		<link rel="stylesheet" type="text/css" href="css/lib/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="css/lib/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/lib/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" type="text/css" href="css/common.css">
 		<link rel="stylesheet" type="text/css" href="css/successconfirmdialog.css">
 		<link rel="stylesheet" type="text/css" href="css/confirmdialog.css">
 		<link rel="stylesheet" type="text/css" href="css/errorconfirmdialog.css">
 		<script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
 		<script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/lib/moment.min.js"></script>
+		<script type="text/javascript" src="js/lib/bootstrap-datetimepicker.min.js"></script>
 
         <script type="text/javascript" src="js/utils.js"></script>
 		<script type="text/javascript" src="js/order-tab.js"></script>
@@ -111,7 +114,15 @@
 						            <input type="text" class="form-control cls_curOrderVenue" id="id_orderVenue" placeholder="Enter Venue">
 						        </div>
 						        <div class="col-4">
-						            <input type="text" class="form-control cls_curOrderDate" id="id_orderDate" placeholder="Enter Date">
+						            <!-- <input type="text" class="form-control cls_curOrderDate" id="id_orderDate" placeholder="Enter Date"> -->
+						            <div class="container">
+							            <div class="row">
+					                        <div class='input-group date' id='datetimepicker1'>
+					                            <input type="text" readOnly class="form-control cls_curOrderDate" id="id_orderDate" placeholder="Enter Date">
+					                             <i class="fa cls_calenderIcon">&#xf073;</i>
+					                        </div>
+							            </div>
+							        </div>
 						        </div>
 						    </div>
 						    <div class="row p-3">
