@@ -376,9 +376,19 @@ OrderTab.prototype.renderSessionTemplate = function(session) {
 	{
 		for(var i=0; i<sessioncategories.length;i++)
 		{
-			renderHtml += '<h5><u>'+sessioncategories[i]+'</u></h5>'
+			renderHtml += '<div class="cls_eventRecipeCat" id="id_eventRecipeCat_'+sessioncategories[i]+'">'
+			+ '<h5>'
+			+ '<u>'+sessioncategories[i]+'</u>'
+			+ '    <span class="col-1 cls_removeRecipeCat">'
+			+ '			<a role="button" class="btn p-0"> <i class="fa fa-minus-circle cls_removeCurrentReceipeCategory text-danger" title= "Remove" style="font-size:20px;cursor:pointer"></i></a>'
+			+ '    </span>'
+			+ '		<span class="col-1 cls_addRecipeCat d-none">'
+			+ '			<a role="button" class="btn p-0"> <i class="fa fa-plus-circle cls_addCurrentReceipeCategory text-success" aria-hidden="true" style="font-size : 20px"></i></a>'
+			+ '		</span>'
+			+ '</h5>'
 			renderHtml += _this.getReceipeMapContainer(null, sessioncategories[i]);
-			renderHtml + '<br>'
+			renderHtml += '</div>'
+			renderHtml += '<br>'
 		}
 	}
 
@@ -390,6 +400,8 @@ OrderTab.prototype.getReceipeMapContainer = function(serviceObj, categoryToRende
 	renderHtml += '  <div class="form-group receipeMapContainer mb-4">'
 		+ '  	<div class="serviceFormReceipeMap mt-4">'
 		+ '    		<div class="row">'
+		+ '      		<div class="col-1">'
+		+ '      		</div>'
 		+ '      		<div class="col-4 text-center">'
 		+ '			        <label class="font-weight-bold">Name</label>'
 		+ '      		</div>'		
@@ -409,7 +421,7 @@ OrderTab.prototype.getReceipeMapContainer = function(serviceObj, categoryToRende
 		}
 		renderHtml += '		 </div>'			
 		+ '      <div class="row mt-1">'
-		+ '      	<div class="col">'
+		+ '      	<div class="col-8">'
 		+ '       	</div>'
 		+ '      	<div class="col mt-3">'
 		+ '        		<a class="btn btn-success btn-md mr-3 text-white cls_addReceipe_sf" data-category="'+categoryToRender+'">'
@@ -457,6 +469,8 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 	{
 		var recipeInSameCategory = getRecipeByCategory(recipeJson, categoryToRender);
 		renderHtmlMapRow += '<div class="row recipeMapRowSf '+ (initialRowNum>0 ? 'mt-5"' : 'mt-4"') +'>'
+				+ '      <div class="col-1">'
+				+ '      </div>'
 				+ '      <div class="col-4">'
 				+ '        	<select class="form-control cls_receipeName_sf" name="receipeName">'
 				if(recipeInSameCategory && recipeInSameCategory.length>0)
@@ -553,6 +567,24 @@ OrderTab.prototype.renderEvents = function() {
 
 		$(document).on("click", ".cls_removeCurrentReceipeMap", function(){
 			$(this).parents('.recipeMapRowSf').remove();
+		});
+
+		$(document).on("click", ".cls_removeCurrentReceipeCategory", function(){
+			var parentElem = $(this).parents('.cls_eventRecipeCat');
+			parentElem.addClass('cls_dontConsider');
+			parentElem.addClass('float-right');
+			parentElem.find('.receipeMapContainer').addClass('d-none');
+			parentElem.find('.cls_removeRecipeCat').addClass('d-none');
+			parentElem.find('.cls_addRecipeCat').removeClass('d-none');
+		});
+
+		$(document).on("click", ".cls_addCurrentReceipeCategory", function(){
+			var parentElem = $(this).parents('.cls_eventRecipeCat');
+			parentElem.removeClass('cls_dontConsider');
+			parentElem.removeClass('float-right');
+			parentElem.find('.receipeMapContainer').removeClass('d-none');
+			parentElem.find('.cls_removeRecipeCat').removeClass('d-none');
+			parentElem.find('.cls_addRecipeCat').addClass('d-none');
 		});
 
 		$(document).on("click", ".purchaseListForEvent", function(){
