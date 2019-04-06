@@ -373,6 +373,29 @@ function getOrderObjById(ordersJson, idToFind) {
 	return toRet;
 }
 
+function getCategoriesBySession(session) {
+	var toRet = "";
+
+	if(session.toLowerCase() == "morning")
+	{
+		toRet = morning_recipe_category;
+	}
+	else if(session.toLowerCase() == "afternoon")
+	{
+		toRet = lunch_recipe_category;
+	}
+	else if(session.toLowerCase() == "evening")
+	{
+		toRet = evening_recipe_category;
+	}
+	else if(session.toLowerCase() == "night")
+	{
+		toRet = night_recipe_category;
+	}
+
+	return toRet;
+}
+
 function getNextId(jsonToFind, module) {
 	var highestId = 0;
 	if(module == "Ingredient")

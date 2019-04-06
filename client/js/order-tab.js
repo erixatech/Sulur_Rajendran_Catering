@@ -343,7 +343,7 @@ OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
 		+ '				</a>'
 		+ ' 		</div>'
 		+ ' 	</div>'
-		+ '  	<div class="row">'
+		+ '  	<div class="row mb-5">'
 		+ '  		<div class="col-4">'
 		+ '    			<label for="serviceFormName">Session</label>'
 		+ '    			<select class="form-control" id="id_session">'
@@ -362,13 +362,34 @@ OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
 		+ '  		</div>'
 		+ '  	</div>'
 		+ '  </div>'
-		+ '  <h5><u>Add Receipes to Event</u></h5>'
-		+ '  <div class="form-group receipeMapContainer">'
+		+ '  <div class="cls_categoriesInEventContainer"></div>'
+		//+ '  <h5><u>Add Receipes to Event</u></h5>'		
+		+ '</div>'
+	return renderHtml;
+}
+OrderTab.prototype.renderSessionTemplate = function(session) {
+	var _this = this;
+	var renderHtml = [];
+	var sessioncategories = getCategoriesBySession(session);
+
+	if(sessioncategories && sessioncategories.length>0)
+	{
+		for(var i=0; i<sessioncategories.length;i++)
+		{
+			renderHtml += '<h5><u>'+sessioncategories[i]+'</u></h5>'
+			renderHtml += _this.getReceipeMapContainer(null, sessioncategories[i]);
+			renderHtml + '<br>'
+		}
+	}
+
+	return renderHtml;
+}
+OrderTab.prototype.getReceipeMapContainer = function(serviceObj, categoryToRender) {
+	var _this = this;
+	var renderHtml = [];
+	renderHtml += '  <div class="form-group receipeMapContainer mb-4">'
 		+ '  	<div class="serviceFormReceipeMap mt-4">'
 		+ '    		<div class="row">'
-		+ '      		<div class="col-3 text-center">'
-		+ '			        <label class="font-weight-bold">Category</label>'
-		+ '      		</div>'
 		+ '      		<div class="col-4 text-center">'
 		+ '			        <label class="font-weight-bold">Name</label>'
 		+ '      		</div>'		
@@ -384,27 +405,22 @@ OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
 			}
 		}
 		else{
-			renderHtml += _this.getReceipeMapRowForSF("", 0);
+			renderHtml += _this.getReceipeMapRowForSF("", 0, categoryToRender);
 		}
 		renderHtml += '		 </div>'			
-		+ '      <div class="row mt-5 mb-4">'
+		+ '      <div class="row mt-1">'
 		+ '      	<div class="col">'
 		+ '       	</div>'
-		+ '       	<div class="col">'
-		+ '      	</div>'
-		+ '       	<div class="col">'
-		+ '      	</div>'		
 		+ '      	<div class="col mt-3">'
-		+ '        		<a class="btn btn-success btn-md mr-3 text-white cls_addReceipe_sf">'
+		+ '        		<a class="btn btn-success btn-md mr-3 text-white cls_addReceipe_sf" data-category="'+categoryToRender+'">'
 		+ '					<i class="fa fa-plus-circle" aria-hidden="true"></i> Add'
 		+ '				</a>'
 		+ '      	</div>'
 		+ '      </div>'
 		+ '  </div>'
-		+ '</div>'
 	return renderHtml;
 }
-OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, initialRowNum) {
+OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, initialRowNum, categoryToRender) {
 	var _this = this;
 	var renderHtmlMapRow = [];
 
@@ -439,16 +455,19 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 	}
 	else
 	{
+		var recipeInSameCategory = getRecipeByCategory(recipeJson, categoryToRender);
 		renderHtmlMapRow += '<div class="row recipeMapRowSf '+ (initialRowNum>0 ? 'mt-5"' : 'mt-4"') +'>'
-				+ '      <div class="col-3">'
-				+ '        <select class="form-control cls_receipeCategory_sf" name="receipeCategory">'
-				+ '          <option>Select</option>'
-				renderHtmlMapRow += '</select>'
-				+ '</div>'
 				+ '      <div class="col-4">'
-				+ '        <select class="form-control cls_receipeName_sf" name="receipeName">'
-				renderHtmlMapRow += '</select>'
-				+ '</div>'
+				+ '        	<select class="form-control cls_receipeName_sf" name="receipeName">'
+				if(recipeInSameCategory && recipeInSameCategory.length>0)
+				{
+					for(var i=0; i<recipeInSameCategory.length; i++)
+					{
+						renderHtmlMapRow += '<option>' + recipeInSameCategory[i].name +'</option>'
+					}
+				}
+				renderHtmlMapRow += '			</select>'
+				+ '		</div>'
 				+ '      <div class="col-2">'
 				+ '        <input type="number" min="0" class="form-control cls_receipeCount_sf" required id="id_receipeCount_sf" value="" placeholder="Enter Head Count" name="receipeCount">'
 				+ '      </div>'
@@ -524,8 +543,8 @@ OrderTab.prototype.renderEvents = function() {
 		});
 		
 		$(document).on("click", ".cls_addReceipe_sf", function(){
-			var elemToAdd = $(_this.getReceipeMapRowForSF("", $('.recipeMapRowSf').length));
-			cloneDOM(elemToAdd, $('.serviceFormReceipeMap'));
+			var elemToAdd = $(_this.getReceipeMapRowForSF("", $('.recipeMapRowSf').length, $(this).data("category")));
+			cloneDOM(elemToAdd, $(this).parents('.receipeMapContainer').find('.serviceFormReceipeMap'));
 			var $thisParentContainer = $(this).parents(".cls_orderEvent");
 			var session = $thisParentContainer.find("#id_session").val();
 			var categories = getCategoryBySession(session);
@@ -617,8 +636,9 @@ OrderTab.prototype.renderEvents = function() {
 		$(document).on("change", "#id_session", function(){
 			var session = $(this).val();
 			var $thisParent = $(this).parents('.cls_orderEvent');
-			var categories = getCategoryBySession(session);
-			renderOptionsToSelectViaElem(categories, $thisParent.find('.cls_receipeCategory_sf'));
+			//var categories = getCategoryBySession(session);
+			//renderOptionsToSelectViaElem(categories, $thisParent.find('.cls_receipeCategory_sf'));
+			$thisParent.find('.cls_categoriesInEventContainer').html(_this.renderSessionTemplate(session));
 		});
 		$(document).on('click', '.cls_deleteOrder', function(event){
 			event.stopPropagation();
