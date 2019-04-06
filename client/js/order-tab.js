@@ -378,14 +378,14 @@ OrderTab.prototype.renderSessionTemplate = function(session) {
 		for(var i=0; i<sessioncategories.length;i++)
 		{
 			renderHtml += '<div class="cls_eventRecipeCat" id="id_eventRecipeCat_'+sessioncategories[i]+'">'
-			+ '<h5>'
-			+ '<u>'+sessioncategories[i]+'</u>'
+			+ '<h5 class="bg-light p-2">'
+			+ '	   <span class="col-1 cls_addRecipeCat d-none">'
+			+ '			<a role="button" class="btn p-0"> <i class="fa fa-plus-circle cls_addCurrentReceipeCategory text-success" aria-hidden="true" style="font-size : 20px"></i></a>'
+			+ '	   </span>'
+			+ '    <u class="col-2">'+sessioncategories[i]+'</u>'
 			+ '    <span class="col-1 cls_removeRecipeCat">'
 			+ '			<a role="button" class="btn p-0"> <i class="fa fa-minus-circle cls_removeCurrentReceipeCategory text-danger" title= "Remove" style="font-size:20px;cursor:pointer"></i></a>'
 			+ '    </span>'
-			+ '		<span class="col-1 cls_addRecipeCat d-none">'
-			+ '			<a role="button" class="btn p-0"> <i class="fa fa-plus-circle cls_addCurrentReceipeCategory text-success" aria-hidden="true" style="font-size : 20px"></i></a>'
-			+ '		</span>'
 			+ '</h5>'
 			renderHtml += _this.getReceipeMapContainer(null, sessioncategories[i]);
 			renderHtml += '</div>'
@@ -592,7 +592,6 @@ OrderTab.prototype.renderEvents = function() {
 		$(document).on("click", ".cls_removeCurrentReceipeCategory", function(){
 			var parentElem = $(this).parents('.cls_eventRecipeCat');
 			parentElem.addClass('cls_dontConsider');
-			parentElem.addClass('float-right');
 			parentElem.find('.receipeMapContainer').addClass('d-none');
 			parentElem.find('.cls_removeRecipeCat').addClass('d-none');
 			parentElem.find('.cls_addRecipeCat').removeClass('d-none');
