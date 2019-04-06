@@ -359,7 +359,15 @@ OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
 		+ '         </div>'
 		+ '  		<div class="col-4">'
 		+ '    			<label for="serviceFormDateTime">Session Date and Time</label>'
-		+ '    			<input type="text" class="form-control" id="sessionDateTime" value="'+ (isUpdate ? serviceObj.sessionDateTime : "")+'" placeholder="Enter Session Date and Time">'
+		/*+ '    			<input type="text" class="form-control" id="sessionDateTime" value="'+ (isUpdate ? serviceObj.sessionDateTime : "")+'" placeholder="Enter Session Date and Time">'*/
+		+ '					<div class="container">'
+		+ '        				<div class="row">'
+		+ '            				<div class="input-group date" id="datetimepicker1">'
+		+ '    							<input type="text" class="form-control cls_sessionDateTime" readOnly id="sessionDateTime" value="'+ (isUpdate ? serviceObj.sessionDateTime : "")+'" placeholder="Enter Session Date and Time">'
+		+ '                 			<i class="fa cls_calenderIcon">&#xf073;</i>'
+	    + '        					</div>'
+		+ '                		</div>'
+	    + ' 				</div>'
 		+ '  		</div>'
 		+ '  	</div>'
 		+ '  </div>'
@@ -647,6 +655,21 @@ OrderTab.prototype.renderEvents = function() {
 			_this.getServiceFormDataAndCreateAndUpdate();
 		});
 
+		$('#sessionDateTime').datetimepicker({
+            sideBySide: true,
+            ignoreReadonly: true,
+            format: "DD/MM/YYYY hh:mm A"
+        });
+
+		$('#id_orderDate').datetimepicker({
+            ignoreReadonly: true,
+            format: "DD/MM/YYYY"
+        });
+
+		$(document).on("click", ".cls_calenderIcon", function(){
+			$(this).prev('input').data('DateTimePicker').toggle();
+		});
+
 		$(document).on("click", "#id_deleteEvent", function(){
 			$(this).parents(".cls_orderEvent").remove();
 			if(!($(".cls_orderEvent_last") && $(".cls_orderEvent_last").length > 0)){
@@ -682,6 +705,13 @@ OrderTab.prototype.renderEvents = function() {
 				$("#id_createEventContainer").after(_this.renderServiceFormCreateOrUpdate(null, true));
 			}
 			$(".cls_eventAction").removeClass("d-none");
+			setTimeout(function(){
+				$('.cls_sessionDateTime').datetimepicker({
+		            sideBySide: true,
+		            ignoreReadonly: true,
+		            format: "DD/MM/YYYY hh:mm A"
+		        });
+			}, 200);
 			var categories = getCategoryBySession("");
 			addOptionsToSelectViaElem(categories, $('.cls_receipeCategory_sf')[$('.cls_receipeCategory_sf').length-1]);
 		});
