@@ -17,6 +17,7 @@ OrderTab.prototype.init = function(){
 	_this.isPurchaseList = getValueFromQueryParam('purchaseList') ? "true" : "false";
 	_this.purchaseListCategory = getValueFromQueryParam('purchaseListCategory');
 	_this.waitForDataLoad();
+	_this.idIncrementer = 1;
 };
 OrderTab.prototype.waitForDataLoad = function(){
 	var _this = this;
@@ -435,6 +436,7 @@ OrderTab.prototype.getReceipeMapContainer = function(serviceObj, categoryToRende
 OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, initialRowNum, categoryToRender) {
 	var _this = this;
 	var renderHtmlMapRow = [];
+	_this.idIncrementer += 1;
 
 	if(recipeObjInServiceForm && !$.isEmptyObject(recipeObjInServiceForm))
 	{
@@ -451,11 +453,17 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 				renderHtmlMapRow += '</select>'
 				+ '</div>'
 				+ '      <div class="col-4">'
-				+ '        <select class="form-control cls_receipeName_sf" name="receipeName">'
+				/*+ '        <select class="form-control cls_receipeName_sf" name="receipeName">'
 							for(var i=0; i<recipeInSameCategory.length; i++){
 								renderHtmlMapRow += '<option '+ ((isUpdate && recipeObj.name && recipeInSameCategory[i].name && recipeObj.name.toLowerCase() == recipeInSameCategory[i].name.toLowerCase())? "selected" : "")+'>' + recipeInSameCategory[i].name +'</option>'
 							}
-				renderHtmlMapRow += '</select>'
+				renderHtmlMapRow += '</select>'*/
+				+ '	<input class="form-control cls_receipeName_sf" name="receipeName" list="id_receipeName_sf_s'+_this.idIncrementer+'">'
+				+ '			<datalist id="id_receipeName_sf_s'+_this.idIncrementer+'">'
+					for(var i=0; i<recipeInSameCategory.length; i++){
+						renderHtmlMapRow += '<option '+ ((isUpdate && recipeObj.name && recipeInSameCategory[i].name && recipeObj.name.toLowerCase() == recipeInSameCategory[i].name.toLowerCase())? "selected" : "")+'>'
+					}
+				renderHtmlMapRow += '</datalist>'
 				+ '</div>'
 				+ '      <div class="col-2">'
 				+ '        <input type="number" min="0" class="form-control cls_receipeCount_sf" required id="id_receipeCount_sf" value="'+ (isUpdate ? recipeObjInServiceForm.count : "")+'" placeholder="Enter Head Count" name="receipeCount">'
@@ -467,12 +475,13 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 	}
 	else
 	{
+		_this.idIncrementer += 1;
 		var recipeInSameCategory = getRecipeByCategory(recipeJson, categoryToRender);
 		renderHtmlMapRow += '<div class="row recipeMapRowSf '+ (initialRowNum>0 ? 'mt-5"' : 'mt-4"') +'>'
 				+ '      <div class="col-1">'
 				+ '      </div>'
 				+ '      <div class="col-4">'
-				+ '        	<select class="form-control cls_receipeName_sf" name="receipeName">'
+				/*+ '        	<select class="form-control cls_receipeName_sf" name="receipeName">'
 				if(recipeInSameCategory && recipeInSameCategory.length>0)
 				{
 					for(var i=0; i<recipeInSameCategory.length; i++)
@@ -480,7 +489,18 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 						renderHtmlMapRow += '<option>' + recipeInSameCategory[i].name +'</option>'
 					}
 				}
-				renderHtmlMapRow += '			</select>'
+				renderHtmlMapRow += '			</select>'*/
+				+ '	<input class="form-control cls_receipeName_sf" name="receipeName" list="id_receipeName_sf_s'+_this.idIncrementer+'">'
+				+ '			<datalist id="id_receipeName_sf_s'+_this.idIncrementer+'">'
+				if(recipeInSameCategory && recipeInSameCategory.length>0)
+				{
+					for(var i=0; i<recipeInSameCategory.length; i++)
+					{
+						renderHtmlMapRow += '<option value='+recipeInSameCategory[i].name+'>' 
+					}
+				}
+				renderHtmlMapRow += '			</datalist>'
+				//
 				+ '		</div>'
 				+ '      <div class="col-2">'
 				+ '        <input type="number" min="0" class="form-control cls_receipeCount_sf" required id="id_receipeCount_sf" value="" placeholder="Enter Head Count" name="receipeCount">'
