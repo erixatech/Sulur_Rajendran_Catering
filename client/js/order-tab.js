@@ -717,8 +717,11 @@ OrderTab.prototype.renderEvents = function() {
 		$(document).on("click", "#id_deleteEvent", function(){
 			$(this).parents(".cls_orderEvent").remove();
 			if(!($(".cls_orderEvent_last") && $(".cls_orderEvent_last").length > 0)){
-				$(".cls_eventAction").addClass("d-none");
-				$(".cls_noDataFound").removeClass("d-none");
+				if($(".cls_orderEvent").length==0)
+				{
+					$(".cls_eventAction").addClass("d-none");
+					$(".cls_noDataFound").removeClass("d-none");
+				}
 			}
 		});
 
