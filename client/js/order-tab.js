@@ -6,6 +6,7 @@ function OrderTab(){
 	var ordersList = {};
 	var currentOrder = null;
 	var isOrdersTabLoaded = false;
+	var isGeneratePLWithSave = false;
 }
 OrderTab.prototype.init = function(){
 	var _this = this;
@@ -560,6 +561,37 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 			
 	return renderHtmlMapRow;
 };
+OrderTab.prototype.generatePLFromOrder = function() {
+	var _this = this;
+
+	var $errorPopup = $("#errorPopup");
+	var $errModalTitle = $errorPopup.find('.modal-title');
+	
+	if(_this.currentOrder && _this.currentOrder[0] && _this.currentOrder[0].serviceForms)
+	{
+		//new renderPL(_this.currentOrder[0]);
+		var plWindow = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Maligai");
+		setTimeout(function(){
+            var plWindow2 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=KaaiKanigal");
+        }, 100);
+        setTimeout(function(){
+            var plWindow3= window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Extras");
+        }, 200);
+        setTimeout(function(){
+            var plWindow4 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Suppliments");
+        }, 300);
+	}
+	else if(_this.currentOrder && _this.currentOrder[0])
+	{
+		$errModalTitle.text('No Events added for this Order');
+		$errorPopup.modal('show');
+	}
+	else
+	{
+		$errModalTitle.text('Could not find the specified Order to Generate purchase list');
+		$errorPopup.modal('show');
+	}
+};
 OrderTab.prototype.renderEvents = function() {
 	var _this = this;
 	
@@ -660,33 +692,8 @@ OrderTab.prototype.renderEvents = function() {
 
 		$(document).on("click", ".purchaseListForOrder", function(){
 			//var plWindow = window.open("purchaselistgen.html");
-			var $errorPopup = $("#errorPopup");
-			var $errModalTitle = $errorPopup.find('.modal-title');
-			
-			if(_this.currentOrder && _this.currentOrder[0] && _this.currentOrder[0].serviceForms)
-	    	{
-				//new renderPL(_this.currentOrder[0]);
-				var plWindow = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Maligai");
-				setTimeout(function(){
-		            var plWindow2 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=KaaiKanigal");
-		        }, 100);
-		        setTimeout(function(){
-		            var plWindow3= window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Extras");
-		        }, 200);
-		        setTimeout(function(){
-		            var plWindow4 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Suppliments");
-		        }, 300);
-			}
-			else if(_this.currentOrder && _this.currentOrder[0])
-			{
-				$errModalTitle.text('No Events added for this Order');
-				$errorPopup.modal('show');
-			}
-			else
-			{
-				$errModalTitle.text('Could not find the specified Order to Generate purchase list');
-				$errorPopup.modal('show');
-			}
+			_this.isGeneratePLWithSave = true;
+			$("#id_updateOrderData").trigger('click');
 		});
 
 		$(document).on("click", "#id_createServiceForm", function(){
@@ -909,11 +916,16 @@ OrderTab.prototype.getOrderDataAndCreate = function(){
     		$("#successPopup").modal('show');
     		$("#successPopup").data('toRedirect','listservice_from_ordercreate');
     		$("#successPopup").data('orderIdToAppend',orderMetaData.orderId);
+    		if(_this.isGeneratePLWithSave)
+    		{
+    			_this.generatePLFromOrder();
+    		}
 		},
 		error: function(){
 			hideLoading();
 		    $("#errorPopup").find('.modal-title').text('Failed to create Order. Please Try again later.');
     		$("#errorPopup").modal('show');
+    		_this.isGeneratePLWithSave = false;
 		}
 	});
 
@@ -969,11 +981,16 @@ OrderTab.prototype.getOrderDataAndUpdate = function(orderId){
 			$("#successPopup").find('.modal-title').text("Order Updated Successfully");
     		$("#successPopup").modal('show');
     		$("#successPopup").data('toRedirect','listservice_from_orderupdate');
+    		if(_this.isGeneratePLWithSave)
+    		{
+    			_this.generatePLFromOrder();
+    		}
 		},
 		error: function(){
 			hideLoading();
 		    $("#errorPopup").find('.modal-title').text('Failed to update Order. Please Try again later.');
     		$("#errorPopup").modal('show');
+    		_this.isGeneratePLWithSave = false;
 		}
 	});
 
