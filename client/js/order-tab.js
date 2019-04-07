@@ -276,6 +276,7 @@ OrderTab.prototype.renderServiceForms = function(){
 		}
 
 		$(".cls_orderDataCont").append(_this.renderServiceFormList());
+		registerDatepickerEvent();
 		$(".backFromServiceList").removeClass("d-none");
 		$(".cls_serviceListTitle").removeClass("d-none");
 		_this.minimiseEmptyRecipeCategories();
@@ -692,13 +693,11 @@ OrderTab.prototype.renderEvents = function() {
 			showLoading();
 			_this.getServiceFormDataAndCreateAndUpdate();
 		});
-
-		$('#sessionDateTime').datetimepicker({
+		$('.cls_sessionDateTime').datetimepicker({
             sideBySide: true,
             ignoreReadonly: true,
             format: "DD/MM/YYYY hh:mm A"
-        });
-
+        });	
 		$('#id_orderDate').datetimepicker({
             ignoreReadonly: true,
             format: "DD/MM/YYYY"
@@ -743,13 +742,7 @@ OrderTab.prototype.renderEvents = function() {
 				$("#id_createEventContainer").after(_this.renderServiceFormCreateOrUpdate(null, true));
 			}
 			$(".cls_eventAction").removeClass("d-none");
-			setTimeout(function(){
-				$('.cls_sessionDateTime').datetimepicker({
-		            sideBySide: true,
-		            ignoreReadonly: true,
-		            format: "DD/MM/YYYY hh:mm A"
-		        });
-			}, 200);
+			registerDatepickerEvent();
 			var categories = getCategoryBySession("");
 			addOptionsToSelectViaElem(categories, $('.cls_receipeCategory_sf')[$('.cls_receipeCategory_sf').length-1]);
 		});
