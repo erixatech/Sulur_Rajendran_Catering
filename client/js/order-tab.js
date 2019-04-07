@@ -373,20 +373,23 @@ OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
 		+ '  </div>'
 		+ '  <div class="cls_categoriesInEventContainer">'
 		if(isUpdate) {
-			renderHtml += _this.renderSessionTemplate(serviceObj.session);
+			renderHtml += _this.renderSessionTemplate(serviceObj, serviceObj.session);
 		}
 	    renderHtml += '</div>'
 		//+ '  <h5><u>Add Receipes to Event</u></h5>'		
 		+ '</div>'
 	return renderHtml;
 }
-OrderTab.prototype.renderSessionTemplate = function(session) {
+OrderTab.prototype.renderSessionTemplate = function(serviceObj, session) {
 	var _this = this;
 	var renderHtml = [];
 	var sessioncategories = getCategoriesBySession(session);
 
 	if(sessioncategories && sessioncategories.length>0)
 	{
+		if(serviceObj && serviceObj.recipes && serviceObj.recipes.length > 0){
+			serviceObj.recipes = _this.setRecipeCategory(serviceObj.recipes);
+		}
 		for(var i=0; i<sessioncategories.length;i++)
 		{
 			renderHtml += '<div class="cls_eventRecipeCat" id="id_eventRecipeCat_'+sessioncategories[i]+'">'
@@ -399,7 +402,7 @@ OrderTab.prototype.renderSessionTemplate = function(session) {
 			+ '			<a role="button" class="btn p-0"> <i class="fa fa-minus-circle cls_removeCurrentReceipeCategory text-danger" title= "Remove" style="font-size:20px;cursor:pointer"></i></a>'
 			+ '    </span>'
 			+ '</h5>'
-			renderHtml += _this.getReceipeMapContainer(null, sessioncategories[i]);
+			renderHtml += _this.getReceipeMapContainer(serviceObj, sessioncategories[i]);
 			renderHtml += '</div>'
 			renderHtml += '<br>'
 		}
@@ -407,6 +410,18 @@ OrderTab.prototype.renderSessionTemplate = function(session) {
 
 	return renderHtml;
 }
+OrderTab.prototype.setRecipeCategory = function(recipes) {
+	if(recipeJson && recipes){
+		for(var i=0; i<recipeJson.length > 0; i++){
+			for(var j=0; j<recipes.length; j++){
+				if(recipeJson[i].id == recipes[j].id){
+					recipes[j].category = recipeJson[i].itemCategory;
+				}
+			}
+		}
+	}
+	return recipes;
+};
 OrderTab.prototype.getReceipeMapContainer = function(serviceObj, categoryToRender) {
 	var _this = this;
 	var renderHtml = [];
@@ -424,12 +439,16 @@ OrderTab.prototype.getReceipeMapContainer = function(serviceObj, categoryToRende
 		+ '      		<div class="col-1">'
 		+ '      		</div>'
 		+ '    		</div>'
-		if(serviceObj && serviceObj.recipes){
+		var isRecipeAddedForCategory = false;
+		if(serviceObj && serviceObj.recipes && serviceObj.recipes.length>0){
 			for(var i=0; i<serviceObj.recipes.length; i++){
-				renderHtml += _this.getReceipeMapRowForSF(serviceObj.recipes[i], i);
+				if(serviceObj.recipes[i].category == categoryToRender){
+					isRecipeAddedForCategory = true;
+					renderHtml += _this.getReceipeMapRowForSF(serviceObj.recipes[i], i);
+				}
 			}
 		}
-		else{
+		if(!isRecipeAddedForCategory){
 			renderHtml += _this.getReceipeMapRowForSF("", 0, categoryToRender);
 		}
 		renderHtml += '		 </div>'			
@@ -457,12 +476,12 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 		var recipeInSameCategory = getRecipeByCategory(recipeJson, recipeObj.itemCategory);
 		
 		renderHtmlMapRow += '<div class="row recipeMapRowSf '+ (initialRowNum>0 ? 'mt-5"' : 'mt-4"') +'>'
-				+ '      <div class="col-3">'
-				+ '        <select class="form-control cls_receipeCategory_sf" name="receipeCategory">'
+				+ '      <div class="col-1">'
+				/*+ '        <select class="form-control cls_receipeCategory_sf" name="receipeCategory">'
 							for(var i=0; i<recipeCategory.length; i++){
 								renderHtmlMapRow += '<option '+ ((isUpdate && recipeObj.itemCategory && recipeCategory[i] && recipeObj.itemCategory.toLowerCase() == recipeCategory[i].toLowerCase())? "selected" : "")+'>' + recipeCategory[i] +'</option>'
 							}
-				renderHtmlMapRow += '</select>'
+				renderHtmlMapRow += '</select>'*/
 				+ '</div>'
 				+ '      <div class="col-4">'
 				/*+ '        <select class="form-control cls_receipeName_sf" name="receipeName">'
@@ -470,10 +489,10 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 								renderHtmlMapRow += '<option '+ ((isUpdate && recipeObj.name && recipeInSameCategory[i].name && recipeObj.name.toLowerCase() == recipeInSameCategory[i].name.toLowerCase())? "selected" : "")+'>' + recipeInSameCategory[i].name +'</option>'
 							}
 				renderHtmlMapRow += '</select>'*/
-				+ '	<input class="form-control cls_receipeName_sf" name="receipeName" list="id_receipeName_sf_s'+_this.idIncrementer+'">'
+				+ '	<input class="form-control cls_receipeName_sf" name="receipeName" list="id_receipeName_sf_s'+_this.idIncrementer+'" value="' + recipeInSameCategory[0].name + '">'
 				+ '			<datalist id="id_receipeName_sf_s'+_this.idIncrementer+'">'
 					for(var i=0; i<recipeInSameCategory.length; i++){
-						renderHtmlMapRow += '<option '+ ((isUpdate && recipeObj.name && recipeInSameCategory[i].name && recipeObj.name.toLowerCase() == recipeInSameCategory[i].name.toLowerCase())? "selected" : "")+'>'
+						renderHtmlMapRow += '<option value="'+ recipeInSameCategory[i].name +'"></option>'
 					}
 				renderHtmlMapRow += '</datalist>'
 				+ '</div>'
@@ -508,10 +527,10 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 				{
 					for(var i=0; i<recipeInSameCategory.length; i++)
 					{
-						renderHtmlMapRow += '<option value='+recipeInSameCategory[i].name+'>' 
+						renderHtmlMapRow += '<option value="'+recipeInSameCategory[i].name+'"></option>' 
 					}
 				}
-				renderHtmlMapRow += '			</datalist>'
+				renderHtmlMapRow += '</datalist>'
 				//
 				+ '		</div>'
 				+ '      <div class="col-2">'
@@ -723,7 +742,8 @@ OrderTab.prototype.renderEvents = function() {
 			var $thisParent = $(this).parents('.cls_orderEvent');
 			//var categories = getCategoryBySession(session);
 			//renderOptionsToSelectViaElem(categories, $thisParent.find('.cls_receipeCategory_sf'));
-			$thisParent.find('.cls_categoriesInEventContainer').html(_this.renderSessionTemplate(session));
+
+			$thisParent.find('.cls_categoriesInEventContainer').html(_this.renderSessionTemplate("", session));
 		});
 		$(document).on('click', '.cls_deleteOrder', function(event){
 			event.stopPropagation();
