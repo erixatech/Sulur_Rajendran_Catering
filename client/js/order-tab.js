@@ -278,6 +278,7 @@ OrderTab.prototype.renderServiceForms = function(){
 		$(".cls_orderDataCont").append(_this.renderServiceFormList());
 		$(".backFromServiceList").removeClass("d-none");
 		$(".cls_serviceListTitle").removeClass("d-none");
+		_this.minimiseEmptyRecipeCategories();
 	}
 	if(!_this.currentOrder){
 		_this.getOrderByIdFromDB(orderId, cbk);
@@ -422,6 +423,20 @@ OrderTab.prototype.setRecipeCategory = function(recipes) {
 	}
 	return recipes;
 };
+OrderTab.prototype.minimiseEmptyRecipeCategories = function() {
+	$(".cls_removeCurrentReceipeCategory").each(function(index, element) {
+		var parentElem = $(this).parents('.cls_eventRecipeCat');
+		var recipeNamesInCat = parentElem.find('.cls_receipeName_sf');
+		if(recipeNamesInCat && recipeNamesInCat.length==1)
+		{
+			var recipeVal = $(recipeNamesInCat[0]).val();
+			if(recipeVal.length == 0)
+			{
+				$(this).click();
+			}
+		}
+	});	
+};
 OrderTab.prototype.getReceipeMapContainer = function(serviceObj, categoryToRender) {
 	var _this = this;
 	var renderHtml = [];
@@ -489,7 +504,7 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 								renderHtmlMapRow += '<option '+ ((isUpdate && recipeObj.name && recipeInSameCategory[i].name && recipeObj.name.toLowerCase() == recipeInSameCategory[i].name.toLowerCase())? "selected" : "")+'>' + recipeInSameCategory[i].name +'</option>'
 							}
 				renderHtmlMapRow += '</select>'*/
-				+ '	<input class="form-control cls_receipeName_sf" name="receipeName" list="id_receipeName_sf_s'+_this.idIncrementer+'" value="' + recipeInSameCategory[0].name + '">'
+				+ '	<input class="form-control cls_receipeName_sf" name="receipeName" list="id_receipeName_sf_s'+_this.idIncrementer+'" value="' + recipeObj.name + '">'
 				+ '			<datalist id="id_receipeName_sf_s'+_this.idIncrementer+'">'
 					for(var i=0; i<recipeInSameCategory.length; i++){
 						renderHtmlMapRow += '<option value="'+ recipeInSameCategory[i].name +'"></option>'
@@ -623,6 +638,7 @@ OrderTab.prototype.renderEvents = function() {
 		$(document).on("click", ".cls_removeCurrentReceipeCategory", function(){
 			var parentElem = $(this).parents('.cls_eventRecipeCat');
 			parentElem.addClass('cls_dontConsider');
+			//parentElem.addClass('float-right');
 			parentElem.find('.receipeMapContainer').addClass('d-none');
 			parentElem.find('.cls_removeRecipeCat').addClass('d-none');
 			parentElem.find('.cls_addRecipeCat').removeClass('d-none');
@@ -631,7 +647,7 @@ OrderTab.prototype.renderEvents = function() {
 		$(document).on("click", ".cls_addCurrentReceipeCategory", function(){
 			var parentElem = $(this).parents('.cls_eventRecipeCat');
 			parentElem.removeClass('cls_dontConsider');
-			parentElem.removeClass('float-right');
+			//parentElem.removeClass('float-right');
 			parentElem.find('.receipeMapContainer').removeClass('d-none');
 			parentElem.find('.cls_removeRecipeCat').removeClass('d-none');
 			parentElem.find('.cls_addRecipeCat').addClass('d-none');
