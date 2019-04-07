@@ -552,6 +552,15 @@ function hideLoading()
 	$('.loadingguage').modal('hide');
 }
 
+function registerDatepickerEvent(){
+	setTimeout(function(){
+		$('.cls_sessionDateTime').datetimepicker({
+            sideBySide: true,
+            ignoreReadonly: true,
+            format: "DD/MM/YYYY hh:mm A"
+        });
+	}, 200);
+}
 
 /*function loadFile(file, elem){
 
