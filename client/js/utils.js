@@ -555,9 +555,10 @@ function hideLoading()
 function registerDatepickerEvent(){
 	setTimeout(function(){
 		$('.cls_sessionDateTime').datetimepicker({
-            sideBySide: true,
+            //sideBySide: true,
             ignoreReadonly: true,
-            format: "DD/MM/YYYY hh:mm A"
+            //format: "DD/MM/YYYY hh:mm A"
+            format: "DD/MM/YYYY"
         });
 	}, 200);
 }

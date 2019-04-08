@@ -349,7 +349,7 @@ OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
 		+ ' 	</div>'
 		+ '  	<div class="row mb-5">'
 		+ '  		<div class="col-4">'
-		+ '    			<label for="serviceFormName">Session</label>'
+		+ '    			<label for="serviceFormName">Event Session</label>'
 		+ '    			<select class="form-control" id="id_session">'
 		+ '                 <option value="" '+ ( !isUpdate  ? "selected" : "")+ '> Select </option>'
 		+ '                 <option value="Morning" '+ ((isUpdate && serviceObj.session == "Morning")  ? "selected" : "")+ '> Morning </option>'
@@ -361,12 +361,12 @@ OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
 		+ '         <div class="col-2">'
 		+ '         </div>'
 		+ '  		<div class="col-4">'
-		+ '    			<label for="serviceFormDateTime">Session Date and Time</label>'
+		+ '    			<label for="serviceFormDateTime">Event Date</label>'
 		/*+ '    			<input type="text" class="form-control" id="sessionDateTime" value="'+ (isUpdate ? serviceObj.sessionDateTime : "")+'" placeholder="Enter Session Date and Time">'*/
 		+ '					<div class="container">'
 		+ '        				<div class="row">'
 		+ '            				<div class="input-group date" id="datetimepicker1">'
-		+ '    							<input type="text" class="form-control cls_sessionDateTime" readOnly id="sessionDateTime" value="'+ (isUpdate ? serviceObj.sessionDateTime : "")+'" placeholder="Enter Session Date and Time">'
+		+ '    							<input type="text" class="form-control cls_sessionDateTime" readOnly id="sessionDateTime" value="'+ (isUpdate ? serviceObj.sessionDateTime : "")+'" placeholder="Enter Event Date">'
 		+ '                 			<i class="fa cls_calenderIcon">&#xf073;</i>'
 	    + '        					</div>'
 		+ '                		</div>'
@@ -701,9 +701,10 @@ OrderTab.prototype.renderEvents = function() {
 			_this.getServiceFormDataAndCreateAndUpdate();
 		});
 		$('.cls_sessionDateTime').datetimepicker({
-            sideBySide: true,
+            //sideBySide: true,
             ignoreReadonly: true,
-            format: "DD/MM/YYYY hh:mm A"
+            //format: "DD/MM/YYYY hh:mm A"
+            format: "DD/MM/YYYY"
         });	
 		$('#id_orderDate').datetimepicker({
             ignoreReadonly: true,
@@ -748,13 +749,20 @@ OrderTab.prototype.renderEvents = function() {
 			if($(".cls_orderEvent_last") && $(".cls_orderEvent_last").length > 0){ 
 				$(".cls_orderEvent_last:last").after(_this.addMoreEvent(null, true));
 			}
+			else if(_this.isNewOrder == 'true')
+			{
+				$('.serviceFormDetails').append(_this.addMoreEvent(null, true));
+			}
 			else {
 				$("#id_createEventContainer").after(_this.renderServiceFormCreateOrUpdate(null, true));
 			}
 			$(".cls_eventAction").removeClass("d-none");
 			registerDatepickerEvent();
 			var categories = getCategoryBySession("");
-			addOptionsToSelectViaElem(categories, $('.cls_receipeCategory_sf')[$('.cls_receipeCategory_sf').length-1]);
+			if($('.cls_receipeCategory_sf') && $('.cls_receipeCategory_sf').length>0)
+			{
+				addOptionsToSelectViaElem(categories, $('.cls_receipeCategory_sf')[$('.cls_receipeCategory_sf').length-1]);
+			}
 		});
 		$(document).on("change", "#id_session", function(){
 			var session = $(this).val();
