@@ -563,6 +563,34 @@ function registerDatepickerEvent(){
 	}, 200);
 }
 
+function registerOrderLevelDatepickerEvent(){
+	setTimeout(function(){
+		$('.cls_curOrderDate').datetimepicker({
+            ignoreReadonly: true,
+            format: "DD/MM/YYYY"
+        });
+	}, 200);
+}
+
+Date.prototype.toShortFormat = function() {
+
+    var month_names =["Jan","Feb","Mar",
+                      "Apr","May","Jun",
+                      "Jul","Aug","Sep",
+                      "Oct","Nov","Dec"];
+    
+    var day = this.getDate();
+    var month_index = this.getMonth();
+    var year = this.getFullYear();
+    
+    return "" + month_names[month_index] + " " + day + ", " + year;
+}
+
+function toDate(dateStr) {
+  const [day, month, year] = dateStr.split("/")
+  return new Date(year, month - 1, day);
+}
+
 /*function loadFile(file, elem){
 
 	$.ajax({

@@ -116,6 +116,7 @@ OrderTab.prototype.getOrderListFromDB = function(){
     	type: "get",
     	success: function(result){
     		hideLoading();
+    		result = result.reverse();
     		_this.setOrderbyId(result);
     		$("#id_orderContent_tab").append(_this.renderOrderList(result));
     		ordersJsonMain = result;
@@ -138,14 +139,14 @@ OrderTab.prototype.renderOrderList = function(ordersJsonArr){
 			}
 			var curOrderObj = ordersJsonArr[i];
 			renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_orderDetails' style='cursor:pointer' idx='"+curOrderObj.orderId+"'>"
-								+ "<h6 class='card-header text-success bg-transparent border-secondary text-center cls_orderName'>"+ curOrderObj.eventName +"</h6>"
+								+ "<h6 class='card-header text-success bg-transparent border-secondary text-center'>"+ curOrderObj.eventVenue +"</h6>"
 								+ "<div class='card-body text-secondary font-weight-bold'>"
 							 		+ "<div class='row'>"
 							   			+ "<div class='card-title cls_eventName col-6'>" + curOrderObj.eventName +"</div>"
-							    		+ "<div class='card-text cls_eventDate col-6 text-right'>"+ curOrderObj.eventDate +"</div>"
+							    		+ "<div class='card-text cls_eventDate col-6 text-right'>"+ toDate(curOrderObj.eventDate).toShortFormat() +"</div>"
 							    	+ "</div>"
 							 	   	+ "<div class='row'>"
-							    		+ "<div class='card-title cls_eventVenue col-6'>"+ curOrderObj.eventVenue +"</div>"
+							    		+ "<div class='card-title cls_eventNotes col-6'>"+ curOrderObj.clientNotes.substring(0,50) +"</div>"
 							    		+ "<div class='card-text cls_contactNumber col-6 text-right'>"+ curOrderObj.clientPhone +"</div>"
 							    	+ "</div>"
 							  	+ "</div>"
@@ -271,7 +272,8 @@ OrderTab.prototype.renderServiceForms = function(){
 			$(".cls_orderMetadataCont, .cls_createEventRow").removeClass("d-none");
 		    $(".cls_curOrderName").val(_this.currentOrder[0].eventName);
 		    $(".cls_curOrderVenue").val(_this.currentOrder[0].eventVenue);
-		    $(".cls_curOrderDate").val(_this.currentOrder[0].eventDate);
+		    $("#id_orderDate").val(_this.currentOrder[0].eventDate);
+		    $('#id_orderDate').data("DateTimePicker").date(toDate(_this.currentOrder[0].eventDate));
 		    $(".cls_curOrderMobileNumber").val(_this.currentOrder[0].clientPhone);
 		    $(".cls_curOrderNotes").val(_this.currentOrder[0].clientNotes);
 		}
