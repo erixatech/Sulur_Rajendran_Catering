@@ -188,7 +188,7 @@
 								</div>
 							</div>
 					  		<div id="id_createRecipe" class="text-right col-5 mt-4 pt-2">
-								<a data-toggle="modal" data-target="#recipeModal" class="btn btn-primary btn-md mr-3 text-white cls_createRecipe">
+								<a data-toggle="modal" data-target="#recipeModal" class="btn btn-primary btn-md mr-3 text-white cls_createRecipe" data-backdrop="static" data-keyboard="false">
 						          <i class="fa fa-plus-circle" aria-hidden="true"></i> Create Recipe
 						        </a>
 						    </div>
@@ -212,7 +212,7 @@
 							</div>
 
 							<div id="id_createIngredient" class="text-right col-5 mt-4 pt-2">
-								<a class="btn btn-primary btn-md mr-3 text-white cls_createIngredient" data-toggle="modal" data-target="#ingredientModal">
+								<a class="btn btn-primary btn-md mr-3 text-white cls_createIngredient" data-toggle="modal" data-target="#ingredientModal" data-backdrop="static" data-keyboard="false">
 						          <i class="fa fa-plus-circle" aria-hidden="true"></i> Create Ingredient
 						        </a>
 						    </div>
@@ -524,7 +524,7 @@
 				        		if(result.nModified && result.nModified>0)
 				        		{
 									$("#successPopup").find('.modal-title').text("Ingredient Deleted Successfully");
-					        		$("#successPopup").modal('show');
+					        		$("#successPopup").modal({backdrop: 'static', keyboard: false});
 				        		}
 				        		else
 				        		{
@@ -567,7 +567,7 @@
 			        		if(result.nModified && result.nModified>0)
 			        		{
 								$("#successPopup").find('.modal-title').text("Recipe Deleted Successfully");
-				        		$("#successPopup").modal('show');
+				        		$("#successPopup").modal({backdrop: 'static', keyboard: false});
 			        		}
 			        		else
 			        		{

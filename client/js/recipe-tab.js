@@ -87,7 +87,7 @@ RecipeTab.prototype.renderRecipeByCategory = function(recipeCat, catagoryJson, i
 										+ "<label class='col-3'>" + catagoryJson[j].name +"</label>"
 										+ "<label class='col-3'>" + catagoryJson[j].tamilName +"</label>"
 										+ "<label class='col-3'>" + catagoryJson[j].headCount +"</label>"
-										+ "<label class='btn btn-primary btn-md mr-3 mb-0 col-1 text-center cls_editRecipe' idx='" + catagoryJson[j].id +"' data-toggle='modal' data-target='#recipeModal'>Edit</label>"
+										+ "<label class='btn btn-primary btn-md mr-3 mb-0 col-1 text-center cls_editRecipe' idx='" + catagoryJson[j].id +"' data-toggle='modal' data-target='#recipeModal' data-backdrop='static' data-keyboard='false'>Edit</label>"
 										+ "<label class='btn btn-secondary btn-md mr-3 mb-0 col-1 text-center cls_deleteRecipe' idx='" + catagoryJson[j].id +"' name='" + catagoryJson[j].name +"'>Delete</label>"
 									+ "</a>"
 					}
@@ -119,7 +119,7 @@ RecipeTab.prototype.renderSearchResults = function(searchResRecipe) {
 									+ "<label class='col-3'>" + searchResRecipe[j].tamilName +"</label>"
 									+ "<label class='col-1'>" + searchResRecipe[j].headCount +"</label>"
 									+ "<label class='col-2'>" + searchResRecipe[j].itemCategory +"</label>"
-									+ "<label class='btn btn-primary btn-md mr-3 mb-0 col-1 text-center cls_editRecipe' idx='" + searchResRecipe[j].id +"' data-toggle='modal' data-target='#recipeModal'>Edit</label>"
+									+ "<label class='btn btn-primary btn-md mr-3 mb-0 col-1 text-center cls_editRecipe' idx='" + searchResRecipe[j].id +"' data-toggle='modal' data-target='#recipeModal' data-backdrop='static' data-keyboard='false'>Edit</label>"
 									+ "<label class='btn btn-secondary btn-md mr-3 mb-0 col-1 text-center cls_deleteRecipe' idx='" + searchResRecipe[j].id +"' name='" + searchResRecipe[j].name +"'>Delete</label>"
 								+ "</a>";
 				}
@@ -412,7 +412,7 @@ RecipeTab.prototype.registerEvents = function() {
 			        		if(result.nModified && result.nModified>0)
 			        		{
 								$("#successPopup").find('.modal-title').text("Recipe Updated Successfully");
-			        			$("#successPopup").modal('show');
+			        			$("#successPopup").modal({backdrop: 'static', keyboard: false});
 				        	}
 			        		else
 			        		{
@@ -459,7 +459,7 @@ RecipeTab.prototype.registerEvents = function() {
 		        		if(result.nModified && result.nModified>0)
 		        		{
 							$("#successPopup").find('.modal-title').text("Recipe Created Successfully");
-		        			$("#successPopup").modal('show');
+		        			$("#successPopup").modal({backdrop: 'static', keyboard: false});
 			        	}
 		        		else
 		        		{

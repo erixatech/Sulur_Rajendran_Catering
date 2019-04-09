@@ -822,7 +822,7 @@ OrderTab.prototype.renderEvents = function() {
 			        	success: function(result){
 			        		hideLoading();
 							$successPopup.find('.modal-title').text("Order deleted successfully");
-			        		$successPopup.modal('show');
+			        		$successPopup.modal({backdrop: 'static', keyboard: false});
 			        		$confirmationPopup.modal('hide');
 			        		/*showLoading();		//not needed - success popup ok - will reload page
 			        		location.reload();*/
@@ -862,7 +862,7 @@ OrderTab.prototype.renderEvents = function() {
 			        	success: function(result){
 			        		hideLoading();
 							$successPopup.find('.modal-title').text("Event deleted successfully");
-			        		$successPopup.modal('show');
+			        		$successPopup.modal({backdrop: 'static', keyboard: false});
 			        		$confirmationPopup.modal('hide');
 			        		/*showLoading();		//not needed - success popup ok - will reload page
 			        		location.reload();*/
@@ -926,7 +926,7 @@ OrderTab.prototype.getOrderDataAndCreate = function(){
     	success: function(result){
     		hideLoading();
 			$("#successPopup").find('.modal-title').text("Order Created Successfully");
-    		$("#successPopup").modal('show');
+    		$("#successPopup").modal({backdrop: 'static', keyboard: false});
     		$("#successPopup").data('toRedirect','listservice_from_ordercreate');
     		$("#successPopup").data('orderIdToAppend',orderMetaData.orderId);
     		if(_this.isGeneratePLWithSave)
@@ -992,7 +992,7 @@ OrderTab.prototype.getOrderDataAndUpdate = function(orderId){
     	success: function(result){
     		hideLoading();
 			$("#successPopup").find('.modal-title').text("Order Updated Successfully");
-    		$("#successPopup").modal('show');
+    		$("#successPopup").modal({backdrop: 'static', keyboard: false});
     		$("#successPopup").data('toRedirect','listservice_from_orderupdate');
     		if(_this.isGeneratePLWithSave)
     		{
@@ -1054,7 +1054,7 @@ OrderTab.prototype.getServiceFormDataAndCreateAndUpdate = function(){
 	    	success: function(result){
 	    		hideLoading();
 				$("#successPopup").find('.modal-title').text("Event updated Successfully");
-	    		$("#successPopup").modal('show');
+	    		$("#successPopup").modal({backdrop: 'static', keyboard: false});
 	    		$("#successPopup").data('toRedirect','listservice');
 				//calculatePL(recipes);
 			},

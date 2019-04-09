@@ -73,7 +73,7 @@ IngredientTab.prototype.renderIngredientsByCategory = function(ingCat, categoryJ
 						renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ingredient_"+ categoryJson[j].id +"'>"
 										+ "<label class='col-4'>" + categoryJson[j].name +"</label>"
 										+ "<label class='col-4'>" + categoryJson[j].unit +"</label>"
-										+ "<label class='btn btn-primary btn-md mr-4 mb-0 col-1 text-center cls_editIngredient' idx='" + categoryJson[j].id +"' data-toggle='modal' data-target='#ingredientModal'>Edit</label>"
+										+ "<label class='btn btn-primary btn-md mr-4 mb-0 col-1 text-center cls_editIngredient' idx='" + categoryJson[j].id +"' data-toggle='modal' data-target='#ingredientModal' data-backdrop='static' data-keyboard='false'>Edit</label>"
 										+ "<label class='btn btn-secondary btn-md mb-0 col-1 text-center cls_deleteIngredient' idx='" + categoryJson[j].id +"' name='" + categoryJson[j].name +"'>Delete</label>"
 									+ "</a>";
 					}
@@ -98,7 +98,7 @@ IngredientTab.prototype.renderSearchResults = function(searchResIngredients) {
 									+ "<label class='col-4'>" + searchResIngredients[j].name +"</label>"
 									+ "<label class='col-2'>" + searchResIngredients[j].unit +"</label>"
 									+ "<label class='col-2'>" + searchResIngredients[j].category +"</label>"
-									+ "<label class='btn btn-primary btn-md mr-4 mb-0 col-1 text-center cls_editIngredient' idx='" + searchResIngredients[j].id +"' data-toggle='modal' data-target='#ingredientModal'>Edit</label>"
+									+ "<label class='btn btn-primary btn-md mr-4 mb-0 col-1 text-center cls_editIngredient' idx='" + searchResIngredients[j].id +"' data-toggle='modal' data-target='#ingredientModal' data-backdrop='static' data-keyboard='false'>Edit</label>"
 									+ "<label class='btn btn-secondary btn-md mb-0 col-1 text-center cls_deleteIngredient' idx='" + searchResIngredients[j].id +"' name='" + searchResIngredients[j].name +"'>Delete</label>"
 								+ "</a>";
 				}
@@ -202,7 +202,7 @@ IngredientTab.prototype.registerEvents = function() {
 			        		if(result.nModified && result.nModified>0)
 			        		{
 								$("#successPopup").find('.modal-title').text("Ingredient Updated Successfully");
-				        		$("#successPopup").modal('show');
+				        		$("#successPopup").modal({backdrop: 'static', keyboard: false});
 								//$('#ingredientModal .close').click();
 			        		}
 			        		else
@@ -247,7 +247,7 @@ IngredientTab.prototype.registerEvents = function() {
 		        		if(result.nModified && result.nModified>0)
 		        		{
 							$("#successPopup").find('.modal-title').text("Ingredient Created Successfully");
-		        			$("#successPopup").modal('show');
+		        			$("#successPopup").modal({backdrop: 'static', keyboard: false});
 			        	}
 		        		else
 		        		{
