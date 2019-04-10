@@ -87,7 +87,7 @@ OrderTab.prototype.render = function(){
 	    $('.cls_orderPageTitle').removeClass('d-none');
 	    $('.cls_orderPageTitle').text("Edit Event");
 	}
-	else if(_this.orderId && _this.orderId.length > 0){
+	/*else if(_this.orderId && _this.orderId.length > 0){
 		showLoading();
 		var cbk = function(){
 			if(_this.currentOrder && _this.currentOrder.length > 0){
@@ -102,7 +102,7 @@ OrderTab.prototype.render = function(){
 			}
 	    }
 	    _this.getOrderByIdFromDB(_this.orderId, cbk);
-	}
+	}*/
 	else{
 		_this.getOrderListFromDB();
 		$('.cls_orderPageTitle').text("Orders List");
@@ -139,20 +139,20 @@ OrderTab.prototype.renderOrderList = function(ordersJsonArr){
 			}
 			var curOrderObj = ordersJsonArr[i];
 			renderHtml += "<div class='card border-secondary mb-3 col-5 mx-4 cls_orderDetails' style='cursor:pointer' idx='"+curOrderObj.orderId+"'>"
-								+ "<h6 class='card-header text-success bg-transparent border-secondary text-center'>"+ curOrderObj.eventVenue +"</h6>"
+								+ "<h6 class='card-header text-success bg-transparent border-secondary text-center'>"+ curOrderObj.eventVenue +" - " + toDate(curOrderObj.eventDate).toShortFormat() + "</h6>"
 								+ "<div class='card-body text-secondary font-weight-bold'>"
-							 		+ "<div class='row'>"
-							   			+ "<div class='card-title cls_eventName col-6'>" + curOrderObj.eventName +"</div>"
-							    		+ "<div class='card-text cls_eventDate col-6 text-right'>"+ toDate(curOrderObj.eventDate).toShortFormat() +"</div>"
-							    	+ "</div>"
+							 		/*+ "<div class='row'>"
+							   			/*+ "<div class='card-title cls_eventName col-6'>" + curOrderObj.eventName +"</div>"
+							    		+ "<div class='card-text cls_eventDate col-6'>"+ toDate(curOrderObj.eventDate).toShortFormat() +"</div>"
+							    	+ "</div>"*/
 							 	   	+ "<div class='row'>"
 							    		+ "<div class='card-title cls_eventNotes col-6'>"+ curOrderObj.clientNotes.substring(0,50) +"</div>"
 							    		+ "<div class='card-text cls_contactNumber col-6 text-right'>"+ curOrderObj.clientPhone +"</div>"
 							    	+ "</div>"
 							  	+ "</div>"
-							  	+ "<div class='card-footer text-center bg-light border-secondary row p-0'>"
-							  		+ "<label class='col-6 border-right border-secondary m-0 p-2 cls_editOrder' style='cursor:pointer'>Edit</label>"
-							  		+ "<label class='col-6 m-0 p-2 cls_deleteOrder'  data-idx="+curOrderObj.orderId+" data-name='"+curOrderObj.eventName+"' style='cursor:pointer'>Delete</label>"
+							  	+ "<div class='card-footer text-center bg-transparent border-secondary p-0'>"
+							  		/*+ "<label class='col-6 border-right border-secondary m-0 p-2 cls_editOrder' style='cursor:pointer'>Edit</label>"*/
+							  		+ "<label class='text-center m-0 p-2 cls_deleteOrder'  data-idx="+curOrderObj.orderId+" data-name='"+curOrderObj.eventVenue + " - " + toDate(curOrderObj.eventDate).toShortFormat() +"' style='cursor:pointer'>Delete</label>"
 							  	+ "</div>"
 							+ "</div>";
 			if(i%2 != 0){
@@ -167,7 +167,7 @@ OrderTab.prototype.renderOrderList = function(ordersJsonArr){
 	}
 	return renderHtml;
 };
-OrderTab.prototype.renderCreateOrUpdateOrder = function(orderObj){
+/*OrderTab.prototype.renderCreateOrUpdateOrder = function(orderObj){
 	var renderHtml = [];
 	$("#id_createOrder").attr('hidden', true);
 	var isUpdate = (orderObj && !$.isEmptyObject(orderObj)) ? true : false;
@@ -232,7 +232,7 @@ OrderTab.prototype.renderCreateOrUpdateOrder = function(orderObj){
 		+ '</form>';
 
 		return renderHtml;
-};
+};*/
 OrderTab.prototype.setOrderbyId = function(orders) {
 	var _this = this;
 	_this.ordersList = {};
@@ -270,7 +270,7 @@ OrderTab.prototype.renderServiceForms = function(){
 		if(_this.currentOrder && !$.isEmptyObject(_this.currentOrder)) {
 			$(".cls_orderMetadataCont, .cls_orderBtnsCont").removeClass("d-none");
 			$(".cls_orderMetadataCont, .cls_createEventRow").removeClass("d-none");
-		    $(".cls_curOrderName").val(_this.currentOrder[0].eventName);
+		    /*$(".cls_curOrderName").val(_this.currentOrder[0].eventName);*/
 		    $(".cls_curOrderVenue").val(_this.currentOrder[0].eventVenue);
 		    $("#id_orderDate").val(_this.currentOrder[0].eventDate);
 		    $('#id_orderDate').data("DateTimePicker").date(toDate(_this.currentOrder[0].eventDate));
@@ -718,14 +718,12 @@ OrderTab.prototype.renderEvents = function() {
 		});
 
 		$(document).on("click", "#id_deleteEvent", function(){
-			$(this).parents(".cls_orderEvent").remove();
-			if(!($(".cls_orderEvent_last") && $(".cls_orderEvent_last").length > 0)){
-				if($(".cls_orderEvent").length==0)
-				{
-					$(".cls_eventAction").addClass("d-none");
-					$(".cls_noDataFound").removeClass("d-none");
-				}
-			}
+			event.stopPropagation();
+
+    	    $("#confirmationPopup").find('.modal-title').text("Are you sure to delete this Event?");
+			$("#confirmationPopup").modal('show');
+			$("#confirmationPopup").data("eleDelete", this);
+			$("#confirmationPopup").data("module", "Event");
 		});
 
 		$(document).on("change", ".cls_receipeCategory_sf", function(){
@@ -841,45 +839,16 @@ OrderTab.prototype.renderEvents = function() {
 			        $confirmationPopup.modal('hide');
 			    }
 			}
-			else if($confirmationPopup.data("module") == "Service"){
- 				var serviceId = $confirmationPopup.data("idToDelete");
- 				var serviceForms = _this.currentOrder && _this.currentOrder[0] && _this.currentOrder[0].serviceForms;
- 				for(var i=0; i < serviceForms.length; i++){
- 					if(serviceForms[i].serviceId == serviceId){
- 						serviceForms.splice(i, 1);
- 					}
- 				}
- 				var serviceObj = {};
- 				serviceObj.serviceForms = serviceForms;
- 				serviceObj.orderId = _this.currentOrder[0].orderId;
-			    if(serviceId){
-			    	showLoading();
-			       $.ajax({
-			        	url: "/updateOrder",
-		            	type: "post",
-		            	contentType: 'application/json',
-		            	data: JSON.stringify(serviceObj),
-			        	success: function(result){
-			        		hideLoading();
-							$successPopup.find('.modal-title').text("Event deleted successfully");
-			        		$successPopup.modal({backdrop: 'static', keyboard: false});
-			        		$confirmationPopup.modal('hide');
-			        		/*showLoading();		//not needed - success popup ok - will reload page
-			        		location.reload();*/
-						},
-						error: function(){
-							hideLoading();
-						    $errModalTitle.text('Failed to delete Service. Please Try again later.');
-			        		$errorPopup.modal('show');
-			        		$confirmationPopup.modal('hide');
-						}
-					});
-			    }
-			    else{
-			    	$errModalTitle.text('Failed to delete Service. Please Try again later.');
-			        $errorPopup.modal('show');
-			        $confirmationPopup.modal('hide');
-			    }
+			else if($confirmationPopup.data("module") == "Event"){
+				var eleDelete = $confirmationPopup.data("eleDelete");
+ 				$(eleDelete).parents(".cls_orderEvent").remove();
+				if(!($(".cls_orderEvent_last") && $(".cls_orderEvent_last").length > 0)){
+					if($(".cls_orderEvent").length==0){
+						$(".cls_eventAction").addClass("d-none");
+						$(".cls_noDataFound").removeClass("d-none");
+					}
+				}
+				$confirmationPopup.modal('hide');
 			}
 	    });
 		
