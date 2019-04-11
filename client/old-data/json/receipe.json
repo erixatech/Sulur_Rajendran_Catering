@@ -1,0 +1,71 @@
+﻿{
+    "Recipe" : [ 
+        {
+            "id" : 1,
+            "name" : "Samosa",
+            "tamilName" : "சமோசா",
+            "itemCategory" : "Snacks",
+            "headCount" : "150",
+            "Ingredients" : [ 
+                {
+                    "category" : "Maligai",
+                    "name" : "வடைபருப்பு",
+                    "id" : 12,
+                    "quantity" : "5",
+                    "unit" : "kg"
+                }, 
+                {
+                    "category" : "KaaiKanigal",
+                    "name" : "தேங்காய் (வெள்ளைக்காய் பெரியது)",
+                    "id" : 132,
+                    "quantity" : "20",
+                    "unit" : "nos"
+                }, 
+                {
+                    "category" : "Extras",
+                    "name" : "விக்னேஷ் சில்லி மசாலா",
+                    "id" : 191,
+                    "quantity" : "150",
+                    "unit" : "gram"
+                }, 
+                {
+                    "category" : "Suppliments",
+                    "name" : "டிஸ்யூ பேப்பர்",
+                    "id" : 220,
+                    "quantity" : "3",
+                    "unit" : "pocket"
+                }
+            ]
+        }, 
+        {
+            "id" : 2,
+            "name" : "Sweet boli",
+            "tamilName" : "இனிப்பு போலி",
+            "itemCategory" : "Sweet",
+            "headCount" : "500",
+            "Ingredients" : [ 
+                {
+                    "category" : "Maligai",
+                    "name" : "பருப்பு ஒப்புட்டு",
+                    "id" : 121,
+                    "quantity" : "150",
+                    "unit" : "nos"
+                }, 
+                {
+                    "category" : "KaaiKanigal",
+                    "name" : "தேங்காய் (வெள்ளைக்காய் பெரியது)",
+                    "id" : 132,
+                    "quantity" : "200",
+                    "unit" : "nos"
+                }, 
+                {
+                    "category" : "Extras",
+                    "name" : "சிவசக்தி ஸ்பெஷல் நெய் (டின்)",
+                    "id" : 190,
+                    "quantity" : "20",
+                    "unit" : "nos"
+                }
+            ]
+        }
+    ]
+}

@@ -352,7 +352,7 @@ OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
 		+ '  	<div class="row mb-5">'
 		+ '  		<div class="col-4">'
 		+ '    			<label for="serviceFormName">Event Session</label>'
-		+ '    			<select class="form-control" id="id_session">'
+		+ '    			<select class="form-control" id="id_session"' + (isUpdate ? "disabled" : "") + '>'
 		+ '                 <option value="" '+ ( !isUpdate  ? "selected" : "")+ '> Select </option>'
 		+ '                 <option value="Morning" '+ ((isUpdate && serviceObj.session == "Morning")  ? "selected" : "")+ '> Morning </option>'
 		+ '                 <option value="Afternoon" '+ ((isUpdate && serviceObj.session == "Afternoon")  ? "selected" : "")+ '> Afternoon </option>'
