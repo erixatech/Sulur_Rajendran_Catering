@@ -38,6 +38,7 @@
 		    var recipeJson = {};
 		    var recipeNames = {};
 		    var ordersJsonMain = {};
+		    var supplimentIds = [ 118, 119, 120, 121, 126, 127, 128, 129, 130, 131, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 199, 200, 201, 202, 203, 204, 211, 212, 213 ];
         </script> 
      </head>
 	<body>
@@ -157,6 +158,44 @@
 					          		<i class="fa fa-plus-circle" aria-hidden="true"></i> Create New Event
     							</a>
     						</span>
+						</div>
+						<div class="row cls_supplimentsContainer pb-5 ml-2">
+							<h5 class="pb-3"><u>Add Order Level Suppliments</u></h5>
+						    <div class="orderLevelIngredientMap col-12">
+							    <div class="row cls_orderLevelIngredientMapRow col-8">
+								    <div class="col-6">
+									  	<label for="orderLevelIngredientName">Name</label>
+									  	<input class="form-control cls_orderLevelIngredientName_recipe" list="id_orderLevelIngredientName_recipe" name="id_orderLevelIngredientName_recipe">
+					                    <datalist class="cls_dl_orderLevelIngredientName_recipe" id="id_orderLevelIngredientName_recipe" name="orderLevelIngredientName"></datalist>
+				                    </div>
+				                    <div class="cls_onehalfcol">
+								      <label for="orderLevelQunatity">Quantity</label>
+								      <input type="text" class="form-control cls_orderLevelIngredientQunatity_recipe" required id="id_orderLevelIngredientQunatity_recipe" placeholder="Enter Quantity" name="orderLevelQunatity">
+								    </div>
+								    <div class="cls_onehalfcol">
+								      <label for="orderLevelIngredientFraction">Fraction</label>
+								      <select class="form-control cls_orderLevelIngredientFraction_recipe" id="id_orderLevelIngredientFraction_recipe" name="orderLevelIngredientFraction">
+								      	<option></option>
+								      	<option>&frac14;</option>
+								      	<option>&frac12;</option>
+								      	<option>&frac34;</option>
+								      </select>
+								    </div>
+				                    <div class="col-2">
+									  	<label for="orderLevelIngredientUnit">Unit</label>
+					                    <select class="form-control cls_orderLevelIngredientUnit_recipe" id="id_orderLevelIngredientUnit_recipe" name="orderLevelIngredientUnit"></select>
+				                    </div>
+								    <div class="col-1">
+								    </div>
+			                    </div>
+							</div>
+							<div class="row col-9">
+						        <div class="col text-right">
+						        	<a class="btn btn-success btn-md mt-2 text-white cls_orderLevelAddIngredient">
+							         	<i class="fa fa-plus-circle" aria-hidden="true"></i> Add
+							        </a>
+						    	</div>
+						    </div>
 						</div>
 						<div class="row cls_orderBtnsCont d-none">
 							<div class='text-left col-6'>

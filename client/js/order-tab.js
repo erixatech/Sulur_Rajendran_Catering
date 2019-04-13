@@ -594,6 +594,36 @@ OrderTab.prototype.generatePLFromOrder = function() {
 		$errorPopup.modal('show');
 	}
 };
+OrderTab.prototype.getOrderLevelIngredientMapRow = function() {
+	var _this = this;
+	var renderHtmlMapRow = [];
+	
+	renderHtmlMapRow += '<div class="row cls_orderLevelIngredientMapRow col-8 pt-5">'
+						    + '<div class="col-6">'
+							  	+ '<input class="form-control cls_orderLevelIngredientName_recipe" list="id_orderLevelIngredientName_recipe" name="id_orderLevelIngredientName_recipe">'
+			                    + '<datalist class="cls_dl_orderLevelIngredientName_recipe" id="id_orderLevelIngredientName_recipe" name="orderLevelIngredientName"></datalist>'
+		                    + '</div>'
+		                    + '<div class="cls_onehalfcol">'
+						      + '<input type="text" class="form-control cls_orderLevelIngredientQunatity_recipe" required id="id_orderLevelIngredientQunatity_recipe" placeholder="Enter Quantity" name="orderLevelQunatity">'
+						    + '</div>'
+						    + '<div class="cls_onehalfcol">'
+						      + '<select class="form-control cls_orderLevelIngredientFraction_recipe" id="id_orderLevelIngredientFraction_recipe" name="orderLevelIngredientFraction">'
+						      	+ '<option></option>'
+						      	+ '<option>&frac14;</option>'
+						      	+ '<option>&frac12;</option>'
+						      	+ '<option>&frac34;</option>'
+						      + '</select>'
+						    + '</div>'
+		                    + '<div class="col-2">'
+							  	+ '<select class="form-control cls_orderLevelIngredientUnit_recipe" id="id_orderLevelIngredientUnit_recipe" name="orderLevelIngredientUnit"></select>'
+		                    + '</div>'	
+						    + '<div class="col-1">'
+							+    ($('.cls_ingredientMapRow').length>0 ? '<i class="fa fa-minus-circle cls_removeOrderLevelCurrentIngredientMap" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>' : '')
+						    + '</div>'
+	                    + '</div>';
+			
+	return renderHtmlMapRow;
+};
 OrderTab.prototype.renderEvents = function() {
 	var _this = this;
 	
@@ -798,6 +828,17 @@ OrderTab.prototype.renderEvents = function() {
     			$("#confirmationPopup").data("idToDelete", idx);
     			$("#confirmationPopup").data("module", "Service");
 	        }
+		});
+
+		$(document).on("click", ".cls_orderLevelAddIngredient", function(){
+			var elemToAdd = $(_this.getOrderLevelIngredientMapRow());
+			cloneDOM(elemToAdd, $('.orderLevelIngredientMap'));
+			addOptionsToSelectViaElem(orderLevelIngredientUnit, $('.cls_orderLevelIngredientUnit_recipe')[$('.cls_orderLevelIngredientUnit_recipe').length-1]);
+			addOptionsToSelectViaElemHtml(orderLevelIngredientFraction, $('.cls_orderLevelIngredientFraction_recipe')[$('.cls_orderLevelIngredientFraction_recipe').length-1]);
+		});
+
+		$(document).on("click", ".cls_removeOrderLevelCurrentIngredientMap", function(){
+			$(this).parents('.cls_orderLevelIngredientMapRow').remove();
 		});
 	
 		$(".cls_confirmPopupDelete").click(function() {
