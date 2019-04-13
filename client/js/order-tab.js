@@ -618,7 +618,7 @@ OrderTab.prototype.getOrderLevelIngredientMapRow = function() {
 							  	+ '<select class="form-control cls_orderLevelIngredientUnit_recipe" id="id_orderLevelIngredientUnit_recipe" name="orderLevelIngredientUnit"></select>'
 		                    + '</div>'	
 						    + '<div class="col-1">'
-							+    ($('.cls_ingredientMapRow').length>0 ? '<i class="fa fa-minus-circle cls_removeOrderLevelCurrentIngredientMap" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>' : '')
+							+    ($('.cls_ingredientMapRow').length>0 ? '<i class="fa fa-minus-circle cls_removeOrderLevelCurrentIngredientMap mt-2" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>' : '')
 						    + '</div>'
 	                    + '</div>';
 			
