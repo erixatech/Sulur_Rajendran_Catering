@@ -396,6 +396,22 @@ function getCategoriesBySession(session) {
 	return toRet;
 }
 
+function getSupplimentNames() {
+	var toRet = null;
+	var tempArr = [];
+	$.each(supplimentIds, function( index, supplimentId ) {
+		var currIng = getIngredientById(ingredientJson, supplimentId);
+		if(currIng && currIng.name) {
+			tempArr.push(currIng.name);
+		}
+	});
+	if(tempArr.length>0)
+	{
+		toRet = tempArr;
+	}
+	return toRet;
+}
+
 function getNextId(jsonToFind, module) {
 	var highestId = 0;
 	if(module == "Ingredient")
