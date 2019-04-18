@@ -593,9 +593,9 @@ OrderTab.prototype.generatePLFromOrder = function() {
         setTimeout(function(){
             var plWindow3= window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Extras");
         }, 200);
-        setTimeout(function(){
+        /*setTimeout(function(){
             var plWindow4 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Suppliments");
-        }, 300);
+        }, 300);*/
 	}
 	else if(_this.currentOrder && _this.currentOrder[0])
 	{

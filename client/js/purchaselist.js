@@ -71,6 +71,42 @@ renderPL.prototype.calculatePL = function(){
         }
     }
 
+    for(var sup = 0; sup < _this.orderToParse.suppliments.length; sup++)
+    {
+        var currIngItem = _this.orderToParse.suppliments[sup];
+        var qtyToAdd = currIngItem.qty;
+        var unitToAdd = currIngItem.unit;
+
+        if(unitToAdd == "kg")
+        {
+            qtyToAdd = qtyToAdd * 1000;
+            unitToAdd = "gram";
+        }
+        else if(unitToAdd == "ltr")
+        {
+            qtyToAdd = qtyToAdd * 1000;
+            unitToAdd = "ml";
+        }
+        else if(unitToAdd == "dozen")
+        {
+            qtyToAdd = qtyToAdd * 12;
+            unitToAdd = "nos";
+        }
+
+        var currIngObj = getIngredientById(ingredientJson, currIngItem.id);
+        var ingItemForPL = {"name" : currIngObj.name, "quantity" : qtyToAdd, "unit" : unitToAdd};
+        var ingItemIndexInList = isAlreadyPresentInPL(ingItemForPL, PLToGenerate);
+
+        if(ingItemIndexInList != -1)
+        {
+            PLToGenerate[ingItemIndexInList].quantity = Number(PLToGenerate[ingItemIndexInList].quantity) + Number(qtyToAdd);
+        }
+        else
+        {
+            PLToGenerate[PLToGenerate.length] = ingItemForPL;
+        }
+    }
+
     PLToGenerate = incByOnePrec(PLToGenerate);
     PLToGenerate = unitConversion(PLToGenerate);
     PLToGenerate = roundOffPL(PLToGenerate);
