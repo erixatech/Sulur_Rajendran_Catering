@@ -294,6 +294,7 @@ OrderTab.prototype.renderServiceForms = function(){
 		{
 			var mapDataLists = $('.cls_dl_orderLevelIngredientName_recipe');
 			addOptionsToDatalistViaElem(getSupplimentNames(), mapDataLists[mapDataLists.length-1]);
+			_this.renderSuppimentsListForOrderEdit(_this.currentOrder[0].suppliments);
 		}
 		_this.minimiseEmptyRecipeCategories();
 	}
@@ -664,6 +665,40 @@ OrderTab.prototype.renderInitialSuppimentsList = function() {
 		}
 	});
 };
+OrderTab.prototype.renderSuppimentsListForOrderEdit = function(supplimentsArr) {
+	var _this = this;
+	if(supplimentsArr && supplimentsArr.length>0)
+	{
+		$.each(supplimentsArr, function( index, supplimentsObj ) {
+			var currIng = getIngredientById(ingredientJson, supplimentsObj.id);
+			var currMapNameField = $($('.cls_orderLevelIngredientName_recipe')[index]);
+			if(currMapNameField.length>0)
+			{
+				var ingredientUnits = getIngredientUnitsByName(ingredientJson, currIng.name);
+				var currQtyWithoutFrac = getQtyWithoutDecimal(supplimentsObj.qty);
+				var currFrac = getFractionFromQty(supplimentsObj.qty);
+				var qtyElem = currMapNameField.closest('.cls_orderLevelIngredientMapRow').find('.cls_orderLevelIngredientQunatity_recipe')[0];
+				var fracElem = currMapNameField.closest('.cls_orderLevelIngredientMapRow').find('.cls_orderLevelIngredientFraction_recipe')[0];
+				var unitsElem = currMapNameField.closest('.cls_orderLevelIngredientMapRow').find('.cls_orderLevelIngredientUnit_recipe')[0];
+
+				currMapNameField.val(currIng.name);			
+				currMapNameField.closest('.cls_orderLevelIngredientMapRow').find(".cls_orderLevelIngredientUnit_recipe option").remove();
+				addOptionsToSelectViaElem(ingredientUnits, unitsElem);
+				$(qtyElem).val(currQtyWithoutFrac);
+				if(currFrac.length>0)
+				{
+					$(fracElem).val(currFrac);
+				}
+				$(unitsElem).val(supplimentsObj.unit);
+
+				if(index<supplimentsArr.length-1)
+				{
+					_this.addOrderLevelIngMapRow();
+				}
+			}
+		});
+	}
+};
 OrderTab.prototype.renderEvents = function() {
 	var _this = this;
 	
@@ -971,6 +1006,7 @@ OrderTab.prototype.getOrderDataAndCreate = function(){
 	orderMetaData.eventVenue = $("#id_orderVenue").val();
 	orderMetaData.clientNotes = $("#id_orderNotes").val();
 	orderMetaData.serviceForms = _this.getEventsData();
+	orderMetaData.suppliments = _this.getSupplimentsData();
 
 	$.ajax({
     	url: "/createOrder",
@@ -1021,8 +1057,32 @@ OrderTab.prototype.getEventsData = function(){
 		serviceForms.recipes = recipes;
 		eventsArray.push(serviceForms);
 	});
-	return eventsArray;
-	
+	return eventsArray;	
+}
+OrderTab.prototype.getSupplimentsData = function(){
+	var orderLevelSupplimentsArray = [];
+	$(".cls_orderLevelIngredientMapRow").each(function(index, element) {		
+		var currSuppliment = {};
+		var currSupplimentId;
+		var currSupplimentQty;
+		var currSupplimentUnit;
+
+		var currSupplimentName = $(".cls_orderLevelIngredientName_recipe", element).val();
+		var currSupplimentQtyWithoutFrac = $(".cls_orderLevelIngredientQunatity_recipe", element).val();
+		var currSupplimentFrac = $(".cls_orderLevelIngredientFraction_recipe", element).val();
+
+		currSupplimentId = getSupplimentIdByName(supplimentIds, currSupplimentName);
+		currSupplimentQty = (currSupplimentFrac && currSupplimentFrac.length>0) ? getQtyWithDecimalFraction(currSupplimentQtyWithoutFrac, currSupplimentFrac) : currSupplimentQtyWithoutFrac;
+		currSupplimentQty = Number(currSupplimentQty);
+		currSupplimentUnit = $(".cls_orderLevelIngredientUnit_recipe", element).val();
+
+		currSuppliment.id = currSupplimentId;
+		currSuppliment.qty = currSupplimentQty;
+		currSuppliment.unit = currSupplimentUnit;
+
+		orderLevelSupplimentsArray.push(currSuppliment);
+	});
+	return orderLevelSupplimentsArray;
 }
 OrderTab.prototype.getOrderDataAndUpdate = function(orderId){
 	var _this= this;
@@ -1036,7 +1096,7 @@ OrderTab.prototype.getOrderDataAndUpdate = function(orderId){
 	orderMetaData.eventVenue = $("#id_orderVenue").val();
 	orderMetaData.clientNotes = $("#id_orderNotes").val();
 	orderMetaData.serviceForms = _this.getEventsData();
-	
+	orderMetaData.suppliments = _this.getSupplimentsData();
 
 	$.ajax({
     	url: "/updateOrder",
