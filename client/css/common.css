@@ -33,6 +33,15 @@ input, select, button, textarea{
     padding-left: 15px;
 }
 
+.cls_twoshortcol{
+	width: 14.5% !important;
+	position: relative;
+	width: 100%;
+	min-height: 1px;
+	padding-right: 15px;
+	padding-left: 15px;
+}
+
 datalist.cls_dl_ingredientName_recipe{
 	display: none;
 }
