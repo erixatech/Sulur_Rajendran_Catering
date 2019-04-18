@@ -302,10 +302,10 @@ renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
             renderHtml += "<a class='mx-0 px-0 row'>"
         }
         renderHtml += "<div class='list-group-item list-group-item-action cls_ingredientCont col-6 py-2 px-0 m-0'>"
-                        + "<span class='col-1 px-0 mx-0 cls_rowIndex'>"+Number(j+1)+" . </span>"
-                        + "<span><input type='text' class='col-7 form-control px-1' name='name' value='"+itemsToRender[j].name+"' style='display:inline'></span>"
-                        + "<span><input type='text' class='mx-2 cls_twoshortcol form-control px-1' name='quantity' value='"+_this.getQtyToRender(itemsToRender[j].quantity)+"' style='display:inline'></span>"
-                        + "<span><input type='text' class='cls_onehalfcol form-control px-1' name='unit' value='"+itemsToRender[j].unit+"' style='display:inline'></span>"
+                        + "<span class='col-1 px-0 mx-0 cls_rowIndex font-weight-bold'>"+Number(j+1)+" . </span>"
+                        + "<span><input type='text' class='col-7 form-control px-1 font-weight-bold' name='name' value='"+itemsToRender[j].name+"' style='display:inline'></span>"
+                        + "<span><input type='text' class='mx-2 cls_twoshortcol form-control px-1 font-weight-bold' name='quantity' value='"+_this.getQtyToRender(itemsToRender[j].quantity)+"' style='display:inline'></span>"
+                        + "<span><input type='text' class='cls_onehalfcol form-control px-1 font-weight-bold' name='unit' value='"+itemsToRender[j].unit+"' style='display:inline'></span>"
                         + "<span class='col-1 p-0 m-0'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
                     + "</div>"
         if(j%2 == 1)
