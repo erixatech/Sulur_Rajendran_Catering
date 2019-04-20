@@ -913,8 +913,35 @@ OrderTab.prototype.renderEvents = function() {
 			url = addQueryParamToUrl(url, 'listServiceForms', 'true');
 			window.location.href = url;
 		});
+		$(document).on("click", "#id_showOrderMenuList", function(){
+			 var eventsArray = _this.getEventsData();
+			 var recipeObj = _this.getAllRecipeDetails(eventsArray);
+			 localStorage.setItem('recipes', JSON.stringify(recipeObj));
+			 window.open("menulist.html");
+		});
 	});
 	
+};
+OrderTab.prototype.getAllRecipeDetails = function(eventsArray){
+
+	var sessionTitle;
+	var recipe;
+	var recipeList = [];
+	var recipeDetails = {};
+
+	for(var i=0; i<eventsArray.length; i++){
+		sessionTitle = toDate(eventsArray[i].sessionDateTime).toShortFormat() + " - " + eventsArray[i].session;
+		recipeList = [];
+		for(var j=0; j<eventsArray[i].recipes.length; j++){
+			var recipeObj = {};
+			recipe = getRecipeObjById(recipeJson, eventsArray[i].recipes[j].id);
+			recipeObj.name = recipe.name;
+			recipeObj.count = eventsArray[i].recipes[j].count;
+			recipeList.push(recipeObj);
+		}
+		recipeDetails[ sessionTitle ] = recipeList;
+	}
+	return recipeDetails;
 };
 OrderTab.prototype.getOrderDataAndCreate = function(){
 	var _this= this;
