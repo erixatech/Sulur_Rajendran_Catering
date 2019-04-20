@@ -19,8 +19,8 @@ MenuList.prototype.render = function(){
 		var recipes = eventsArray[events[i]];
 		for(var j=0; j<recipes.length; j++){
 			renderHtml +=   '<div class="row border-bottom">'
-						  +    '<h6 class="col-6 font-weight-bold"> ' + recipes[j].name + ' </h6>'
-						  +    '<h6 class="col-6 font-weight-bold"> ' + recipes[j].count+ ' </h6>'
+						  +    '<h6 class="col-10 font-weight-bold"> ' + recipes[j].name + ' </h6>'
+						  +    '<h6 class="col-2 font-weight-bold"> ' + recipes[j].count+ ' </h6>'
 						  + '</div>'
 		}		
 	    renderHtml+= '</div>'
