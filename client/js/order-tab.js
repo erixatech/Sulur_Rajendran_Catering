@@ -57,6 +57,13 @@ OrderTab.prototype.render = function(){
 		$(".cls_orderMetadataCont, .cls_orderBtnsCont").removeClass("d-none");
 		$(".cls_orderMetadataCont, .cls_createEventRow").removeClass("d-none");
 		$(".backFromServiceList").removeClass("d-none");
+		$(".cls_supplimentsContainer").removeClass("d-none");
+		if($('.cls_dl_orderLevelIngredientName_recipe') && $('.cls_dl_orderLevelIngredientName_recipe').length>0)
+		{
+			var mapDataLists = $('.cls_dl_orderLevelIngredientName_recipe');
+			addOptionsToDatalistViaElem(getSupplimentNames(), mapDataLists[mapDataLists.length-1]);
+			_this.renderInitialSuppimentsList();
+		}
 		$(".cls_orderDataCont").append(_this.renderServiceFormCreateOrUpdate(null, true));
 		$("#id_createOrder").addClass("d-none");
 		//$(".backFromServiceFormEdit").removeClass("d-none");
@@ -282,6 +289,13 @@ OrderTab.prototype.renderServiceForms = function(){
 		registerDatepickerEvent();
 		$(".backFromServiceList").removeClass("d-none");
 		$(".cls_serviceListTitle").removeClass("d-none");
+		$(".cls_supplimentsContainer").removeClass("d-none");
+		if($('.cls_dl_orderLevelIngredientName_recipe') && $('.cls_dl_orderLevelIngredientName_recipe').length>0)
+		{
+			var mapDataLists = $('.cls_dl_orderLevelIngredientName_recipe');
+			addOptionsToDatalistViaElem(getSupplimentNames(), mapDataLists[mapDataLists.length-1]);
+			_this.renderSuppimentsListForOrderEdit(_this.currentOrder[0].suppliments);
+		}
 		_this.minimiseEmptyRecipeCategories();
 	}
 	if(!_this.currentOrder){
@@ -579,9 +593,9 @@ OrderTab.prototype.generatePLFromOrder = function() {
         setTimeout(function(){
             var plWindow3= window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Extras");
         }, 200);
-        setTimeout(function(){
+        /*setTimeout(function(){
             var plWindow4 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Suppliments");
-        }, 300);
+        }, 300);*/
 	}
 	else if(_this.currentOrder && _this.currentOrder[0])
 	{
@@ -600,8 +614,8 @@ OrderTab.prototype.getOrderLevelIngredientMapRow = function() {
 	
 	renderHtmlMapRow += '<div class="row cls_orderLevelIngredientMapRow col-8 pt-5">'
 						    + '<div class="col-6">'
-							  	+ '<input class="form-control cls_orderLevelIngredientName_recipe" list="id_orderLevelIngredientName_recipe" name="id_orderLevelIngredientName_recipe">'
-			                    + '<datalist class="cls_dl_orderLevelIngredientName_recipe" id="id_orderLevelIngredientName_recipe" name="orderLevelIngredientName"></datalist>'
+							  	+ '<input class="form-control cls_orderLevelIngredientName_recipe" list="id_orderLevelIngredientName_recipe_'+$('.cls_orderLevelIngredientName_recipe').length+'" name="id_orderLevelIngredientName_recipe">'
+			                    + '<datalist class="cls_dl_orderLevelIngredientName_recipe" id="id_orderLevelIngredientName_recipe_'+$('.cls_orderLevelIngredientName_recipe').length+'" name="orderLevelIngredientName"></datalist>'
 		                    + '</div>'
 		                    + '<div class="cls_onehalfcol">'
 						      + '<input type="text" class="form-control cls_orderLevelIngredientQunatity_recipe" required id="id_orderLevelIngredientQunatity_recipe" placeholder="Enter Quantity" name="orderLevelQunatity">'
@@ -618,11 +632,72 @@ OrderTab.prototype.getOrderLevelIngredientMapRow = function() {
 							  	+ '<select class="form-control cls_orderLevelIngredientUnit_recipe" id="id_orderLevelIngredientUnit_recipe" name="orderLevelIngredientUnit"></select>'
 		                    + '</div>'	
 						    + '<div class="col-1">'
-							+    ($('.cls_ingredientMapRow').length>0 ? '<i class="fa fa-minus-circle cls_removeOrderLevelCurrentIngredientMap" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>' : '')
+							+    ($('.cls_ingredientMapRow').length>0 ? '<i class="fa fa-minus-circle cls_removeOrderLevelCurrentIngredientMap mt-2" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>' : '')
 						    + '</div>'
 	                    + '</div>';
 			
 	return renderHtmlMapRow;
+};
+OrderTab.prototype.addOrderLevelIngMapRow = function() {
+	var _this = this;
+	var elemToAdd = $(_this.getOrderLevelIngredientMapRow());
+	cloneDOM(elemToAdd, $('.orderLevelIngredientMap'));
+	var mapDataLists = $('.cls_supplimentsContainer').find('.cls_dl_orderLevelIngredientName_recipe');
+	addOptionsToDatalistViaElem(getSupplimentNames(), mapDataLists[mapDataLists.length-1]);
+	/*addOptionsToSelectViaElem(orderLevelIngredientUnit, $('.cls_orderLevelIngredientUnit_recipe')[$('.cls_orderLevelIngredientUnit_recipe').length-1]);
+	addOptionsToSelectViaElemHtml(orderLevelIngredientFraction, $('.cls_orderLevelIngredientFraction_recipe')[$('.cls_orderLevelIngredientFraction_recipe').length-1]);*/
+};
+OrderTab.prototype.renderInitialSuppimentsList = function() {
+	var _this = this;
+	$.each(supplimentIds, function( index, supplimentId ) {
+		var currIng = getIngredientById(ingredientJson, supplimentId);
+		var currMapNameField = $($('.cls_orderLevelIngredientName_recipe')[index]);
+		if(currMapNameField.length>0)
+		{
+			currMapNameField.val(currIng.name);
+			var ingredientUnits = getIngredientUnitsByName(ingredientJson, currIng.name);
+			currMapNameField.closest('.cls_orderLevelIngredientMapRow').find(".cls_orderLevelIngredientUnit_recipe option").remove();
+			addOptionsToSelectViaElem(ingredientUnits, currMapNameField.closest('.cls_orderLevelIngredientMapRow').find('.cls_orderLevelIngredientUnit_recipe')[0]);
+			if(index<supplimentIds.length-1)
+			{
+				_this.addOrderLevelIngMapRow();
+			}
+		}
+	});
+};
+OrderTab.prototype.renderSuppimentsListForOrderEdit = function(supplimentsArr) {
+	var _this = this;
+	if(supplimentsArr && supplimentsArr.length>0)
+	{
+		$.each(supplimentsArr, function( index, supplimentsObj ) {
+			var currIng = getIngredientById(ingredientJson, supplimentsObj.id);
+			var currMapNameField = $($('.cls_orderLevelIngredientName_recipe')[index]);
+			if(currMapNameField.length>0)
+			{
+				var ingredientUnits = getIngredientUnitsByName(ingredientJson, currIng.name);
+				var currQtyWithoutFrac = getQtyWithoutDecimal(supplimentsObj.qty);
+				var currFrac = getFractionFromQty(supplimentsObj.qty);
+				var qtyElem = currMapNameField.closest('.cls_orderLevelIngredientMapRow').find('.cls_orderLevelIngredientQunatity_recipe')[0];
+				var fracElem = currMapNameField.closest('.cls_orderLevelIngredientMapRow').find('.cls_orderLevelIngredientFraction_recipe')[0];
+				var unitsElem = currMapNameField.closest('.cls_orderLevelIngredientMapRow').find('.cls_orderLevelIngredientUnit_recipe')[0];
+
+				currMapNameField.val(currIng.name);			
+				currMapNameField.closest('.cls_orderLevelIngredientMapRow').find(".cls_orderLevelIngredientUnit_recipe option").remove();
+				addOptionsToSelectViaElem(ingredientUnits, unitsElem);
+				$(qtyElem).val(currQtyWithoutFrac);
+				if(currFrac.length>0)
+				{
+					$(fracElem).val(currFrac);
+				}
+				$(unitsElem).val(supplimentsObj.unit);
+
+				if(index<supplimentsArr.length-1)
+				{
+					_this.addOrderLevelIngMapRow();
+				}
+			}
+		});
+	}
 };
 OrderTab.prototype.renderEvents = function() {
 	var _this = this;
@@ -831,10 +906,14 @@ OrderTab.prototype.renderEvents = function() {
 		});
 
 		$(document).on("click", ".cls_orderLevelAddIngredient", function(){
-			var elemToAdd = $(_this.getOrderLevelIngredientMapRow());
-			cloneDOM(elemToAdd, $('.orderLevelIngredientMap'));
-			addOptionsToSelectViaElem(orderLevelIngredientUnit, $('.cls_orderLevelIngredientUnit_recipe')[$('.cls_orderLevelIngredientUnit_recipe').length-1]);
-			addOptionsToSelectViaElemHtml(orderLevelIngredientFraction, $('.cls_orderLevelIngredientFraction_recipe')[$('.cls_orderLevelIngredientFraction_recipe').length-1]);
+			_this.addOrderLevelIngMapRow();
+		});
+
+		$(document).on("input, change", ".cls_orderLevelIngredientName_recipe", function(){
+			var name = $(this).val();
+			var ingredientUnits = getIngredientUnitsByName(ingredientJson, name);
+			$(this).closest('.cls_orderLevelIngredientMapRow').find(".cls_orderLevelIngredientUnit_recipe option").remove();
+			addOptionsToSelectViaElem(ingredientUnits, $(this).closest('.cls_orderLevelIngredientMapRow').find('.cls_orderLevelIngredientUnit_recipe')[0]);
 		});
 
 		$(document).on("click", ".cls_removeOrderLevelCurrentIngredientMap", function(){
@@ -954,6 +1033,7 @@ OrderTab.prototype.getOrderDataAndCreate = function(){
 	orderMetaData.eventVenue = $("#id_orderVenue").val();
 	orderMetaData.clientNotes = $("#id_orderNotes").val();
 	orderMetaData.serviceForms = _this.getEventsData();
+	orderMetaData.suppliments = _this.getSupplimentsData();
 
 	$.ajax({
     	url: "/createOrder",
@@ -1004,8 +1084,32 @@ OrderTab.prototype.getEventsData = function(){
 		serviceForms.recipes = recipes;
 		eventsArray.push(serviceForms);
 	});
-	return eventsArray;
-	
+	return eventsArray;	
+}
+OrderTab.prototype.getSupplimentsData = function(){
+	var orderLevelSupplimentsArray = [];
+	$(".cls_orderLevelIngredientMapRow").each(function(index, element) {		
+		var currSuppliment = {};
+		var currSupplimentId;
+		var currSupplimentQty;
+		var currSupplimentUnit;
+
+		var currSupplimentName = $(".cls_orderLevelIngredientName_recipe", element).val();
+		var currSupplimentQtyWithoutFrac = $(".cls_orderLevelIngredientQunatity_recipe", element).val();
+		var currSupplimentFrac = $(".cls_orderLevelIngredientFraction_recipe", element).val();
+
+		currSupplimentId = getSupplimentIdByName(supplimentIds, currSupplimentName);
+		currSupplimentQty = (currSupplimentFrac && currSupplimentFrac.length>0) ? getQtyWithDecimalFraction(currSupplimentQtyWithoutFrac, currSupplimentFrac) : currSupplimentQtyWithoutFrac;
+		currSupplimentQty = Number(currSupplimentQty);
+		currSupplimentUnit = $(".cls_orderLevelIngredientUnit_recipe", element).val();
+
+		currSuppliment.id = currSupplimentId;
+		currSuppliment.qty = currSupplimentQty;
+		currSuppliment.unit = currSupplimentUnit;
+
+		orderLevelSupplimentsArray.push(currSuppliment);
+	});
+	return orderLevelSupplimentsArray;
 }
 OrderTab.prototype.getOrderDataAndUpdate = function(orderId){
 	var _this= this;
@@ -1019,7 +1123,7 @@ OrderTab.prototype.getOrderDataAndUpdate = function(orderId){
 	orderMetaData.eventVenue = $("#id_orderVenue").val();
 	orderMetaData.clientNotes = $("#id_orderNotes").val();
 	orderMetaData.serviceForms = _this.getEventsData();
-	
+	orderMetaData.suppliments = _this.getSupplimentsData();
 
 	$.ajax({
     	url: "/updateOrder",

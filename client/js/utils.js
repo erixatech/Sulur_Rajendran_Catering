@@ -192,6 +192,18 @@ function getIngredientIdByNameAndCat(ingredientJson, name, category) {
 	return toRet;
 }
 
+function getSupplimentIdByName(supplimentIds, name) {
+	var toRet = -1;
+	$.each( supplimentIds, function( index, id ) {
+		var ingredientObj = getIngredientById(ingredientJson, id);
+		if(ingredientObj.name.toLowerCase() == name.toLowerCase()) {
+	  		toRet = ingredientObj.id;
+	  		return toRet;
+      	}
+	});
+	return toRet;
+}
+
 function getIngredientUnitsByName(ingredientJson, name) {
 	var toRet = null;
 	$.each( ingredientJson, function( categoryName, ingredientsArr ) {
@@ -396,6 +408,22 @@ function getCategoriesBySession(session) {
 	return toRet;
 }
 
+function getSupplimentNames() {
+	var toRet = null;
+	var tempArr = [];
+	$.each(supplimentIds, function( index, supplimentId ) {
+		var currIng = getIngredientById(ingredientJson, supplimentId);
+		if(currIng && currIng.name) {
+			tempArr.push(currIng.name);
+		}
+	});
+	if(tempArr.length>0)
+	{
+		toRet = tempArr;
+	}
+	return toRet;
+}
+
 function getNextId(jsonToFind, module) {
 	var highestId = 0;
 	if(module == "Ingredient")
@@ -541,6 +569,59 @@ function isInList(itemToCheck, listToCheck)
 
 	return toRet;
 }
+
+function getQtyWithDecimalFraction(currQty, currFraction) {
+	if(currFraction == "¼")
+	{
+		currQty = Number(currQty) + Number(.25);
+	}
+	else if(currFraction == "½")
+	{
+		currQty = Number(currQty) + Number(.5);
+	}
+	else if(currFraction == "¾")
+	{
+		currQty = Number(currQty) + Number(.75);
+	}
+
+	return Number(currQty);
+};
+
+function getQtyWithoutDecimal(qty) {
+	var qtyToRet = qty;
+
+	if(qty.toString().indexOf(".")>-1)
+	{
+		qtyToRet = qty.toString().split(".")[0];
+	}
+	
+	return Number(qtyToRet);
+};
+
+function getFractionFromQty(qty) {
+	var fracToRet = "";
+	var currFraction = "";
+
+	if(qty.toString().indexOf(".")>-1)
+	{
+		currFraction = qty.toString().split(".")[1];
+	}
+
+	if(currFraction == 25)
+	{
+		fracToRet = "¼";
+	}
+	else if(currFraction == 5)
+	{
+		fracToRet = "½";
+	}
+	else if(currFraction == 75)
+	{
+		fracToRet = "¾";
+	}
+
+	return fracToRet;
+};
 
 function showLoading()
 {
