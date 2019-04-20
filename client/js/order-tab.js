@@ -54,7 +54,7 @@ OrderTab.prototype.render = function(){
 		$('.cls_orderPageTitle').text("Create Event");
 	}
 	else if(_this.isNewOrder == 'true'){
-		$(".cls_orderMetadataCont, .cls_orderBtnsCont").removeClass("d-none");
+		$(".cls_orderMetadataCont, .cls_orderBtnsCont, .cls_showMenuList").removeClass("d-none");
 		$(".cls_orderMetadataCont, .cls_createEventRow").removeClass("d-none");
 		$(".backFromServiceList").removeClass("d-none");
 		$(".cls_supplimentsContainer").removeClass("d-none");
@@ -275,7 +275,7 @@ OrderTab.prototype.renderServiceForms = function(){
 
 	var cbk = function(){
 		if(_this.currentOrder && !$.isEmptyObject(_this.currentOrder)) {
-			$(".cls_orderMetadataCont, .cls_orderBtnsCont").removeClass("d-none");
+			$(".cls_orderMetadataCont, .cls_orderBtnsCont, .cls_showMenuList").removeClass("d-none");
 			$(".cls_orderMetadataCont, .cls_createEventRow").removeClass("d-none");
 		    /*$(".cls_curOrderName").val(_this.currentOrder[0].eventName);*/
 		    $(".cls_curOrderVenue").val(_this.currentOrder[0].eventVenue);
@@ -652,7 +652,7 @@ OrderTab.prototype.renderInitialSuppimentsList = function() {
 	$.each(supplimentIds, function( index, supplimentId ) {
 		var currIng = getIngredientById(ingredientJson, supplimentId);
 		var currMapNameField = $($('.cls_orderLevelIngredientName_recipe')[index]);
-		if(currMapNameField.length>0)
+		if(currMapNameField.length>0 && currIng)
 		{
 			currMapNameField.val(currIng.name);
 			var ingredientUnits = getIngredientUnitsByName(ingredientJson, currIng.name);
@@ -672,7 +672,7 @@ OrderTab.prototype.renderSuppimentsListForOrderEdit = function(supplimentsArr) {
 		$.each(supplimentsArr, function( index, supplimentsObj ) {
 			var currIng = getIngredientById(ingredientJson, supplimentsObj.id);
 			var currMapNameField = $($('.cls_orderLevelIngredientName_recipe')[index]);
-			if(currMapNameField.length>0)
+			if(currMapNameField.length>0 && currIng)
 			{
 				var ingredientUnits = getIngredientUnitsByName(ingredientJson, currIng.name);
 				var currQtyWithoutFrac = getQtyWithoutDecimal(supplimentsObj.qty);

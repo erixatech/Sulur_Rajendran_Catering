@@ -94,16 +94,18 @@ renderPL.prototype.calculatePL = function(){
         }
 
         var currIngObj = getIngredientById(ingredientJson, currIngItem.id);
-        var ingItemForPL = {"name" : currIngObj.name, "quantity" : qtyToAdd, "unit" : unitToAdd};
-        var ingItemIndexInList = isAlreadyPresentInPL(ingItemForPL, PLToGenerate);
+        if(currIngObj){
+            var ingItemForPL = {"name" : currIngObj.name, "quantity" : qtyToAdd, "unit" : unitToAdd};
+            var ingItemIndexInList = isAlreadyPresentInPL(ingItemForPL, PLToGenerate);
 
-        if(ingItemIndexInList != -1)
-        {
-            PLToGenerate[ingItemIndexInList].quantity = Number(PLToGenerate[ingItemIndexInList].quantity) + Number(qtyToAdd);
-        }
-        else
-        {
-            PLToGenerate[PLToGenerate.length] = ingItemForPL;
+            if(ingItemIndexInList != -1)
+            {
+                PLToGenerate[ingItemIndexInList].quantity = Number(PLToGenerate[ingItemIndexInList].quantity) + Number(qtyToAdd);
+            }
+            else
+            {
+                PLToGenerate[PLToGenerate.length] = ingItemForPL;
+            }
         }
     }
 
