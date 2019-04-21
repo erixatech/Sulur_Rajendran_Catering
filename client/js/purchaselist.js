@@ -296,28 +296,16 @@ renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
         var renderHtml = [];
         var columnLeftItems = [];
         var columnRightItems = [];
-        var columnSplitCap = itemsToRender.length/2;
 
-        if(itemsToRender.length%2==1)
-        {
-            columnSplitCap = Math.ceil(itemsToRender.length/2);
-        }
-        
-        for(var i=0; i<columnSplitCap ; i++)
-        {
-            columnLeftItems[i] = itemsToRender[i];
-        }
-        for(var i=0; i<((itemsToRender.length%2==1) ? columnSplitCap-1 : columnSplitCap) ; i++)
-        {
-            columnRightItems[i] = itemsToRender[columnSplitCap+i];
-        }
+        columnLeftItems = _this.getLeftItems(itemsToRender, headingText);
+        columnRightItems = _this.getRightItems(itemsToRender, headingText);
 
         renderHtml  += "<div class='row col-12 mx-0 px-0'>"
                         + "<div class='list-group col-12 text-center mx-0 px-0'>"
                             + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold p-2 m-0'>"
                                 + headingText
                                 
-        for(var j=0; j<columnSplitCap ; j++)
+        for(var j=0; j<columnLeftItems.length; j++)
         {
             var currItem = itemsToRender[j];
             var index = Number(j+1);
@@ -326,13 +314,14 @@ renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
             {
                 if(k%2 == 0)
                 {
+                    index = _this.getLeftIndex(j, headingText);
                     renderHtml += "<a class='mx-0 px-0 row'>"
                     currItem = columnLeftItems[j];
                 }
                 else
                 {
+                    index = _this.getRightIndex(j, headingText);
                     currItem = (j<columnRightItems.length) ? columnRightItems[j] : null;
-                    index = Number(columnSplitCap+index);
                 }
 
                 if(currItem)
@@ -360,6 +349,152 @@ renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
 
         return renderHtml;
     }
+};
+
+renderPL.prototype.getLeftItems = function(itemsToRender, headingText) {
+    var _this = this;
+    var columnLeftItems = [];
+    var currLen= 0;
+
+    if(headingText.toLowerCase() == "maligai")
+    {
+        for(var i=0; i<18 ; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnLeftItems[i] = itemsToRender[i];
+            }
+        }
+        currLen = columnLeftItems.length;
+        for(var i=36; i<63 ; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnLeftItems[currLen] = itemsToRender[i];
+                currLen++;
+            }
+        }
+        currLen = columnLeftItems.length;
+        for(var i=90; i<117; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnLeftItems[currLen] = itemsToRender[i];
+                currLen++;
+            }
+        }
+        currLen = columnLeftItems.length;
+        for(var i=144; i<171 ; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnLeftItems[currLen] = itemsToRender[i];
+                currLen++;
+            }
+        }
+    }
+    return columnLeftItems;
+};
+
+renderPL.prototype.getRightItems = function(itemsToRender, headingText) {
+    var _this = this;
+    var columnRightItems = [];
+    var currLen= 0;
+
+    if(headingText.toLowerCase() == "maligai")
+    {
+        for(var i=18; i<36 ; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnRightItems[i-18] = itemsToRender[i];
+            }
+        }
+        currLen = columnRightItems.length;
+        for(var i=63; i<90 ; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnRightItems[currLen] = itemsToRender[i];
+                currLen++;
+            }
+        }
+        currLen = columnRightItems.length;
+        for(var i=117; i<144 ; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnRightItems[currLen] = itemsToRender[i];
+                currLen++;
+            }
+        }
+        currLen = columnRightItems.length;
+        for(var i=171; i<198 ; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnRightItems[currLen] = itemsToRender[i];
+                currLen++;
+            }
+        }
+    }
+    return columnRightItems;
+};
+
+renderPL.prototype.getLeftIndex = function(serialNum, headingText) {
+    var _this = this;
+    serialNum = Number(serialNum);
+    var indexToRet = Number(serialNum);
+
+    if(headingText.toLowerCase() == "maligai")
+    {
+        if(serialNum<18)
+        {
+           indexToRet =  serialNum+1;
+        }
+        else if(serialNum<45)
+        {
+           indexToRet =  serialNum+19;
+        }
+        else if(serialNum<72)
+        {
+           indexToRet =  serialNum+46;
+        }
+        else if(serialNum<99)
+        {
+           indexToRet =  serialNum+73;
+        }
+    }
+
+    return indexToRet;
+};
+
+renderPL.prototype.getRightIndex = function(serialNum, headingText) {
+    var _this = this;
+    serialNum = Number(serialNum);
+    var indexToRet = Number(serialNum);
+
+    if(headingText.toLowerCase() == "maligai")
+    {
+        if(serialNum<18)
+        {
+           indexToRet =  serialNum+19;
+        }
+        else if(serialNum<45)
+        {
+           indexToRet =  serialNum+46;
+        }
+        else if(serialNum<72)
+        {
+           indexToRet =  serialNum+73;
+        }
+        else if(serialNum<99)
+        {
+           indexToRet =  serialNum+100;
+        }
+    }
+
+    return indexToRet;
 };
 
 renderPL.prototype.renderAddRowToPL = function() {
