@@ -290,38 +290,76 @@ renderPL.prototype.render = function(plToRender) {
 };
 
 renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
-    var _this = this;
-    var renderHtml = [];
+    if(itemsToRender && itemsToRender.length>0)
+    {
+        var _this = this;
+        var renderHtml = [];
+        var columnLeftItems = [];
+        var columnRightItems = [];
+        var columnSplitCap = itemsToRender.length/2;
 
-    renderHtml  += "<div class='row col-12 mx-0 px-0'>"
-                    + "<div class='list-group col-12 text-center mx-0 px-0'>"
-                        + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
-                            + headingText
-                            
-    for(var j=0; j<itemsToRender.length ; j++){
-        if(j%2 == 0)
+        if(itemsToRender.length%2==1)
         {
-            renderHtml += "<a class='mx-0 px-0 row'>"
+            columnSplitCap = Math.ceil(itemsToRender.length/2);
         }
-        renderHtml += "<div class='list-group-item list-group-item-action cls_ingredientCont col-6 py-2 px-0 m-0'>"
-                        + "<span class='col-1 px-0 mx-0 cls_rowIndex font-weight-bold'>"+Number(j+1)+" . </span>"
-                        + "<span><input type='text' class='col-7 form-control px-1 font-weight-bold' name='name' value='"+itemsToRender[j].name+"' style='display:inline'></span>"
-                        + "<span><input type='text' class='mx-2 cls_twoshortcol form-control px-1 font-weight-bold' name='quantity' value='"+_this.getQtyToRender(itemsToRender[j].quantity)+"' style='display:inline'></span>"
-                        + "<span><input type='text' class='cls_onehalfcol form-control px-1 font-weight-bold' name='unit' value='"+itemsToRender[j].unit+"' style='display:inline'></span>"
-                        + "<span class='col-1 p-0 m-0'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
-                    + "</div>"
-        if(j%2 == 1)
+        
+        for(var i=0; i<columnSplitCap ; i++)
         {
-            renderHtml += "</a>"
+            columnLeftItems[i] = itemsToRender[i];
         }
+        for(var i=0; i<((itemsToRender.length%2==1) ? columnSplitCap-1 : columnSplitCap) ; i++)
+        {
+            columnRightItems[i] = itemsToRender[columnSplitCap+i];
+        }
+
+        renderHtml  += "<div class='row col-12 mx-0 px-0'>"
+                        + "<div class='list-group col-12 text-center mx-0 px-0'>"
+                            + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold p-2 m-0'>"
+                                + headingText
+                                
+        for(var j=0; j<columnSplitCap ; j++)
+        {
+            var currItem = itemsToRender[j];
+            var index = Number(j+1);
+
+            for(var k=0; k<2; k++)
+            {
+                if(k%2 == 0)
+                {
+                    renderHtml += "<a class='mx-0 px-0 row'>"
+                    currItem = columnLeftItems[j];
+                }
+                else
+                {
+                    currItem = (j<columnRightItems.length) ? columnRightItems[j] : null;
+                    index = Number(columnSplitCap+index);
+                }
+
+                if(currItem)
+                {
+                    renderHtml += "<div class='list-group-item list-group-item-action cls_ingredientCont col-6 py-2 px-0 m-0'>"
+                                    + "<span class='col-1 px-0 mx-0 cls_rowIndex font-weight-bold'>"+index+" . </span>"
+                                    + "<span><input type='text' class='col-7 form-control px-1 font-weight-bold' name='name' value='"+currItem.name+"' style='display:inline'></span>"
+                                    + "<span><input type='text' class='mx-2 cls_twoshortcol form-control px-1 font-weight-bold' name='quantity' value='"+_this.getQtyToRender(currItem.quantity)+"' style='display:inline'></span>"
+                                    + "<span><input type='text' class='cls_onehalfcol form-control px-1 font-weight-bold' name='unit' value='"+currItem.unit+"' style='display:inline'></span>"
+                                    + "<span class='col-1 p-0 m-0'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
+                                + "</div>"
+                }
+
+                if(k%2 == 1)
+                {
+                    renderHtml += "</a>"
+                }
+            }
+        }
+
+        renderHtml += "</a>"
+                   + "</div>"
+                   + "</div>"
+                   +"<br><br>"
+
+        return renderHtml;
     }
-
-    renderHtml += "</a>"
-               + "</div>"
-               + "</div>"
-               +"<br><br>"
-
-    return renderHtml;
 };
 
 renderPL.prototype.renderAddRowToPL = function() {
