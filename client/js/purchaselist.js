@@ -300,8 +300,8 @@ renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
         columnLeftItems = _this.getLeftItems(itemsToRender, headingText);
         columnRightItems = _this.getRightItems(itemsToRender, headingText);
 
-        renderHtml  += "<div class='row col-12 mx-0 px-0'>"
-                        + "<div class='list-group col-12 text-center mx-0 px-0'>"
+        renderHtml  += "<div class='row col-12 mx-0 px-0 border border-dark'>"
+                        + "<div class='list-group col-12 text-center mx-0 px-0 mt-2'>"
                             + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold p-2 m-0'>"
                                 + headingText
                                 
@@ -324,13 +324,27 @@ renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
                     currItem = (j<columnRightItems.length) ? columnRightItems[j] : null;
                 }
 
+                var indexSpaces = " . ";                
+                if(index<10)
+                {
+                    indexSpaces = "&nbsp;&nbsp;&nbsp; . ";
+                }
+                else if(index<100)
+                {
+                    indexSpaces = "&nbsp; . ";
+                }
+                else
+                {
+                    indexSpaces = ". ";
+                }
+
                 if(currItem)
                 {
-                    renderHtml += "<div class='list-group-item list-group-item-action cls_ingredientCont col-6 py-2 px-0 m-0'>"
-                                    + "<span class='col-1 px-0 mx-0 cls_rowIndex font-weight-bold'>"+index+" . </span>"
-                                    + "<span><input type='text' class='col-7 form-control px-1 font-weight-bold' name='name' value='"+currItem.name+"' style='display:inline'></span>"
-                                    + "<span><input type='text' class='mx-2 cls_twoshortcol form-control px-1 font-weight-bold' name='quantity' value='"+_this.getQtyToRender(currItem.quantity)+"' style='display:inline'></span>"
-                                    + "<span><input type='text' class='cls_onehalfcol form-control px-1 font-weight-bold' name='unit' value='"+currItem.unit+"' style='display:inline'></span>"
+                    renderHtml += "<div class='list-group-item list-group-item-action cls_ingredientCont col-6 p-0 px-0 m-0 pt-1'>"
+                                    + "<span class='col-1 px-0 mx-0 cls_rowIndex font-weight-bold'>"+index+indexSpaces+"</span>"
+                                    + "<span><input type='text' class='col-7 form-control px-1 p-0 m-0 font-weight-bold' name='name' value='"+currItem.name+"' style='display:inline'></span>"
+                                    + "<span><input type='text' class='mx-2 cls_twoshortcol form-control px-1 p-0 m-0 font-weight-bold' name='quantity' value='"+_this.getQtyToRender(currItem.quantity)+"' style='display:inline'></span>"
+                                    + "<span><input type='text' class='cls_onehalfcol form-control px-1 p-0 m-0 font-weight-bold' name='unit' value='"+currItem.unit+"' style='display:inline'></span>"
                                     + "<span class='col-1 p-0 m-0'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
                                 + "</div>"
                 }
@@ -338,6 +352,10 @@ renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
                 if(k%2 == 1)
                 {
                     renderHtml += "</a>"
+                    if(index == 33 || index == 66)
+                    {
+                        renderHtml += "<br><br>"
+                    }
                 }
             }
         }
@@ -345,7 +363,6 @@ renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
         renderHtml += "</a>"
                    + "</div>"
                    + "</div>"
-                   +"<br><br>"
 
         return renderHtml;
     }
@@ -358,7 +375,7 @@ renderPL.prototype.getLeftItems = function(itemsToRender, headingText) {
 
     if(headingText.toLowerCase() == "maligai")
     {
-        for(var i=0; i<18 ; i++)
+        /*for(var i=0; i<18 ; i++)         //old calculation
         {
             if(itemsToRender[i])
             {
@@ -391,6 +408,23 @@ renderPL.prototype.getLeftItems = function(itemsToRender, headingText) {
                 columnLeftItems[currLen] = itemsToRender[i];
                 currLen++;
             }
+        }*/
+
+        for(var i=0; i<33 ; i++)         //new calculation
+        {
+            if(itemsToRender[i])
+            {
+                columnLeftItems[i] = itemsToRender[i];
+            }
+        }
+        currLen = columnLeftItems.length;
+        for(var i=66; i<112 ; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnLeftItems[currLen] = itemsToRender[i];
+                currLen++;
+            }
         }
     }
     return columnLeftItems;
@@ -403,7 +437,7 @@ renderPL.prototype.getRightItems = function(itemsToRender, headingText) {
 
     if(headingText.toLowerCase() == "maligai")
     {
-        for(var i=18; i<36 ; i++)
+        /*for(var i=18; i<36 ; i++)         //old calculation
         {
             if(itemsToRender[i])
             {
@@ -436,6 +470,23 @@ renderPL.prototype.getRightItems = function(itemsToRender, headingText) {
                 columnRightItems[currLen] = itemsToRender[i];
                 currLen++;
             }
+        }*/
+
+        for(var i=33; i<66 ; i++)         //new calculation
+        {
+            if(itemsToRender[i])
+            {
+                columnRightItems[i-33] = itemsToRender[i];
+            }
+        }
+        currLen = columnRightItems.length;
+        for(var i=112; i<158 ; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnRightItems[currLen] = itemsToRender[i];
+                currLen++;
+            }
         }
     }
     return columnRightItems;
@@ -448,7 +499,7 @@ renderPL.prototype.getLeftIndex = function(serialNum, headingText) {
 
     if(headingText.toLowerCase() == "maligai")
     {
-        if(serialNum<18)
+        /*if(serialNum<18)         //old calculation
         {
            indexToRet =  serialNum+1;
         }
@@ -463,6 +514,14 @@ renderPL.prototype.getLeftIndex = function(serialNum, headingText) {
         else if(serialNum<99)
         {
            indexToRet =  serialNum+73;
+        }*/
+        if(serialNum<33)         //new calculation
+        {
+           indexToRet =  serialNum+1;
+        }
+        else if(serialNum<112)
+        {
+           indexToRet =  serialNum+34;
         }
     }
 
@@ -476,7 +535,7 @@ renderPL.prototype.getRightIndex = function(serialNum, headingText) {
 
     if(headingText.toLowerCase() == "maligai")
     {
-        if(serialNum<18)
+        /*if(serialNum<18)         //old calculation
         {
            indexToRet =  serialNum+19;
         }
@@ -491,6 +550,14 @@ renderPL.prototype.getRightIndex = function(serialNum, headingText) {
         else if(serialNum<99)
         {
            indexToRet =  serialNum+100;
+        }*/
+        if(serialNum<33)         //new calculation
+        {
+           indexToRet =  serialNum+34;
+        }
+        else if(serialNum<158)
+        {
+           indexToRet =  serialNum+80;
         }
     }
 
@@ -513,7 +580,7 @@ renderPL.prototype.renderAddRowToPL = function() {
                             +"<br>"
                         +"</span>"
                     +"</div>"
-                    +"<i class='fa fa-plus-circle mr-5 pr-5 float-right cls_addRowPLAction' style='font-size:24px;color:green'></i><br><br>"
+                    +"<i class='fa fa-plus-circle mr-5 pr-5 float-right cls_addRowPLAction' style='font-size:24px;color:green'></i>"
 
     $("#id_purchaseListContainer").append(renderHtml);
 };
