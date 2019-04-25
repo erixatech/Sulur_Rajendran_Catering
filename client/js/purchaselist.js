@@ -110,8 +110,9 @@ renderPL.prototype.calculatePL = function(){
     }
 
     PLToGenerate = incByOnePrec(PLToGenerate);
-    PLToGenerate = unitConversion(PLToGenerate);
+    PLToGenerate = unitConversion(PLToGenerate);    
     PLToGenerate = roundOffPL(PLToGenerate);
+    PLToGenerate = convertToTamilUnits(PLToGenerate);
     PLToGenerate = getCategorizedPL(PLToGenerate);
     PLToGenerate = getSortedPL(PLToGenerate);
     console.log(PLToGenerate);
@@ -568,7 +569,7 @@ renderPL.prototype.renderAddRowToPL = function() {
     var _this = this;
     var renderHtml = [];
 
-    renderHtml  += "<div class='row col-12'>"
+    /*renderHtml  += "<div class='row col-12'>"
                         +"<span class='col-7'></span>"
                             +"<span class='col-5'>"
                                 +"<span class='cls_addRowPLContainer float-right d-none'>"
@@ -580,7 +581,23 @@ renderPL.prototype.renderAddRowToPL = function() {
                             +"<br>"
                         +"</span>"
                     +"</div>"
-                    +"<i class='fa fa-plus-circle mr-5 pr-5 float-right cls_addRowPLAction' style='font-size:24px;color:green'></i>"
+                    +"<i class='fa fa-plus-circle mr-5 pr-5 float-right cls_addRowPLAction' style='font-size:24px;color:green'></i>"*/
+
+    renderHtml  +=  "<br>"
+                    +"<div class='row col-12 cls_printReadyContainer'>"
+                        +"<span class='col-5'></span>"
+                        +"<span class='col-4'>"
+                            +"<span class='cls_addRowPLContainer float-right'>"
+                                +"Add row below number "
+                                +"<input type='text' class='form-control col-2 mx-3 cls_addLineAfterNum' style='display:inline'> "
+                                +"<a class='btn btn-success btn-md text-white cls_addRowInPL'><i class='fa fa-plus-circle'></i>Add </a>"
+                            +"</span>"
+                        +"</span>"
+                        +"<span class='col-3 cls_printReadyActionContainer float-right'>"
+                            +"<a class='btn btn-success btn-md text-white cls_getPrintReadyBtn'>Get Print Ready</a>"
+                        +"</span>"
+                    +"</div>"
+                    +"<i class='fa fa-plus-circle mr-5 pr-5 float-right cls_addRowPLAction d-none' style='font-size:24px;color:green'></i>"
 
     $("#id_purchaseListContainer").append(renderHtml);
 };
@@ -678,14 +695,23 @@ renderPL.prototype.registerEvents = function() {
         });
 
         $(document).on("click", ".cls_addRowPLAction", function(){
-            if($('.cls_addRowPLContainer').hasClass('d-none'))
+            /*if($('.cls_addRowPLContainer').hasClass('d-none'))
             {
                 $('.cls_addRowPLContainer').removeClass('d-none');
             }
             else
             {
                 $('.cls_addRowPLContainer').addClass('d-none');
-            }            
+            }*/     
+            $('.cls_removeCurrentIngMap').attr('hidden',false);
+            $(this).addClass('d-none');
+            $('.cls_printReadyContainer').removeClass('d-none');
+        });
+
+        $(document).on("click", ".cls_getPrintReadyBtn", function(){
+            $('.cls_removeCurrentIngMap').attr('hidden',true);
+            $('.cls_printReadyContainer').addClass('d-none');
+            $('.cls_addRowPLAction').removeClass('d-none');
         });
 
         $(document).on("click", ".cls_addRowInPL", function(){
@@ -736,6 +762,48 @@ function unitConversion(PLToConvert)
 			PLToConvert[i].quantity = qtyToConvert / 1000;
 			PLToConvert[i].unit = "litre";
 		}
+    }
+    return PLToConvert;
+}
+
+function convertToTamilUnits(PLToConvert)
+{
+    for(var i = 0; i < PLToConvert.length; i++)
+    {
+        var unitToConvert = PLToConvert[i].unit;
+
+        if(unitToConvert == "gram")
+        {
+            PLToConvert[i].unit = "கிராம்";
+        }
+        else if(unitToConvert == "kilo")
+        {
+            PLToConvert[i].unit = "கிலோ";
+        }
+        else if(unitToConvert == "ml")
+        {
+            PLToConvert[i].unit = "மில்லி";
+        }
+        else if(unitToConvert == "litre")
+        {
+            PLToConvert[i].unit = "லிட்டர்";
+        }
+        else if(unitToConvert == "pocket")
+        {
+            PLToConvert[i].unit = "பாக்ட்";
+        }
+        else if(unitToConvert == "meter")
+        {
+            PLToConvert[i].unit = "மீட்டர்";
+        }
+        else if(unitToConvert == "kowli")
+        {
+            PLToConvert[i].unit = "கவுளி";
+        }
+        else if(unitToConvert == "kattu")
+        {
+            PLToConvert[i].unit = "கட்டு";
+        }
     }
     return PLToConvert;
 }
