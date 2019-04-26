@@ -174,7 +174,7 @@ renderPL.prototype.render = function(plToRender) {
         if(cat_kaikanigal && cat_kaikanigal.length>0){
             renderHtml += "<div class='row col-12 text-center'>"
                             + "<div class='col-12 text-center font-weight-bold'>தேதி <input type='text' class='form-control col-2 mx-3' style='display:inline'> மாலை <input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு தேவை, இடம் <input type='text' class='form-control col-3 ml-3' style='display:inline'></div><br>"
-                            + "<div class='col-12 text-center text-danger font-weight-bold'><u>மளிகை சாமான்கள் மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
+                            + "<div class='col-12 text-center text-danger font-weight-bold'><u>காய்கறி மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
                         + "</div><br>"
                         /*+ "<div class='row col-12'>"
                                 + "<div class='col-1'></div>"
@@ -208,10 +208,10 @@ renderPL.prototype.render = function(plToRender) {
     if(purchaseListCategory == "Extras")
     {
         if(cat_extras && cat_extras.length>0){
-            renderHtml += "<div class='row col-12 text-center'>"
+            /*renderHtml += "<div class='row col-12 text-center'>"
                             + "<div class='col-12 text-center font-weight-bold'>தேதி <input type='text' class='form-control col-2 mx-3' style='display:inline'> மாலை <input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு தேவை, இடம் <input type='text' class='form-control col-3 ml-3' style='display:inline'></div><br>"
                             + "<div class='col-12 text-center text-danger font-weight-bold'><u>மளிகை சாமான்கள் மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
-                        + "</div><br>"
+                        + "</div><br>"*/
                         /*+ "<div class='row col-12'>"
                             + "<div class='col-1'></div>"
                             + "<div class='list-group col-10 text-center'>"
@@ -244,10 +244,10 @@ renderPL.prototype.render = function(plToRender) {
     if(purchaseListCategory == "Suppliments")
     {
         if(cat_suppliments && cat_suppliments.length>0){
-            renderHtml += "<div class='row col-12 text-center'>"
+            /*renderHtml += "<div class='row col-12 text-center'>"
                             + "<div class='col-12 text-center font-weight-bold'>தேதி <input type='text' class='form-control col-2 mx-3' style='display:inline'> மாலை <input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு தேவை, இடம் <input type='text' class='form-control col-3 ml-3' style='display:inline'></div><br>"
                             + "<div class='col-12 text-center text-danger font-weight-bold'><u>மளிகை சாமான்கள் மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
-                        + "</div><br>"
+                        + "</div><br>"*/
                         /*+ "<div class='row col-12'>"
                             + "<div class='col-1'></div>" 
                             + "<div class='list-group col-10 text-center'>"
@@ -353,9 +353,19 @@ renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
                 if(k%2 == 1)
                 {
                     renderHtml += "</a>"
-                    if(index == 33 || index == 66)
+                    if(headingText.toLowerCase() == "maligai")
                     {
-                        renderHtml += "<br><br>"
+                        if(index == 33 || index == 66)
+                        {
+                            renderHtml += "<br><br>"
+                        }
+                    }
+                    else if(headingText.toLowerCase().replace(/ /g, '') == "kaaikanigal")
+                    {
+                        if(index == 36 || index == 72)
+                        {
+                            renderHtml += "<br><br>"
+                        }
                     }
                 }
             }
@@ -428,6 +438,17 @@ renderPL.prototype.getLeftItems = function(itemsToRender, headingText) {
             }
         }
     }
+    else if(headingText.toLowerCase().replace(/ /g, '') == "kaaikanigal")
+    {
+        for(var i=0; i<36; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnLeftItems[i] = itemsToRender[i];
+            }
+        }
+    }
+
     return columnLeftItems;
 };
 
@@ -490,6 +511,17 @@ renderPL.prototype.getRightItems = function(itemsToRender, headingText) {
             }
         }
     }
+    else if(headingText.toLowerCase().replace(/ /g, '') == "kaaikanigal")
+    {
+        for(var i=36; i<72 ; i++)         //new calculation
+        {
+            if(itemsToRender[i])
+            {
+                columnRightItems[i-36] = itemsToRender[i];
+            }
+        }
+    }
+
     return columnRightItems;
 };
 
@@ -523,6 +555,13 @@ renderPL.prototype.getLeftIndex = function(serialNum, headingText) {
         else if(serialNum<112)
         {
            indexToRet =  serialNum+34;
+        }
+    }
+    else if(headingText.toLowerCase().replace(/ /g, '') == "kaaikanigal")
+    {
+        if(serialNum<36)
+        {
+           indexToRet =  serialNum+1;
         }
     }
 
@@ -559,6 +598,13 @@ renderPL.prototype.getRightIndex = function(serialNum, headingText) {
         else if(serialNum<158)
         {
            indexToRet =  serialNum+80;
+        }
+    }
+    else if(headingText.toLowerCase().replace(/ /g, '') == "kaaikanigal")
+    {
+        if(serialNum<36)         //new calculation
+        {
+           indexToRet =  serialNum+37;
         }
     }
 
