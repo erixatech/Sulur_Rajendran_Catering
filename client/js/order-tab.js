@@ -585,16 +585,25 @@ OrderTab.prototype.generatePLFromOrder = function() {
 	
 	if(_this.currentOrder && _this.currentOrder[0] && _this.currentOrder[0].serviceForms)
 	{
+		var incParam = '';
+
+		if($("#id_percentageIncrease") && $("#id_percentageIncrease").val().length>0)
+		{
+			incParam = "&inc="+$("#id_percentageIncrease").val();
+		}
 		//new renderPL(_this.currentOrder[0]);
-		var plWindow = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Maligai");
+		var plWindow = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Maligai" + incParam);
+
 		setTimeout(function(){
-            var plWindow2 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=KaaiKanigal");
+            var plWindow2 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=KaaiKanigal" + incParam);
         }, 100);
+
         setTimeout(function(){
-            var plWindow3= window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Extras");
+            var plWindow3= window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Extras" + incParam);
         }, 200);
+
         /*setTimeout(function(){
-            var plWindow4 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Suppliments");
+            var plWindow4 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Suppliments" + incParam);
         }, 300);*/
 	}
 	else if(_this.currentOrder && _this.currentOrder[0])

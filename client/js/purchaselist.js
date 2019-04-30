@@ -109,7 +109,7 @@ renderPL.prototype.calculatePL = function(){
         }
     }
 
-    PLToGenerate = incByOnePrec(PLToGenerate);
+    PLToGenerate = incByPrecentage(PLToGenerate);
     PLToGenerate = unitConversion(PLToGenerate);    
     PLToGenerate = roundOffPL(PLToGenerate);
     PLToGenerate = convertToTamilUnits(PLToGenerate);
@@ -781,12 +781,16 @@ function isAlreadyPresentInPL(ingItemForPL, PLToCheck)
     return -1;
 }
 
-function incByOnePrec(PLToIncrement)
+function incByPrecentage(PLToIncrement)
 {
-	for(var i = 0; i < PLToIncrement.length; i++)
+    var percToIncrease = getUrlParts(window.location.href).inc;
+    if(percToIncrease!=undefined && percToIncrease.length>0 && percToIncrease>0)
     {
+    	for(var i = 0; i < PLToIncrement.length; i++)
+        {
 
-        PLToIncrement[i].quantity = PLToIncrement[i].quantity + (PLToIncrement[i].quantity/100);
+            PLToIncrement[i].quantity = PLToIncrement[i].quantity + ((PLToIncrement[i].quantity*percToIncrease)/100);
+        }
     }
     return PLToIncrement;
 }
