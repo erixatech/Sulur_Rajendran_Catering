@@ -118,9 +118,19 @@ renderPL.prototype.calculatePL = function(){
     console.log(PLToGenerate);
     //initiatePL(PLToGenerate);
     _this.render(PLToGenerate);
-    _this.registerEvents();
+    _this.registerEvents(PLToGenerate);
 };
 
+renderPL.prototype.removeAndReRender = function(indexToRemove, PLToGenerate) {
+    var _this = this;
+    var newPL = PLToGenerate;
+    var purchaseListCategory = getValueFromQueryParam('purchaseListCategory');
+    var arrToAlter = PLToGenerate[purchaseListCategory];
+    var removeNum = indexToRemove-1;
+    arrToAlter.splice(removeNum,1);
+    newPL[purchaseListCategory] = arrToAlter;
+    _this.render(newPL);
+};
 
 renderPL.prototype.render = function(plToRender) {
     var _this = this;
@@ -277,7 +287,7 @@ renderPL.prototype.render = function(plToRender) {
         }
     }
 
-    $("#id_purchaseListContainer").append(renderHtml);
+    $("#id_purchaseListContainer").html(renderHtml);
     $("#id_purchaseListContainer").removeClass("d-none");
     $("#id_mainContentContainer").addClass("d-none");
     _this.renderAddRowToPL();
@@ -346,7 +356,7 @@ renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
                                     + "<span><input type='text' class='col-7 form-control px-1 p-0 m-0 font-weight-bold' name='name' value='"+currItem.name+"' style='display:inline'></span>"
                                     + "<span><input type='text' class='mx-2 cls_twoshortcol form-control px-1 p-0 m-0 font-weight-bold' name='quantity' value='"+_this.getQtyToRender(currItem.quantity)+"' style='display:inline'></span>"
                                     + "<span><input type='text' class='cls_onehalfcol form-control px-1 p-0 m-0 font-weight-bold' name='unit' value='"+currItem.unit+"' style='display:inline'></span>"
-                                    + "<span class='col-1 p-0 m-0'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
+                                    + "<span class='col-1 p-0 m-0'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' data-index='"+index+"' style='font-size:25px;color:red'></i></span>"
                                 + "</div>"
                 }
 
@@ -731,13 +741,14 @@ renderPL.prototype.renderPoojaTable = function() {
     return renderHtml;
 };
 
-renderPL.prototype.registerEvents = function() {
+renderPL.prototype.registerEvents = function(PLToGenerate) {
     var _this = this;
     
     $(document).ready(function(){
-        $(document).on("click", ".cls_removeCurrentIngMap", function(){
-            $(this).parents('.cls_ingredientCont').remove();
-            _this.reIndexPL();
+        $(document).on("click", ".cls_removeCurrentIngMap", function(e){
+            /*$(this).parents('.cls_ingredientCont').remove();
+            _this.reIndexPL();*/
+            _this.removeAndReRender($(this).data('index'), PLToGenerate)
         });
 
         $(document).on("click", ".cls_addRowPLAction", function(){
