@@ -207,7 +207,7 @@ renderPL.prototype.render = function(plToRender) {
     {
         if(cat_kaikanigal && cat_kaikanigal.length>0){
             renderHtml += "<div class='row col-12 text-center'>"
-                            + "<div class='col-12 text-center font-weight-bold'>தேதி <input type='text' class='form-control col-2 mx-3' style='display:inline'> <select class='form-control cls_pl_session cls_onehalfcol font-weight-bold' id='id_pl_session' name='plSession' style='display:inline'><option>காலை </option><option>மாலை</option></select> <input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு தேவை, இடம் <input type='text' class='form-control col-3 ml-3' style='display:inline'></div><br>"
+                            + "<div class='col-12 text-center font-weight-bold'>தேதி <input type='text' class='form-control col-2 mx-3' style='display:inline'> <select class='form-control cls_pl_session cls_onehalfcol font-weight-bold' id='id_pl_session' name='plSession' style='display:inline'><option>காலை </option><option>மாலை</option></select> <input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு தேவை, இடம் <input type='text' class='form-control col-3 ml-3' style='display:inline'></div><br><br>"
                             + "<div class='col-12 text-center text-danger font-weight-bold'><u>காய்கறி மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
                         + "</div><br>"
                         /*+ "<div class='row col-12'>"
@@ -337,7 +337,7 @@ renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
 
         renderHtml  += "<div class='row col-12 mx-0 px-0 border border-dark'>"
                         + "<div class='list-group col-12 text-center mx-0 px-0 mt-2'>"
-                            + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold p-2 m-0'>"
+                            + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold p-1 m-0'>"
                                 + headingText
                                 
         for(var j=0; j<columnLeftItems.length; j++)
@@ -391,14 +391,34 @@ renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
                     {
                         if(index == 33 || index == 66)
                         {
-                            renderHtml += "<br><br>"
+                            if(itemsToRender.length>66)
+                            {
+                                renderHtml += "<br><br><br><br>"
+                            }
+                        }
+                        else if(index == 112 || index == 158)
+                        {
+                            if(itemsToRender.length>158)
+                            {
+                                renderHtml += "<br><br><br><br>"
+                            }
                         }
                     }
                     else if(headingText.toLowerCase().replace(/ /g, '') == "kaaikanigal")
                     {
                         if(index == 36 || index == 72)
                         {
-                            renderHtml += "<br><br>"
+                            if(itemsToRender.length>72)
+                            {
+                                renderHtml += "<br><br><br><br><br><br>"
+                            }
+                        }
+                        else if(index == 118 || index == 164)
+                        {
+                            if(itemsToRender.length>164)
+                            {
+                                renderHtml += "<br><br><br><br>"
+                            }
                         }
                     }
                 }
@@ -471,6 +491,15 @@ renderPL.prototype.getLeftItems = function(itemsToRender, headingText) {
                 currLen++;
             }
         }
+        currLen = columnLeftItems.length;
+        for(var i=158; i<204 ; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnLeftItems[currLen] = itemsToRender[i];
+                currLen++;
+            }
+        }
     }
     else if(headingText.toLowerCase().replace(/ /g, '') == "kaaikanigal")
     {
@@ -479,6 +508,15 @@ renderPL.prototype.getLeftItems = function(itemsToRender, headingText) {
             if(itemsToRender[i])
             {
                 columnLeftItems[i] = itemsToRender[i];
+            }
+        }
+        currLen = columnLeftItems.length;
+        for(var i=72; i<118 ; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnLeftItems[currLen] = itemsToRender[i];
+                currLen++;
             }
         }
     }
@@ -544,6 +582,15 @@ renderPL.prototype.getRightItems = function(itemsToRender, headingText) {
                 currLen++;
             }
         }
+        currLen = columnRightItems.length;
+        for(var i=204; i<250 ; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnRightItems[currLen] = itemsToRender[i];
+                currLen++;
+            }
+        }
     }
     else if(headingText.toLowerCase().replace(/ /g, '') == "kaaikanigal")
     {
@@ -552,6 +599,15 @@ renderPL.prototype.getRightItems = function(itemsToRender, headingText) {
             if(itemsToRender[i])
             {
                 columnRightItems[i-36] = itemsToRender[i];
+            }
+        }
+        currLen = columnRightItems.length;
+        for(var i=118; i<164 ; i++)
+        {
+            if(itemsToRender[i])
+            {
+                columnRightItems[currLen] = itemsToRender[i];
+                currLen++;
             }
         }
     }
@@ -586,9 +642,13 @@ renderPL.prototype.getLeftIndex = function(serialNum, headingText) {
         {
            indexToRet =  serialNum+1;
         }
-        else if(serialNum<112)
+        else if(serialNum<79)
         {
            indexToRet =  serialNum+34;
+        }
+        else if(serialNum<125)
+        {
+           indexToRet =  serialNum+80;
         }
     }
     else if(headingText.toLowerCase().replace(/ /g, '') == "kaaikanigal")
@@ -596,6 +656,10 @@ renderPL.prototype.getLeftIndex = function(serialNum, headingText) {
         if(serialNum<36)
         {
            indexToRet =  serialNum+1;
+        }
+        else if(serialNum<82)
+        {
+           indexToRet =  serialNum+37;
         }
     }
 
@@ -629,16 +693,24 @@ renderPL.prototype.getRightIndex = function(serialNum, headingText) {
         {
            indexToRet =  serialNum+34;
         }
-        else if(serialNum<158)
+        else if(serialNum<79)
         {
            indexToRet =  serialNum+80;
+        }
+        else if(serialNum<125)
+        {
+           indexToRet =  serialNum+126;
         }
     }
     else if(headingText.toLowerCase().replace(/ /g, '') == "kaaikanigal")
     {
-        if(serialNum<36)         //new calculation
+        if(serialNum<36)
         {
            indexToRet =  serialNum+37;
+        }
+        else if(serialNum<82)
+        {
+           indexToRet =  serialNum+83;
         }
     }
 
