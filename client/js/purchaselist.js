@@ -121,13 +121,37 @@ renderPL.prototype.calculatePL = function(){
     _this.registerEvents(PLToGenerate);
 };
 
+renderPL.prototype.getCurrentEditedPL = function() {
+    var _this = this;
+    var arrToAlter = [];
+    for(var i=0; i<$('.cls_rowIndex').length;i++)
+    {
+        var index = $($('.cls_rowIndex')[i]).data('index')-1;
+        arrToAlter[index] = {};
+        arrToAlter[index].name = $($('.pl_curr_name')[i]).val();
+        arrToAlter[index].quantity = $($('.pl_curr_qty')[i]).val();
+        arrToAlter[index].unit = $($('.pl_curr_unit')[i]).val();
+    }
+    return arrToAlter;
+};
+
 renderPL.prototype.removeAndReRender = function(indexToRemove, PLToGenerate) {
     var _this = this;
     var newPL = PLToGenerate;
     var purchaseListCategory = getValueFromQueryParam('purchaseListCategory');
-    var arrToAlter = PLToGenerate[purchaseListCategory];
-    var removeNum = indexToRemove-1;
-    arrToAlter.splice(removeNum,1);
+    var arrToAlter = _this.getCurrentEditedPL();
+    arrToAlter.splice(indexToRemove-1,1);
+    newPL[purchaseListCategory] = arrToAlter;
+    _this.render(newPL);
+};
+
+renderPL.prototype.addAndReRender = function(indexToAdd, PLToGenerate) {
+    var _this = this;
+    var newPL = PLToGenerate;
+    var emptyObjToAdd = {"name" : "", "quantity" : "", "unit" : ""};
+    var purchaseListCategory = getValueFromQueryParam('purchaseListCategory');
+    var arrToAlter = _this.getCurrentEditedPL();
+    arrToAlter.splice(indexToAdd, 0, emptyObjToAdd);
     newPL[purchaseListCategory] = arrToAlter;
     _this.render(newPL);
 };
@@ -352,10 +376,10 @@ renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
                 if(currItem)
                 {
                     renderHtml += "<div class='list-group-item list-group-item-action cls_ingredientCont col-6 p-0 px-0 m-0 pt-1'>"
-                                    + "<span class='col-1 px-0 mx-0 cls_rowIndex font-weight-bold'>"+index+indexSpaces+"</span>"
-                                    + "<span><input type='text' class='col-7 form-control px-1 p-0 m-0 font-weight-bold' name='name' value='"+currItem.name+"' style='display:inline'></span>"
-                                    + "<span><input type='text' class='mx-2 cls_twoshortcol form-control px-1 p-0 m-0 font-weight-bold' name='quantity' value='"+_this.getQtyToRender(currItem.quantity)+"' style='display:inline'></span>"
-                                    + "<span><input type='text' class='cls_onehalfcol form-control px-1 p-0 m-0 font-weight-bold' name='unit' value='"+currItem.unit+"' style='display:inline'></span>"
+                                    + "<span class='col-1 px-0 mx-0 cls_rowIndex font-weight-bold' data-index='"+index+"'>"+index+indexSpaces+"</span>"
+                                    + "<span><input type='text' class='col-7 form-control px-1 p-0 m-0 font-weight-bold pl_curr_name' name='name' value='"+currItem.name+"' style='display:inline'></span>"
+                                    + "<span><input type='text' class='mx-2 cls_twoshortcol form-control px-1 p-0 m-0 font-weight-bold pl_curr_qty' name='quantity' value='"+_this.getQtyToRender(currItem.quantity)+"' style='display:inline'></span>"
+                                    + "<span><input type='text' class='cls_onehalfcol form-control px-1 p-0 m-0 font-weight-bold pl_curr_unit' name='unit' value='"+currItem.unit+"' style='display:inline'></span>"
                                     + "<span class='col-1 p-0 m-0'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' data-index='"+index+"' style='font-size:25px;color:red'></i></span>"
                                 + "</div>"
                 }
@@ -772,7 +796,8 @@ renderPL.prototype.registerEvents = function(PLToGenerate) {
         });
 
         $(document).on("click", ".cls_addRowInPL", function(){
-            _this.addNewRowToPL($('.cls_addLineAfterNum').val());
+            //_this.addNewRowToPL($('.cls_addLineAfterNum').val());
+            _this.addAndReRender($('.cls_addLineAfterNum').val(), PLToGenerate);
         });
 
     });
