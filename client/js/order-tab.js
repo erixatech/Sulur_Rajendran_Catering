@@ -599,12 +599,12 @@ OrderTab.prototype.generatePLFromOrder = function() {
         }, 100);
 
         setTimeout(function(){
-            var plWindow3= window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Extras" + incParam);
+            var plWindow3= window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=PaalThayir" + incParam);
         }, 200);
 
-        /*setTimeout(function(){
-            var plWindow4 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Suppliments" + incParam);
-        }, 300);*/
+        setTimeout(function(){
+            var plWindow4 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Extras" + incParam);
+        }, 300);
 	}
 	else if(_this.currentOrder && _this.currentOrder[0])
 	{

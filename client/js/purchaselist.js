@@ -311,10 +311,76 @@ renderPL.prototype.render = function(plToRender) {
         }
     }
 
+    if(purchaseListCategory == "PaalThayir")
+    {
+        renderHtml += "<br><br><div class='row col-12 text-center'>"
+
+                            + "<div class='col-12 text-center text-danger font-weight-bold'><u>ஸ்வீட்டுக்கு ஸ்பெஷல் பசும்பால்(கேன்பால்) ஆர்டர் செய்யவும்</u></div><br>"
+                            + "<br>"
+                            + "<div class='col-12 cls_RowModalOne_Cont'>"
+                                + "<div class='col-12 cls_paalThayir_RowModalOne'>"
+                                    + "<span class='col-1'></span>"
+                                    + "<span class='col-10 text-center font-weight-bold'>"
+                                        + "தேதி <input type='text' class='form-control cls_onehalfcol mx-3' style='display:inline'>"
+                                        + "<select class='form-control cls_pl_session cls_onehalfcol font-weight-bold' id='id_pl_session' name='plSession' style='display:inline'><option>காலை </option><option>மாலை</option></select>"
+                                        + "<input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு  &nbsp; &nbsp; பால் <input type='text' class='form-control col-1 ml-3' style='display:inline'> லிட்டர்"
+                                        + "<span class='col-1 p-0 m-0'> <i class='fa fa-minus-circle mt-2 ml-2 cls_removeCurrentIngMap' data-index='1' style='font-size:25px;color:red'></i></span>"
+                                    + "</span>"
+                                    + "<span class='col-1'></span>"
+                                    + "<br><br>"
+                                + "</div>"
+                            + "</div>"
+                            + "<span class='col-12'><a class='btn btn-success btn-md text-white cls_addRowInPaalThayir_ModalOne float-right mr-5'><i class='fa fa-plus-circle'></i>Add </a></span>"
+                            +"<br><br>"
+
+                            + "<div class='col-12 text-center text-danger font-weight-bold'><u>அரோமா ஸ்பெஷல் பாக்கெட் பால் ஆர்டர் செய்யவும்</u></div><br>"
+                                + "<br>"
+                                + "<div class='col-12 cls_RowModalTwo_Cont'>"
+                                    + "<div class='col-12 cls_paalThayir_RowModalTwo'>"
+                                        + "<span class='col-1'></span>"
+                                        + "<span class='col-10 text-center font-weight-bold'>"
+                                            + "தேதி <input type='text' class='form-control cls_onehalfcol mx-3' style='display:inline'>"
+                                            + "<select class='form-control cls_pl_session cls_onehalfcol font-weight-bold' id='id_pl_session' name='plSession' style='display:inline'><option>காலை </option><option>மாலை</option></select>"
+                                            + "<input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு "
+                                            + "<select class='form-control cls_pl_paal_thayir cls_onehalfcol font-weight-bold' id='id_pl_session' name='plPaalThayir' style='display:inline'><option>பால்</option><option>தயிர்</option></select>"
+                                            + "<input type='text' class='form-control col-1 ml-3' style='display:inline'> லிட்டர்"
+                                            + "<span class='col-1 p-0 m-0'> <i class='fa fa-minus-circle mt-2 ml-2 cls_removeCurrentIngMap' data-index='1' style='font-size:25px;color:red'></i></span>"
+                                        + "</span>"
+                                        + "<span class='col-1'></span>"
+                                        + "<br><br>"
+                                    + "</div>"
+                                + "</div>"
+                                + "<span class='col-12'><a class='btn btn-success btn-md text-white cls_addRowInPaalThayir_ModalTwo float-right mr-5'><i class='fa fa-plus-circle'></i>Add </a></span>"
+                            + "</div>"
+
+                            + "<br><h5 class='col-12 text-center text-danger font-weight-bold'>TAP'D Water (AKA aqua farms) - 9842259874</h5><br>"
+                            + "<div class='col-12 text-center font-weight-bold'>"
+                                + "20லி தண்ணீர் கேன் (குடிக்க)"
+                                + "<input type='text' class='form-control col-1 mx-3' style='display:inline'> கேன்"
+                            + "</div><br>"
+                            + "<div class='col-12 text-center font-weight-bold'>"
+                                + "300 மில்லி குடிநீர் பாட்டில்"
+                                + "<input type='text' class='form-control col-1 mx-3' style='display:inline'> பாட்டில்"
+                            + "</div><br>"
+                            + "<div class='col-12 text-center'>"
+                                + "(சமையலுக்கு தண்ணீர் தேவை)"
+                            + "</div><br>"
+
+                        + "</div>"
+    }
+
     $("#id_purchaseListContainer").html(renderHtml);
     $("#id_purchaseListContainer").removeClass("d-none");
     $("#id_mainContentContainer").addClass("d-none");
-    _this.renderAddRowToPL();
+
+    if(purchaseListCategory != "PaalThayir")
+    {
+        _this.renderAddRowToPL();
+    }
+    else
+    {
+        _this.renderAddRowToPLForPTExtras();
+    }
 
     /*if(purchaseListCategory == "Maligai")
     {
@@ -322,6 +388,46 @@ renderPL.prototype.render = function(plToRender) {
             var plWindow2 = window.open(addUrlParam(window.location.href, "purchaseListCategory", "KaaiKanigal"));
         }, 1000);
     }*/
+};
+
+renderPL.prototype.getPaalThayirModelOneRow = function() {
+    var _this = this;
+    var renderHtmlMapRow = [];
+    
+    renderHtmlMapRow += "<div class='col-12 cls_paalThayir_RowModalOne'>"
+                            + "<span class='col-1'></span>"
+                            + "<span class='col-10 text-center font-weight-bold'>"
+                                + "தேதி <input type='text' class='form-control cls_onehalfcol mx-3' style='display:inline'>"
+                                + "<select class='form-control cls_pl_session cls_onehalfcol font-weight-bold' id='id_pl_session' name='plSession' style='display:inline'><option>காலை </option><option>மாலை</option></select>"
+                                + "<input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு  &nbsp; &nbsp; பால் <input type='text' class='form-control col-1 ml-3' style='display:inline'> லிட்டர்"
+                                + "<span class='col-1 p-0 m-0'> <i class='fa fa-minus-circle mt-2 ml-2 cls_removeCurrentIngMap' data-index='1' style='font-size:25px;color:red'></i></span>"
+                            + "</span>"
+                            + "<span class='col-1'></span>"
+                            + "<br><br>"
+                        + "</div>"
+            
+    return renderHtmlMapRow;
+};
+
+renderPL.prototype.getPaalThayirModelTwoRow = function() {
+    var _this = this;
+    var renderHtmlMapRow = [];
+    
+    renderHtmlMapRow += "<div class='col-12 cls_paalThayir_RowModalTwo'>"
+                        + "<span class='col-1'></span>"
+                        + "<span class='col-10 text-center font-weight-bold'>"
+                            + "தேதி <input type='text' class='form-control cls_onehalfcol mx-3' style='display:inline'>"
+                            + "<select class='form-control cls_pl_session cls_onehalfcol font-weight-bold' id='id_pl_session' name='plSession' style='display:inline'><option>காலை </option><option>மாலை</option></select>"
+                            + "<input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு "
+                            + "<select class='form-control cls_pl_paal_thayir cls_onehalfcol font-weight-bold' id='id_pl_session' name='plPaalThayir' style='display:inline'><option>பால்</option><option>தயிர்</option></select>"
+                            + "<input type='text' class='form-control col-1 ml-3' style='display:inline'> லிட்டர்"
+                            + "<span class='col-1 p-0 m-0'> <i class='fa fa-minus-circle mt-2 ml-2 cls_removeCurrentIngMap' data-index='1' style='font-size:25px;color:red'></i></span>"
+                        + "</span>"
+                        + "<span class='col-1'></span>"
+                        + "<br><br>"
+                    + "</div>"
+            
+    return renderHtmlMapRow;
 };
 
 renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
@@ -754,6 +860,21 @@ renderPL.prototype.renderAddRowToPL = function() {
     $("#id_purchaseListContainer").append(renderHtml);
 };
 
+renderPL.prototype.renderAddRowToPLForPTExtras = function() {
+    var _this = this;
+    var renderHtml = [];
+
+    renderHtml  +=  "<br>"
+                    +"<div class='row col-12 cls_printReadyContainer'>"
+                        +"<span class='col-12 cls_printReadyActionContainer'>"
+                            +"<a class='btn btn-success btn-md text-white cls_getPrintReadyBtn float-right'>Get Print Ready</a>"
+                        +"</span>"
+                    +"</div>"
+                    +"<i class='fa fa-plus-circle mr-5 pr-5 float-right cls_addRowPLAction d-none' style='font-size:24px;color:green'></i>"
+
+    $("#id_purchaseListContainer").append(renderHtml);
+};
+
 renderPL.prototype.addNewRowToPL = function(addAfterIndex) {
     var _this = this;
     var renderHtml = [];
@@ -847,16 +968,26 @@ renderPL.prototype.renderPoojaTable = function() {
 
 renderPL.prototype.registerEvents = function(PLToGenerate) {
     var _this = this;
-    
+    var purchaseListCategory = getValueFromQueryParam('purchaseListCategory');
+
     $(document).ready(function(){
         $(document).on("click", ".cls_removeCurrentIngMap", function(e){
             /*$(this).parents('.cls_ingredientCont').remove();
             _this.reIndexPL();*/
             //_this.removeAndReRender($(this).data('index'), PLToGenerate);
-            $("#confirmationPopup").find('.modal-title').text("Are you sure to delete "+$(this).parents('.cls_ingredientCont').find('.pl_curr_name').val()+" from Purchase List?");
-            $("#confirmationPopup").modal('show');     
-            $("#confirmationPopup").data("module", "PL");
-            $("#confirmationPopup").data("idToDelete", $(this).data('index'));            
+
+            if(purchaseListCategory != "PaalThayir")
+            {
+                $("#confirmationPopup").find('.modal-title').text("Are you sure to delete "+$(this).parents('.cls_ingredientCont').find('.pl_curr_name').val()+" from Purchase List?");
+                $("#confirmationPopup").modal('show');     
+                $("#confirmationPopup").data("module", "PL");
+                $("#confirmationPopup").data("idToDelete", $(this).data('index'));
+            }
+            else
+            {
+                $(this).parents('.cls_paalThayir_RowModalOne').remove();
+                $(this).parents('.cls_paalThayir_RowModalTwo').remove();
+            }
         });
 
         $(document).on("click", ".cls_addRowPLAction", function(){
@@ -871,12 +1002,16 @@ renderPL.prototype.registerEvents = function(PLToGenerate) {
             $('.cls_removeCurrentIngMap').attr('hidden',false);
             $(this).addClass('d-none');
             $('.cls_printReadyContainer').removeClass('d-none');
+            $('.cls_addRowInPaalThayir_ModalOne').removeClass('d-none');
+            $('.cls_addRowInPaalThayir_ModalTwo').removeClass('d-none');
         });
 
         $(document).on("click", ".cls_getPrintReadyBtn", function(){
             $('.cls_removeCurrentIngMap').attr('hidden',true);
             $('.cls_printReadyContainer').addClass('d-none');
             $('.cls_addRowPLAction').removeClass('d-none');
+            $('.cls_addRowInPaalThayir_ModalOne').addClass('d-none');
+            $('.cls_addRowInPaalThayir_ModalTwo').addClass('d-none');
         });
 
         $(document).on("click", ".cls_addRowInPL", function(){
@@ -890,6 +1025,16 @@ renderPL.prototype.registerEvents = function(PLToGenerate) {
                 _this.removeAndReRender($("#confirmationPopup").data("idToDelete"), PLToGenerate);
                 $("#confirmationPopup").modal('hide');
             }
+        });
+
+        $(document).on("click", ".cls_addRowInPaalThayir_ModalOne", function(){
+            var elemToAdd = $(_this.getPaalThayirModelOneRow());
+            cloneDOM(elemToAdd, $('.cls_RowModalOne_Cont'));
+        });
+
+        $(document).on("click", ".cls_addRowInPaalThayir_ModalTwo", function(){
+            var elemToAdd = $(_this.getPaalThayirModelTwoRow());
+            cloneDOM(elemToAdd, $('.cls_RowModalTwo_Cont'));
         });
 
     });
