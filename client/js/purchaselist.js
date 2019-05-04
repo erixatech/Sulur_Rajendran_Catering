@@ -844,7 +844,11 @@ renderPL.prototype.registerEvents = function(PLToGenerate) {
         $(document).on("click", ".cls_removeCurrentIngMap", function(e){
             /*$(this).parents('.cls_ingredientCont').remove();
             _this.reIndexPL();*/
-            _this.removeAndReRender($(this).data('index'), PLToGenerate)
+            //_this.removeAndReRender($(this).data('index'), PLToGenerate);
+            $("#confirmationPopup").find('.modal-title').text("Are you sure to delete "+$(this).parents('.cls_ingredientCont').find('.pl_curr_name').val()+" from Purchase List?");
+            $("#confirmationPopup").modal('show');     
+            $("#confirmationPopup").data("module", "PL");
+            $("#confirmationPopup").data("idToDelete", $(this).data('index'));            
         });
 
         $(document).on("click", ".cls_addRowPLAction", function(){
@@ -870,6 +874,14 @@ renderPL.prototype.registerEvents = function(PLToGenerate) {
         $(document).on("click", ".cls_addRowInPL", function(){
             //_this.addNewRowToPL($('.cls_addLineAfterNum').val());
             _this.addAndReRender($('.cls_addLineAfterNum').val(), PLToGenerate);
+        });
+
+        $(".cls_confirmPopupDelete").click(function() {
+            if($("#confirmationPopup").data("module")== "PL")
+            {
+                _this.removeAndReRender($("#confirmationPopup").data("idToDelete"), PLToGenerate);
+                $("#confirmationPopup").modal('hide');
+            }
         });
 
     });
