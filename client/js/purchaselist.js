@@ -801,7 +801,15 @@ renderPL.prototype.getQtyToRender = function(qty) {
             fracToRet = "&frac34;";
         }
 
-        qtyToRet = qtyToRet + " " + fracToRet;
+        if(qtyToRet>0)
+        {
+            qtyToRet = qtyToRet + " " + fracToRet;
+        }
+        else
+        {
+            qtyToRet = fracToRet;
+        }
+        //qtyToRet = qtyToRet + " " + fracToRet;
     }
     
     return qtyToRet;
@@ -922,7 +930,64 @@ function unitConversion(PLToConvert)
         var qtyToConvert = PLToConvert[i].quantity;
 		var unitToConvert = PLToConvert[i].unit;
 
-		if(unitToConvert == "gram" && qtyToConvert>1000)
+        if(unitToConvert == "gram")
+        {
+            if(qtyToConvert>1000)
+            {
+                PLToConvert[i].quantity = qtyToConvert / 1000;
+                PLToConvert[i].unit = "kilo";
+            }
+            else if(qtyToConvert>199 && qtyToConvert<301)   //200 to 300
+            {
+                PLToConvert[i].quantity = 0.25;
+                PLToConvert[i].unit = "kilo";
+            }
+            else if(qtyToConvert>449 && qtyToConvert<650)   //450 to 649
+            {
+                PLToConvert[i].quantity = 0.5;
+                PLToConvert[i].unit = "kilo";
+            }
+            else if(qtyToConvert>649 && qtyToConvert<801)   //650 to 800
+            {
+                PLToConvert[i].quantity = 0.75;
+                PLToConvert[i].unit = "kilo";
+            }
+            else if(qtyToConvert>800 && qtyToConvert<1001)  //801 to 1000
+            {
+                PLToConvert[i].quantity = 1;
+                PLToConvert[i].unit = "kilo";
+            }
+        }
+        else if(unitToConvert == "ml")
+        {
+            if(qtyToConvert>1000)
+            {
+                PLToConvert[i].quantity = qtyToConvert / 1000;
+                PLToConvert[i].unit = "litre";
+            }
+            else if(qtyToConvert>199 && qtyToConvert<301)   //200 to 300
+            {
+                PLToConvert[i].quantity = 0.25;
+                PLToConvert[i].unit = "litre";
+            }
+            else if(qtyToConvert>449 && qtyToConvert<650)   //450 to 649
+            {
+                PLToConvert[i].quantity = 0.5;
+                PLToConvert[i].unit = "litre";
+            }
+            else if(qtyToConvert>649 && qtyToConvert<801)   //650 to 800
+            {
+                PLToConvert[i].quantity = 0.75;
+                PLToConvert[i].unit = "litre";
+            }
+            else if(qtyToConvert>800 && qtyToConvert<1001)  //801 to 1000
+            {
+                PLToConvert[i].quantity = 1;
+                PLToConvert[i].unit = "litre";
+            }
+        }
+
+		/*if(unitToConvert == "gram" && qtyToConvert>1000)
 		{
 			PLToConvert[i].quantity = qtyToConvert / 1000;
 			PLToConvert[i].unit = "kilo";
@@ -931,7 +996,7 @@ function unitConversion(PLToConvert)
 		{
 			PLToConvert[i].quantity = qtyToConvert / 1000;
 			PLToConvert[i].unit = "litre";
-		}
+		}*/
     }
     return PLToConvert;
 }
