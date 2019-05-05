@@ -174,27 +174,7 @@ renderPL.prototype.render = function(plToRender) {
                         + "<div class='col-12 text-center text-danger font-weight-bold'><u>மளிகை சாமான்கள் மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
                         + _this.renderPoojaTable()
                         + "</div>"
-                            /*+ "<div class='row col-12'>"
-                                + "<div class='col-1'></div>"
-                                + "<div class='list-group col-10 text-center'>"
-                                    + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
-                                        + "Maligai"
-
-                                    for(var j=0; j<cat_maligai.length ; j++){
-                                        renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_maligai_"+ j +" mx-0 px-0'>"
-                                                        + "<span class='col-1 px-3 cls_rowIndex'>"+Number(j+1)+" . </span>"
-                                                        + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='"+cat_maligai[j].name+"' style='display:inline'></span>"
-                                                        + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='"+_this.getQtyToRender(cat_maligai[j].quantity)+"' style='display:inline'></span>"
-                                                        + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='"+cat_maligai[j].unit+"' style='display:inline'></span>"
-                                                        + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
-                                                    + "</a>"
-                                    }
-                                    
-                        renderHtml += "</a>"
-                           + "</div>"
-                           + "<div class='col-1'></div>"
-                       + "</div>"
-                       +"<br><br>"*/
+                        
                        renderHtml += _this.renderItemInPL(cat_maligai, "Maligai");
         }
         else
@@ -210,27 +190,7 @@ renderPL.prototype.render = function(plToRender) {
                             + "<div class='col-12 text-center font-weight-bold'>தேதி <input type='text' class='form-control col-2 mx-3' style='display:inline'> <select class='form-control cls_pl_session cls_onehalfcol font-weight-bold' id='id_pl_session' name='plSession' style='display:inline'><option>காலை </option><option>மாலை</option></select> <input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு தேவை, இடம் <input type='text' class='form-control col-3 ml-3' style='display:inline'></div><br><br>"
                             + "<div class='col-12 text-center text-danger font-weight-bold'><u>காய்கறி மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
                         + "</div><br>"
-                        /*+ "<div class='row col-12'>"
-                                + "<div class='col-1'></div>"
-                                +"<div class='list-group col-10 text-center'>"
-                                    + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
-                                        + "Kaai Kanigal"
-
-                                    for(var j=0; j<cat_kaikanigal.length ; j++){
-                                        renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_kaikanigal_"+ j +" mx-0 px-0'>"
-                                                        + "<span class='col-1 px-3 cls_rowIndex'>"+Number(j+1)+" . </span>"
-                                                        + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='"+cat_kaikanigal[j].name+"' style='display:inline'></span>"
-                                                        + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='"+_this.getQtyToRender(cat_kaikanigal[j].quantity)+"' style='display:inline'></span>"
-                                                        + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='"+cat_kaikanigal[j].unit+"' style='display:inline'></span>"
-                                                        + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
-                                                    + "</a>"
-                                    }
-                                    
-                        renderHtml += "</a>"
-                            + "</div>"
-                           + "<div class='col-1'></div>"
-                       + "</div>"
-                       + "<br><br>"*/
+                        
                        renderHtml += _this.renderItemInPL(cat_kaikanigal, "Kaai Kanigal");
         }
         else
@@ -365,39 +325,19 @@ renderPL.prototype.render = function(plToRender) {
 
                         + "</div>"
                     + "</div><br>"
-        if(cat_extras && cat_extras.length>0){
-            /*renderHtml += "<div class='row col-12 text-center'>"
+        /*if(cat_extras && cat_extras.length>0){
+            renderHtml += "<div class='row col-12 text-center'>"
                             + "<div class='col-12 text-center font-weight-bold'>தேதி <input type='text' class='form-control col-2 mx-3' style='display:inline'> மாலை <input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு தேவை, இடம் <input type='text' class='form-control col-3 ml-3' style='display:inline'></div><br>"
                             + "<div class='col-12 text-center text-danger font-weight-bold'><u>மளிகை சாமான்கள் மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
 
-                        + "</div><br>"*/
-                        /*+ "<div class='row col-12'>"
-                            + "<div class='col-1'></div>"
-                            + "<div class='list-group col-10 text-center'>"
-                                + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
-                                    + "Extras"
-
-                                for(var j=0; j<cat_extras.length ; j++){
-                                    renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_extras_"+ j +" mx-0 px-0'>"
-                                                    + "<span class='col-1 px-3 cls_rowIndex'>"+Number(j+1)+" . </span>"
-                                                    + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='"+cat_extras[j].name+"' style='display:inline'></span>"
-                                                    + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='"+_this.getQtyToRender(cat_extras[j].quantity)+"' style='display:inline'></span>"
-                                                    + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='"+cat_extras[j].unit+"' style='display:inline'></span>"
-                                                    + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
-                                                + "</a>"
-                                }
-                                
-                    renderHtml += "</a>"
-                            + "</div>"
-                           + "<div class='col-1'></div>"
-                       + "</div>"
-                       + "<br><br>"*/
-                       //renderHtml += _this.renderItemInPL(cat_extras, "Extras");
+                        + "</div><br>"
+                        
+                       renderHtml += _this.renderItemInPL(cat_extras, "Extras");
         }
         else
         {
             renderHtml += "<div class='list-group col-12 py-5 my-5 font-weight-bold text-danger text-center'>No Items in Extras for this Order</div>"
-        }
+        }*/
     }
 
     if(purchaseListCategory == "Suppliments")
@@ -1353,7 +1293,7 @@ function roundOffPL(PLToRoundOff)
         	{
                 var qtyToRound = Number(String(PLToRoundOff[i].quantity).split('.')[0]);                
                 var fracval = Number((String(PLToRoundOff[i].quantity).split('.')[1]).charAt(0));
-                var unitsToCheckForNonFraction = ["nos", "kattu", "kowli", "pocket"];
+                var unitsToCheckForNonFraction = ["nos", "kattu", "kowli", "pocket", "gram", "ml"];
 
                 if(!isInList(PLToRoundOff[i].unit, unitsToCheckForNonFraction))
                 {            		
