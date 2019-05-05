@@ -249,7 +249,7 @@ RecipeTab.prototype.getIngredientMapRow = function() {
 		              + '            <select class="form-control cls_ingredientUnit_recipe" id="id_ingredientUnit_recipe_'+$('.cls_ingredientUnit_recipe').length+'" name="ingredientUnit"></select>'
 		              + '        </div>'
 		              + '        <div class="col-1">'
-		  			  +             ($('.cls_ingredientMapRow').length>0 ? '<i class="fa fa-minus-circle cls_removeCurrentIngredientMap" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>' : '')
+		  			  +            	'<i class="fa fa-minus-circle cls_removeCurrentIngredientMap" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>'
 		  			  + '        </div>'
 		              + '	</div>';
 			

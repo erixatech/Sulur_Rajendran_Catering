@@ -533,7 +533,7 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 				+ '        <input type="number" min="0" class="form-control cls_receipeCount_sf" required id="id_receipeCount_sf" value="'+ (isUpdate ? recipeObjInServiceForm.count : "")+'" placeholder="Enter Head Count" name="receipeCount">'
 				+ '      </div>'
 				+ '      <div class="col-1">'
-				+ (initialRowNum>0 ? '<a role="button" class="btn p-0"> <i class="fa fa-minus-circle mt-2 cls_removeCurrentReceipeMap text-danger" title= "Remove" style="font-size:25px;cursor:pointer"></i></a>' : '')
+				+ '			<a role="button" class="btn p-0"> <i class="fa fa-minus-circle mt-2 cls_removeCurrentReceipeMap text-danger" title= "Remove" style="font-size:25px;cursor:pointer"></i></a>'
 				+ '      </div>'
 				+ '    </div>';
 	}
@@ -570,7 +570,7 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 				+ '        <input type="number" min="0" class="form-control cls_receipeCount_sf" required id="id_receipeCount_sf" value="" placeholder="Enter Head Count" name="receipeCount">'
 				+ '      </div>'
 				+ '      <div class="col-1">'
-				+ (initialRowNum>0 ? '<a role="button" class="btn p-0"> <i class="fa fa-minus-circle mt-2 cls_removeCurrentReceipeMap text-danger" title= "Remove" style="font-size:25px;cursor:pointer"></i></a>' : '')
+				+ 			'<a role="button" class="btn p-0"> <i class="fa fa-minus-circle mt-2 cls_removeCurrentReceipeMap text-danger" title= "Remove" style="font-size:25px;cursor:pointer"></i></a>'
 				+ '      </div>'
 				+ '    </div>';
 	}
@@ -641,7 +641,7 @@ OrderTab.prototype.getOrderLevelIngredientMapRow = function() {
 							  	+ '<select class="form-control cls_orderLevelIngredientUnit_recipe" id="id_orderLevelIngredientUnit_recipe" name="orderLevelIngredientUnit"></select>'
 		                    + '</div>'	
 						    + '<div class="col-1">'
-							+    ($('.cls_ingredientMapRow').length>0 ? '<i class="fa fa-minus-circle cls_removeOrderLevelCurrentIngredientMap mt-2" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>' : '')
+							+   '<i class="fa fa-minus-circle cls_removeOrderLevelCurrentIngredientMap mt-2" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>'
 						    + '</div>'
 	                    + '</div>';
 			

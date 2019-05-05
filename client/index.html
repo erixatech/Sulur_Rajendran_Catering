@@ -162,17 +162,17 @@
 						<div class="row cls_supplimentsContainer pb-5 ml-2 d-none">
 							<h5 class="pb-3"><u>Add Order Level Suppliments</u></h5>
 						    <div class="orderLevelIngredientMap col-12">
-							    <div class="row cls_orderLevelIngredientMapRow col-8 text-center">
-								    <div class="col-6">
+							    <div class="row cls_orderLevelIngredientMapRow col-8">
+								    <div class="col-6 text-center">
 									  	<label for="orderLevelIngredientName">Name</label>
 									  	<input class="form-control cls_orderLevelIngredientName_recipe" list="id_orderLevelIngredientName_recipe_0" name="id_orderLevelIngredientName_recipe">
 					                    <datalist class="cls_dl_orderLevelIngredientName_recipe" id="id_orderLevelIngredientName_recipe_0" name="orderLevelIngredientName"></datalist>
 				                    </div>
-				                    <div class="cls_onehalfcol">
+				                    <div class="cls_onehalfcol text-center">
 								      <label for="orderLevelQunatity">Quantity</label>
 								      <input type="text" class="form-control cls_orderLevelIngredientQunatity_recipe" required id="id_orderLevelIngredientQunatity_recipe" placeholder="Enter Quantity" name="orderLevelQunatity">
 								    </div>
-								    <div class="cls_onehalfcol">
+								    <div class="cls_onehalfcol text-center">
 								      <label for="orderLevelIngredientFraction">Fraction</label>
 								      <select class="form-control cls_orderLevelIngredientFraction_recipe" id="id_orderLevelIngredientFraction_recipe" name="orderLevelIngredientFraction">
 								      	<option></option>
@@ -181,11 +181,12 @@
 								      	<option>&frac34;</option>
 								      </select>
 								    </div>
-				                    <div class="col-2">
+				                    <div class="col-2 text-center">
 									  	<label for="orderLevelIngredientUnit">Unit</label>
 					                    <select class="form-control cls_orderLevelIngredientUnit_recipe" id="id_orderLevelIngredientUnit_recipe" name="orderLevelIngredientUnit"></select>
 				                    </div>
-								    <div class="col-1">
+								    <div class="col-1 pt-4">
+								    	<i class="fa fa-minus-circle cls_removeOrderLevelCurrentIngredientMap mt-2" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>
 								    </div>
 			                    </div>
 							</div>
@@ -362,7 +363,8 @@
 							  	<label for="ingredientUnit">Unit</label>
 			                    <select class="form-control cls_ingredientUnit_recipe" id="id_ingredientUnit_recipe" name="ingredientUnit"></select>
 		                    </div>
-						    <div class="col-1">
+						    <div class="col-1 pt-4">
+						    	<i class="fa fa-minus-circle cls_removeCurrentIngredientMap" title= "Remove" style="font-size:25px;color:red;cursor:pointer"></i>
 						    </div>
 	                    </div>
 				    </div>
