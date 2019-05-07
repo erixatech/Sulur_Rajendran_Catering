@@ -193,27 +193,7 @@ renderPL.prototype.render = function(plToRender) {
                         + "<div class='col-12 text-center text-danger font-weight-bold'><u>மளிகை சாமான்கள் மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
                         + _this.renderPoojaTable()
                         + "</div>"
-                            /*+ "<div class='row col-12'>"
-                                + "<div class='col-1'></div>"
-                                + "<div class='list-group col-10 text-center'>"
-                                    + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
-                                        + "Maligai"
-
-                                    for(var j=0; j<cat_maligai.length ; j++){
-                                        renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_maligai_"+ j +" mx-0 px-0'>"
-                                                        + "<span class='col-1 px-3 cls_rowIndex'>"+Number(j+1)+" . </span>"
-                                                        + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='"+cat_maligai[j].name+"' style='display:inline'></span>"
-                                                        + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='"+_this.getQtyToRender(cat_maligai[j].quantity)+"' style='display:inline'></span>"
-                                                        + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='"+cat_maligai[j].unit+"' style='display:inline'></span>"
-                                                        + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
-                                                    + "</a>"
-                                    }
-                                    
-                        renderHtml += "</a>"
-                           + "</div>"
-                           + "<div class='col-1'></div>"
-                       + "</div>"
-                       +"<br><br>"*/
+                        
                        renderHtml += _this.renderItemInPL(cat_maligai, "Maligai");
         }
         else
@@ -248,27 +228,7 @@ renderPL.prototype.render = function(plToRender) {
                         +    "</div>"
                         + "<div class='col-12 text-center text-danger font-weight-bold'><u>காய்கறி மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
                         + "</div><br>"
-                        /*+ "<div class='row col-12'>"
-                                + "<div class='col-1'></div>"
-                                +"<div class='list-group col-10 text-center'>"
-                                    + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
-                                        + "Kaai Kanigal"
-
-                                    for(var j=0; j<cat_kaikanigal.length ; j++){
-                                        renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_kaikanigal_"+ j +" mx-0 px-0'>"
-                                                        + "<span class='col-1 px-3 cls_rowIndex'>"+Number(j+1)+" . </span>"
-                                                        + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='"+cat_kaikanigal[j].name+"' style='display:inline'></span>"
-                                                        + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='"+_this.getQtyToRender(cat_kaikanigal[j].quantity)+"' style='display:inline'></span>"
-                                                        + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='"+cat_kaikanigal[j].unit+"' style='display:inline'></span>"
-                                                        + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
-                                                    + "</a>"
-                                    }
-                                    
-                        renderHtml += "</a>"
-                            + "</div>"
-                           + "<div class='col-1'></div>"
-                       + "</div>"
-                       + "<br><br>"*/
+                        
                        renderHtml += _this.renderItemInPL(cat_kaikanigal, "Kaai Kanigal");
         }
         else
@@ -279,439 +239,143 @@ renderPL.prototype.render = function(plToRender) {
 
     if(purchaseListCategory == "Extras")
     {
-        renderHtml += "<div class='row pl-2'>"
-                        + "<div class='col-10'>"
-                            + "<div class='row border'>"
+        var row1NameData = ["சர்க்கரை இல்லாத பால்கோவா", "ஸ்வீட் நைஸ் பால்கோவா", "சிவசக்தி ஸ்பெஷல் நெய்", "விக்னேஷ் சில்லி மசாலா"];
+        var row1UnitData = ["கிலோ", "கிலோ", "டின்", "கிலோ"];
+        
+        var row2NameData = ["ஸ்பெஷல் பால் பன்னீர்", "சர்க்கரை இல்லாத பால்கோவா", "மில்க்கிரீம்", "வெண்ணெய்"];
+        var row2UnitData = ["கிலோ", "கிலோ", "கிலோ", "கிலோ"];
+
+        var table2NameData = ["option", "option", "ஸ்பெஷல் தோசை மாவு", "option", "ஸ்பெஷல் தோசை மாவு", "ஸ்பெஷல் இடியாப்பம் மாவு", "ஸ்பெஷல் ஆப்பம் மாவு", "ஐஸ்பார் (50 கிலோ அளவு)"];
+        var table2UnitData = ["கிலோ", "கிலோ", "கிலோ", "கிலோ", "கிலோ", "கிலோ", "கிலோ", "பார்"];
+        var table2OptionData = ["மெது இட்லி மாவு", "இளநீர் இட்லி மாவு", "தட்டு இட்லி மாவு"];
+
+        renderHtml += "<div class='row px-3 font-weight-bold my-3'>"
+                        + "<div class='col-12 border border-dark'>"
+                            + "<div class='row border border-dark p-2'>"
                             +   "<div class='col-6 text-danger font-weight-bold'> சூலூர் விக்னேஷ் புட்ஸ் </div>" 
                             +   "<div class='col-4 text-danger font-weight-bold'> பாலகுமார் 9843977555 </div>"
                             +   "<div class='col-2 text-danger text-center font-weight-bold'> அளவு </div>"
                             + "</div>"
-                            + "<div class='row border'>"
-                                + "<div class='col-6 border-right'>"
-                                +      "<div class='row'>"
-                                +           "<div class='col border-right'>"
-                                +               "<div class='row p-2'>"
-                                +                   "<label class='col-sm-4 col-form-label' for='date'>தேதி </label>"
-                                +                   "<input type='text' class='form-control col-sm-7 cls_sessionDateTime' name='date' id='date'/>"
-                                +                   "<i class='fa cls_calenderIcon'>&#xf073;</i>"
-                                +               "</div>"
-                                +               "<div class='row pl-2'>"
-                                +                   "<select class='form-control col-sm-4 mr-2'>"
-                                +                       "<option> காலை </option>"
-                                +                       "<option> மாலை </option>"
-                                +                   "</select>"
-                                +                   "<input type='text' class='form-control col-sm-4' name='time' id='time'/>"
-                                +                   "<label class='col-sm-3 col-form-label'> மணிக்கு </label>"
-                                +               "</div>"
-                                +           "</div>"
-                                +      "</div>"
-                                + "</div>"
-                                + "<div class='col-6'>"
+                            + "<div class='row border border-dark'>"
+                    renderHtml  += _this.getExtrasTableOneLeftRow();
+                    renderHtml  += "<div class='col-6'>"
                                 +   "<div class='row'>"
                                 +       "<div class='col'>"
-                                +           "<div class='row border-bottom p-2'>"
-                                +               "<span class='col-9 border-right'> சர்க்கரை இல்லாத பால்கோவா </span>"
-                                +               "<div class='col-3'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +           "<div class='row border-bottom p-2'>"
-                                +               "<span class='col-9 border-right'> ஸ்வீட் நைஸ் பால்கோவா </span>"
-                                +               "<div class='col-3'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +           "<div class='row border-bottom p-2'>"
-                                +               "<span class='col-9 border-right'> சிவசக்தி ஸ்பெஷல் நெய் </span>"
-                                +               "<div class='col-3'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +           "<div class='row p-2'>"
-                                +               "<span class='col-9 border-right'> விக்னேஷ் சில்லி மசாலா </span>"
-                                +               "<div class='col-3'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +       "</div>"
+
+                                for(var i=0; i<row1NameData.length; i++)
+                                {
+                                    renderHtml  +=          "<div class='row "+ ((i!=row1NameData.length-1) ? "border-bottom" : "") +" border-dark p-2'>"
+                                                +               "<span class='col-8 pt-2 border-right border-dark'>"+row1NameData[i]+"</span>"
+                                                +               "<div class='col-4'>"
+                                                +                   "<div class='row pl-2'>"
+                                                +                       "<input type='text' class='form-control input-sm col-6'/>"
+                                                +                       "<span class='col-6 pt-2'>"+row1UnitData[i]+"</span>"
+                                                +                   "</div>"
+                                                +               "</div>"
+                                                +           "</div>"
+                                }
+
+                    renderHtml  +=       "</div>"
                                 +   "</div>"
                                 + "</div>"
-                            + "</div>"
-                            + "<div class='row border'>"
-                                + "<div class='col-6 border-right'>"
-                                +      "<div class='row'>"
-                                +           "<div class='col border-right'>"
-                                +               "<div class='row p-2'>"
-                                +                   "<label class='col-sm-4 col-form-label' for='date'>தேதி </label>"
-                                +                   "<input type='text' class='form-control col-sm-7 cls_sessionDateTime' name='date' id='date'/>"
-                                +                   "<i class='fa cls_calenderIcon'>&#xf073;</i>"
-                                +               "</div>"
-                                +               "<div class='row pl-2'>"
-                                +                   "<select class='form-control col-sm-4 mr-2'>"
-                                +                       "<option> காலை </option>"
-                                +                       "<option> மாலை </option>"
-                                +                   "</select>"
-                                +                   "<input type='text' class='form-control col-sm-4' name='time' id='time'/>"
-                                +                   "<label class='col-sm-3 col-form-label'> மணிக்கு </label>"
-                                +               "</div>"
-                                +           "</div>"
-                                +      "</div>"
                                 + "</div>"
-                                + "<div class='col-6'>"
+                                + "<div class='row border border-dark'>"
+                    renderHtml  += _this.getExtrasTableOneLeftRow();
+                    renderHtml  += "<div class='col-6'>"
                                 +   "<div class='row'>"
                                 +       "<div class='col'>"
-                                +           "<div class='row border-bottom p-2'>"
-                                +               "<span class='col-9 border-right'> ஸ்பெஷல் பால் பன்னீர் </span>"
-                                +               "<div class='col-3'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +           "<div class='row border-bottom p-2'>"
-                                +               "<span class='col-9 border-right'> சர்க்கரை இல்லாத பால்கோவா </span>"
-                                +               "<div class='col-3'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +           "<div class='row border-bottom p-2'>"
-                                +               "<span class='col-9 border-right'> மில்க்கிரீம் </span>"
-                                +               "<div class='col-3'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +           "<div class='row p-2'>"
-                                +               "<span class='col-9 border-right'> வெண்ணெய் </span>"
-                                +               "<div class='col-3'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +       "</div>"
+
+                                for(var i=0; i<row2NameData.length; i++)
+                                {
+                                    renderHtml  +=          "<div class='row "+ ((i!=row2NameData.length-1) ? "border-bottom" : "") +" border-dark p-2'>"
+                                                +               "<span class='col-8 pt-2 border-right border-dark'>"+row2NameData[i]+"</span>"
+                                                +               "<div class='col-4'>"
+                                                +                   "<div class='row pl-2'>"
+                                                +                       "<input type='text' class='form-control input-sm col-6'/>"
+                                                +                       "<span class='col-6 pt-2'>"+row2UnitData[i]+"</span>"
+                                                +                   "</div>"
+                                                +               "</div>"
+                                                +           "</div>"
+                                }
+
+                    renderHtml  +=       "</div>"
                                 +   "</div>"
                                 + "</div>"
                             + "</div>"
                         + "</div>"
-                        + "<div class='col-10 pt-4'>"
-                            + "<div class='row border'>"
+
+                        + "<div class='col-12 border border-dark mt-5'>"
+                            + "<div class='row border border-dark p-2'>"
                             +   "<div class='col-6 text-danger font-weight-bold'> சூலூர் விக்னேஷ் புட்ஸ் </div>" 
                             +   "<div class='col-4 text-danger font-weight-bold'> 9842259874, 9566356662 </div>"
                             +   "<div class='col-2 text-danger text-center font-weight-bold'> அளவு </div>"
                             + "</div>"
-                            + "<div class='row border'>"
-                                + "<div class='col'>"
-                                +   "<div class='row'>"
-                                +       "<div class='col'>"
-                                +           "<div class='row border-bottom p-2'>"
-                                +               "<div class='col-6 border-right'>"
-                                +                   "<div class='row p-1'>"
-                                +                       "<label class='col-sm-1 col-form-label p-0' for='date'>தேதி </label>"
-                                +                       "<input type='text' class='form-control col-sm-3 cls_sessionDateTime' name='date' id='date'/>"
-                                +                       "<i class='fa cls_calenderIcon'>&#xf073;</i>"
-                                +                       "<select class='form-control col-sm-3 mx-2'>"
-                                +                           "<option> காலை </option>"
-                                +                           "<option> மாலை </option>"
-                                +                       "</select>"
-                                +                       "<input type='text' class='form-control col-sm-2' name='time' id='time'/>"
-                                +                       "<label class='col-sm-2 col-form-label'> மணிக்கு </label>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +               "<div class='col-4 border-right'>"
-                                +                   "<select class='form-control col-10 mx-2'>"
-                                +                       "<option>மெது</option>"
-                                +                       "<option>இளநீர்</option>"
-                                +                       "<option>தட்டு இட்லி மாவு</option>"
-                                +                   "</select>"
-                                +               "</div>"
-                                +               "<div class='col-2'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +       "</div>"
-                                +   "</div>"
-                                + "</div>"
-                            + "</div>"
-                            + "<div class='row border'>"
-                            +   "<div class='col'>"
-                                +   "<div class='row'>"
-                                +       "<div class='col'>"
-                                +           "<div class='row border-bottom p-2'>"
-                                +               "<div class='col-6 border-right'>"
-                                +                   "<div class='row p-1'>"
-                                +                       "<label class='col-sm-1 col-form-label p-0' for='date'>தேதி </label>"
-                                +                       "<input type='text' class='form-control col-sm-3 cls_sessionDateTime' name='date' id='date'/>"
-                                +                       "<i class='fa cls_calenderIcon'>&#xf073;</i>"
-                                +                       "<select class='form-control col-sm-3 mx-2'>"
-                                +                           "<option> காலை </option>"
-                                +                           "<option> மாலை </option>"
-                                +                       "</select>"
-                                +                       "<input type='text' class='form-control col-sm-2' name='time' id='time'/>"
-                                +                       "<label class='col-sm-2 col-form-label'> மணிக்கு </label>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +               "<div class='col-4 border-right'>"
-                                +                   "<select class='form-control col-10 mx-2'>"
-                                +                       "<option>மெது</option>"
-                                +                       "<option>இளநீர்</option>"
-                                +                       "<option>தட்டு இட்லி மாவு</option>"
-                                +                   "</select>"
-                                +               "</div>"
-                                +               "<div class='col-2'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +       "</div>"
-                                +   "</div>"
-                                + "</div>"
-                            + "</div>"
-                            + "<div class='row border'>"
-                            +   "<div class='col'>"
-                                +   "<div class='row'>"
-                                +       "<div class='col'>"
-                                +           "<div class='row border-bottom p-2'>"
-                                +               "<div class='col-6 border-right'>"
-                                +                   "<div class='row p-1'>"
-                                +                       "<label class='col-sm-1 col-form-label p-0' for='date'>தேதி </label>"
-                                +                       "<input type='text' class='form-control col-sm-3 cls_sessionDateTime' name='date' id='date'/>"
-                                +                       "<i class='fa cls_calenderIcon'>&#xf073;</i>"
-                                +                       "<select class='form-control col-sm-3 mx-2'>"
-                                +                           "<option> காலை </option>"
-                                +                           "<option> மாலை </option>"
-                                +                       "</select>"
-                                +                       "<input type='text' class='form-control col-sm-2' name='time' id='time'/>"
-                                +                       "<label class='col-sm-2 col-form-label'> மணிக்கு </label>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +               "<span class='col-4 border-right'> ஸ்பெஷல் தோசை மாவு </span>"
-                                +               "<div class='col-2'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +       "</div>"
-                                +   "</div>"
-                                + "</div>"
-                            + "</div>"
-                            + "<div class='row border'>"
-                            +   "<div class='col'>"
-                                +   "<div class='row'>"
-                                +       "<div class='col'>"
-                                +           "<div class='row border-bottom p-2'>"
-                                +               "<div class='col-6 border-right'>"
-                                +                   "<div class='row p-1'>"
-                                +                       "<label class='col-sm-1 col-form-label p-0' for='date'>தேதி </label>"
-                                +                       "<input type='text' class='form-control col-sm-3 cls_sessionDateTime' name='date' id='date'/>"
-                                +                       "<i class='fa cls_calenderIcon'>&#xf073;</i>"
-                                +                       "<select class='form-control col-sm-3 mx-2'>"
-                                +                           "<option> காலை </option>"
-                                +                           "<option> மாலை </option>"
-                                +                       "</select>"
-                                +                       "<input type='text' class='form-control col-sm-2' name='time' id='time'/>"
-                                +                       "<label class='col-sm-2 col-form-label'> மணிக்கு </label>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +               "<div class='col-4 border-right'>"
-                                +                   "<select class='form-control col-10 mx-2'>"
-                                +                       "<option>மெது</option>"
-                                +                       "<option>இளநீர்</option>"
-                                +                       "<option>தட்டு இட்லி மாவு</option>"
-                                +                   "</select>"
-                                +               "</div>"
-                                +               "<div class='col-2'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +       "</div>"
-                                +   "</div>"
-                                + "</div>"
-                            + "</div>"
-                            + "<div class='row border'>"
-                            +   "<div class='col'>"
-                                +   "<div class='row'>"
-                                +       "<div class='col'>"
-                                +           "<div class='row border-bottom p-2'>"
-                                +               "<div class='col-6 border-right'>"
-                                +                   "<div class='row p-1'>"
-                                +                       "<label class='col-sm-1 col-form-label p-0' for='date'>தேதி </label>"
-                                +                       "<input type='text' class='form-control col-sm-3 cls_sessionDateTime' name='date' id='date'/>"
-                                +                       "<i class='fa cls_calenderIcon'>&#xf073;</i>"
-                                +                       "<select class='form-control col-sm-3 mx-2'>"
-                                +                           "<option> காலை </option>"
-                                +                           "<option> மாலை </option>"
-                                +                       "</select>"
-                                +                       "<input type='text' class='form-control col-sm-2' name='time' id='time'/>"
-                                +                       "<label class='col-sm-2 col-form-label'> மணிக்கு </label>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +               "<span class='col-4 border-right'> ஸ்பெஷல் தோசை மாவு </span>"
-                                +               "<div class='col-2'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +       "</div>"
-                                +   "</div>"
-                                + "</div>"
-                            + "</div>"
-                            + "<div class='row border'>"
-                            +   "<div class='col'>"
-                                +   "<div class='row'>"
-                                +       "<div class='col'>"
-                                +           "<div class='row border-bottom p-2'>"
-                                +               "<div class='col-6 border-right'>"
-                                +                   "<div class='row p-1'>"
-                                +                       "<label class='col-sm-1 col-form-label p-0' for='date'>தேதி </label>"
-                                +                       "<input type='text' class='form-control col-sm-3 cls_sessionDateTime' name='date' id='date'/>"
-                                +                       "<i class='fa cls_calenderIcon'>&#xf073;</i>"
-                                +                       "<select class='form-control col-sm-3 mx-2'>"
-                                +                           "<option> காலை </option>"
-                                +                           "<option> மாலை </option>"
-                                +                       "</select>"
-                                +                       "<input type='text' class='form-control col-sm-2' name='time' id='time'/>"
-                                +                       "<label class='col-sm-2 col-form-label'> மணிக்கு </label>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +               "<span class='col-4 border-right'> ஸ்பெஷல் இடியாப்பம் மாவு </span>"
-                                +               "<div class='col-2'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +       "</div>"
-                                +   "</div>"
-                                + "</div>"
-                            + "</div>"
-                            + "<div class='row border'>"
-                            +   "<div class='col'>"
-                                +   "<div class='row'>"
-                                +       "<div class='col'>"
-                                +           "<div class='row border-bottom p-2'>"
-                                +               "<div class='col-6 border-right'>"
-                                +                   "<div class='row p-1'>"
-                                +                       "<label class='col-sm-1 col-form-label p-0' for='date'>தேதி </label>"
-                                +                       "<input type='text' class='form-control col-sm-3 cls_sessionDateTime' name='date' id='date'/>"
-                                +                       "<i class='fa cls_calenderIcon'>&#xf073;</i>"
-                                +                       "<select class='form-control col-sm-3 mx-2'>"
-                                +                           "<option> காலை </option>"
-                                +                           "<option> மாலை </option>"
-                                +                       "</select>"
-                                +                       "<input type='text' class='form-control col-sm-2' name='time' id='time'/>"
-                                +                       "<label class='col-sm-2 col-form-label'> மணிக்கு </label>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +               "<span class='col-4 border-right'> ஸ்பெஷல் ஆப்பம் மாவு </span>"
-                                +               "<div class='col-2'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>கிலோ</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +       "</div>"
-                                +   "</div>"
-                                + "</div>"
-                            + "</div>"
-                            + "<div class='row border'>"
-                            +   "<div class='col'>"
-                                +   "<div class='row'>"
-                                +       "<div class='col'>"
-                                +           "<div class='row border-bottom p-2'>"
-                                +               "<div class='col-6 border-right'>"
-                                +                   "<div class='row p-1'>"
-                                +                       "<label class='col-sm-1 col-form-label p-0' for='date'>தேதி </label>"
-                                +                       "<input type='text' class='form-control col-sm-3 cls_sessionDateTime' name='date' id='date'/>"
-                                +                       "<i class='fa cls_calenderIcon'>&#xf073;</i>"
-                                +                       "<select class='form-control col-sm-3 mx-2'>"
-                                +                           "<option> காலை </option>"
-                                +                           "<option> மாலை </option>"
-                                +                       "</select>"
-                                +                       "<input type='text' class='form-control col-sm-2' name='time' id='time'/>"
-                                +                       "<label class='col-sm-2 col-form-label'> மணிக்கு </label>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +               "<span class='col-4 border-right'> ஐஸ்பார் (50 கிலோ அளவு) </span>"
-                                +               "<div class='col-2'>"
-                                +                   "<div class='row pl-2'>"
-                                +                       "<input type='text' class='form-control input-sm col-6'/>"
-                                +                       "<span class='col-6'>பார்</span>"
-                                +                   "</div>"
-                                +               "</div>"
-                                +           "</div>"
-                                +       "</div>"
-                                +   "</div>"
-                                + "</div>"
-                            + "</div>"
+
+                            for(var i=0; i<table2NameData.length; i++)
+                            {
+                                renderHtml  += "<div class='row border-bottom border-left border-right border-dark'>"
+                                                + "<div class='col'>"
+                                                +   "<div class='row'>"
+                                                +       "<div class='col'>"
+                                                +           "<div class='row p-2'>"
+                                                +               "<div class='col-6 border-right border-dark'>"
+                                                +                   "<div class='row p-1'>"
+                                                +                       "<label class='col-sm-1 col-form-label p-1 mr-2' for='date'>தேதி </label>"
+                                                +                       "<input type='text' class='form-control col-sm-3 cls_sessionDateTime' name='date' id='date'/>"
+                                                +                       "<i class='fa cls_calenderIcon'>&#xf073;</i>"
+                                                +                       "<select class='form-control col-sm-3 mx-2'>"
+                                                +                           "<option> காலை </option>"
+                                                +                           "<option> மாலை </option>"
+                                                +                       "</select>"
+                                                +                       "<input type='text' class='form-control col-sm-2' name='time' id='time'/>"
+                                                +                       "<label class='col-sm-2 col-form-label'> மணிக்கு </label>"
+                                                +                   "</div>"
+                                                +               "</div>"
+                                                
+                                                if(table2NameData[i] == "option")
+                                                {
+                                                    renderHtml  +=  "<div class='col-4 border-right border-dark pt-1'>"
+                                                                +     "<select class='form-control col-10 mx-2'>"
+                                                    for(var j=0; j<table2OptionData.length;j++)
+                                                    {
+                                                        renderHtml  +=     "<option>"+table2OptionData[j]+"</option>"
+                                                    }
+                                                    renderHtml  +=     "</select>"
+                                                }
+                                                else
+                                                {
+                                                    renderHtml  +=  "<div class='col-4 border-right border-dark pt-2 mt-1'>"
+                                                                +     "<span class='mx-3'>"+table2NameData[i]+"</span>"
+                                                }                                                
+                                    renderHtml  +=                "</div>"
+                                                +               "<div class='col-2 pt-1'>"
+                                                +                   "<div class='row pl-2'>"
+                                                +                       "<input type='text' class='form-control input-sm col-6'/>"
+                                                +                       "<span class='col-6 pt-2'>"+table2UnitData[i]+"</span>"
+                                                +                   "</div>"
+                                                +               "</div>"
+                                                +           "</div>"
+                                                +       "</div>"
+                                                +   "</div>"
+                                                + "</div>"
+                                            + "</div>"
+                            }
+
                         + "</div>"
-                    + "</div>"
-        if(cat_extras && cat_extras.length>0){
-            /*renderHtml += "<div class='row col-12 text-center'>"
+                    + "</div><br>"
+        /*if(cat_extras && cat_extras.length>0){
+            renderHtml += "<div class='row col-12 text-center'>"
                             + "<div class='col-12 text-center font-weight-bold'>தேதி <input type='text' class='form-control col-2 mx-3' style='display:inline'> மாலை <input type='text' class='form-control col-1 mx-3' style='display:inline'> மணிக்கு தேவை, இடம் <input type='text' class='form-control col-3 ml-3' style='display:inline'></div><br>"
                             + "<div class='col-12 text-center text-danger font-weight-bold'><u>மளிகை சாமான்கள் மீதமாவதை தவிர்க்க அளவு குறைவாக எழுதப்படும், தேவையெனில் வாங்கித்தர வேண்டும்</u></div><br>"
 
-                        + "</div><br>"*/
-                        /*+ "<div class='row col-12'>"
-                            + "<div class='col-1'></div>"
-                            + "<div class='list-group col-10 text-center'>"
-                                + "<a class='list-group-item list-group-item-action cls_ingredientCateory active text-white font-weight-bold'>"
-                                    + "Extras"
-
-                                for(var j=0; j<cat_extras.length ; j++){
-                                    renderHtml += "<a class='list-group-item list-group-item-action cls_ingredientCont ing_extras_"+ j +" mx-0 px-0'>"
-                                                    + "<span class='col-1 px-3 cls_rowIndex'>"+Number(j+1)+" . </span>"
-                                                    + "<span class='col-6 px-3'><input type='text' class='col-6 form-control' name='name' value='"+cat_extras[j].name+"' style='display:inline'></span>"
-                                                    + "<span class='col-2 px-3'><input type='text' class='col-1 form-control' name='quantity' value='"+_this.getQtyToRender(cat_extras[j].quantity)+"' style='display:inline'></span>"
-                                                    + "<span class='col-2 px-3'><input type='text' class='cls_onehalfcol form-control' name='unit' value='"+cat_extras[j].unit+"' style='display:inline'></span>"
-                                                    + "<span class='col-1'> <i class='fa fa-minus-circle mt-2 cls_removeCurrentIngMap' style='font-size:25px;color:red'></i></span>"
-                                                + "</a>"
-                                }
-                                
-                    renderHtml += "</a>"
-                            + "</div>"
-                           + "<div class='col-1'></div>"
-                       + "</div>"
-                       + "<br><br>"*/
-                       //renderHtml += _this.renderItemInPL(cat_extras, "Extras");
+                        + "</div><br>"
+                        
+                       renderHtml += _this.renderItemInPL(cat_extras, "Extras");
         }
         else
         {
             renderHtml += "<div class='list-group col-12 py-5 my-5 font-weight-bold text-danger text-center'>No Items in Extras for this Order</div>"
-        }
+        }*/
     }
 
     if(purchaseListCategory == "Suppliments")
@@ -843,13 +507,13 @@ renderPL.prototype.render = function(plToRender) {
     $("#id_purchaseListContainer").removeClass("d-none");
     $("#id_mainContentContainer").addClass("d-none");
 
-    if(purchaseListCategory != "PaalThayir")
+    if(purchaseListCategory != "PaalThayir" && purchaseListCategory != "Extras")
     {
         _this.renderAddRowToPL();
     }
-    else
+    else if(purchaseListCategory == "PaalThayir")
     {
-        _this.renderAddRowToPLForPTExtras();
+        _this.renderAddRowToPLForPT();
     }
 
     /*if(purchaseListCategory == "Maligai")
@@ -858,6 +522,31 @@ renderPL.prototype.render = function(plToRender) {
             var plWindow2 = window.open(addUrlParam(window.location.href, "purchaseListCategory", "KaaiKanigal"));
         }, 1000);
     }*/
+};
+
+renderPL.prototype.getExtrasTableOneLeftRow = function() {
+    var _this = this;
+    var renderHtmlMapRow = [];
+    
+    renderHtmlMapRow += "<div class='col-6 border-right border-dark'>"
+                    +      "<div class='row'>"
+                    +           "<div class='col mx-0 px-0 mt-3 border-dark'>"
+                    +               "<div class='row px-0 mx-0'>"
+                    +                   "<label class='col-1 mr-3 col-form-label' for='date'>தேதி </label>"
+                    +                   "<input type='text' class='form-control col-sm-3 cls_sessionDateTime' name='date' id='date'/>"
+                    +                   "<i class='fa cls_calenderIcon'>&#xf073;</i>"
+                    +                   "<select class='form-control col-3 ml-2 mr-2'>"
+                    +                       "<option> காலை </option>"
+                    +                       "<option> மாலை </option>"
+                    +                   "</select>"
+                    +                   "<input type='text' class='form-control col-sm-2' name='time' id='time'/>"
+                    +                   "<label class='col-sm-2 col-form-label'> மணிக்கு </label>"
+                    +               "</div>"
+                    +           "</div>"
+                    +      "</div>"
+                    + "</div>"
+            
+    return renderHtmlMapRow;
 };
 
 renderPL.prototype.getPaalThayirModelOneRow = function() {
@@ -1361,7 +1050,7 @@ renderPL.prototype.renderAddRowToPL = function() {
     $("#id_purchaseListContainer").append(renderHtml);
 };
 
-renderPL.prototype.renderAddRowToPLForPTExtras = function() {
+renderPL.prototype.renderAddRowToPLForPT = function() {
     var _this = this;
     var renderHtml = [];
 
@@ -1540,6 +1229,9 @@ renderPL.prototype.registerEvents = function(PLToGenerate) {
             registerDatepickerEvent();
         });
 
+        $('#id_purchaseListContainer input').addClass('font-weight-bold');
+        $('#id_purchaseListContainer select').addClass('font-weight-bold');
+
         registerDatepickerEvent();
 
     });
@@ -1703,7 +1395,7 @@ function roundOffPL(PLToRoundOff)
         	{
                 var qtyToRound = Number(String(PLToRoundOff[i].quantity).split('.')[0]);                
                 var fracval = Number((String(PLToRoundOff[i].quantity).split('.')[1]).charAt(0));
-                var unitsToCheckForNonFraction = ["nos", "kattu", "kowli", "pocket"];
+                var unitsToCheckForNonFraction = ["nos", "kattu", "kowli", "pocket", "gram", "ml"];
 
                 if(!isInList(PLToRoundOff[i].unit, unitsToCheckForNonFraction))
                 {            		
