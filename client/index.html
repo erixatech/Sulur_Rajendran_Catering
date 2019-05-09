@@ -41,7 +41,8 @@
 		    var recipeJson = {};
 		    var recipeNames = {};
 		    var ordersJsonMain = {};
-		    var supplimentIds = [ 118, 119, 120, 121, 126, 127, 128, 129, 130, 131, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 199, 200, 201, 202, 203, 204, 211, 212, 213 ];
+		    /*var supplimentIds = [ 118, 119, 120, 121, 126, 127, 128, 129, 130, 131, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 199, 200, 201, 202, 203, 204, 211, 212, 213 ];*/
+		    var supplimentIds = [];
         </script> 
      </head>
 	<body>
@@ -298,6 +299,12 @@
 				<div class="form-group">
 				  	<label for="ingredientCategory">Category</label>
                     <select class="form-control cls_ingredientCategory" id="id_ingredientCategory" name="ingredientCategory"></select>
+				</div>
+				<div class="form-group">
+					<div class="form-check checkbox-info-filled pt-2">
+						<input class="form-check-input filled-in" type="checkbox" value="" id="markAsSuppCheckbox">
+						<label class="form-check-label" for="markAsSuppCheckbox">Mark as Order level Suppliment</label>
+					</div>
 				</div>
 			    <div class="row float-right p-2">
 			        <div class="btn btn-primary mt-2 cls_saveIngredient">Save</div>

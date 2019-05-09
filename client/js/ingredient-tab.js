@@ -23,6 +23,8 @@ IngredientTab.prototype.render = function() {
 	    		ingredientJson = result[0];
 	    		delete ingredientJson["_id"];
 	    	}
+	    	supplimentIds = getSupplimentIdsFromIngredients(ingredientJson);
+	    	//console.log(supplimentIds);
 			_this.renderIngredients("All");
 		},
 		error: function(){
@@ -190,7 +192,8 @@ IngredientTab.prototype.registerEvents = function() {
 		    		{
 			    		"id": Number($("#ingredientModal").data("idToEdit")),
 				        "name": $("#id_tamilName").val(),
-				        "unit": $("#id_ingredientUnit").val()
+				        "unit": $("#id_ingredientUnit").val(),
+				        "isSuppliment": $("#markAsSuppCheckbox").prop("checked")
 				    };
 			        $.ajax({
 			        	url: "/editIngredient",
@@ -235,7 +238,8 @@ IngredientTab.prototype.registerEvents = function() {
 	    		{
 		    		"id": getNextId(ingredientJson, "Ingredient"),
 			        "name": $("#id_tamilName").val(),
-			        "unit": $("#id_ingredientUnit").val()
+			        "unit": $("#id_ingredientUnit").val(),
+			        "isSuppliment": $("#markAsSuppCheckbox").prop("checked")
 			    };
 		        $.ajax({
 		        	url: "/createIngredient",
@@ -282,6 +286,7 @@ IngredientTab.prototype.registerEvents = function() {
 				var name = curIngredientObj.name;
 				var categoryName = curIngredientObj.categoryName;
 				var unit = curIngredientObj.unit;
+				var isSuppliment = curIngredientObj.isSuppliment;
 				var modal = $("#ingredientModal");
 				modal.data("idToEdit",Number(idx));
 				$(".modal-title", modal).text("Edit Ingredient");
@@ -290,6 +295,10 @@ IngredientTab.prototype.registerEvents = function() {
 				$(".cls_ingredientCategory", modal).val(categoryName);
 				$(".cls_ingredientUnit", modal).val(unit);
 				$(".cls_ingredientCategory", modal).prop('disabled', true);
+				if(isSuppliment)
+				{
+					$("#markAsSuppCheckbox").prop("checked", true);
+				}
 			}
 			else
 	        {

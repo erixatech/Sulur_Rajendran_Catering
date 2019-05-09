@@ -192,6 +192,21 @@ function getIngredientIdByNameAndCat(ingredientJson, name, category) {
 	return toRet;
 }
 
+function getSupplimentIdsFromIngredients(ingredientJson) {
+	var toRet = [];
+	$.each( ingredientJson, function( categoryName, ingredientsArr ) {
+		if(categoryName!="_id" && categoryName!="name")
+		{
+			$.each(ingredientsArr, function( index, ingredientObj ) {
+				  if(ingredientObj.isSuppliment) {
+					  toRet[toRet.length] = ingredientObj.id;
+			      }
+			});
+		}			
+	});
+	return toRet;
+}
+
 function getSupplimentIdByName(supplimentIds, name) {
 	var toRet = -1;
 	$.each( supplimentIds, function( index, id ) {
