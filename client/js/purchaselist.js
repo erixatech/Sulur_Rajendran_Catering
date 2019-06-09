@@ -54,12 +54,14 @@ renderPL.prototype.calculatePL = function(){
 
                         qtyToAdd = qtyToAdd * currRecipeMap[i].count;
 
-                		var ingItemForPL = {"name" : currIngList[j].name, "quantity" : qtyToAdd, "unit" : unitToAdd};
+                        var currContribution = currRecipe.name + " : " + _this.formatContribution(qtyToAdd, unitToAdd) + ", ";
+                		var ingItemForPL = {"name" : currIngList[j].name, "quantity" : qtyToAdd, "unit" : unitToAdd, "contribution" : currContribution};
                 		var ingItemIndexInList = isAlreadyPresentInPL(ingItemForPL, PLToGenerate);
 
                 		if(ingItemIndexInList != -1)
                 		{
                 			PLToGenerate[ingItemIndexInList].quantity = Number(PLToGenerate[ingItemIndexInList].quantity) + Number(qtyToAdd);
+                            PLToGenerate[ingItemIndexInList].contribution = PLToGenerate[ingItemIndexInList].contribution + ingItemForPL.contribution;
                 		}
                 		else
                 		{
@@ -95,7 +97,7 @@ renderPL.prototype.calculatePL = function(){
 
         var currIngObj = getIngredientById(ingredientJson, currIngItem.id);
         if(currIngObj){
-            var ingItemForPL = {"name" : currIngObj.name, "quantity" : qtyToAdd, "unit" : unitToAdd};
+            var ingItemForPL = {"name" : currIngObj.name, "quantity" : qtyToAdd, "unit" : unitToAdd, "contribution" : "Suppliment"};
             var ingItemIndexInList = isAlreadyPresentInPL(ingItemForPL, PLToGenerate);
 
             if(ingItemIndexInList != -1)
@@ -671,7 +673,7 @@ renderPL.prototype.renderItemInPL = function(itemsToRender, headingText) {
 
                 if(currItem)
                 {
-                    renderHtml += "<div class='list-group-item list-group-item-action cls_ingredientCont col-6 p-0 px-0 m-0 pt-1'>"
+                    renderHtml += "<div class='list-group-item list-group-item-action cls_ingredientCont col-6 p-0 px-0 m-0 pt-1' title='"+ currItem.contribution +"'>"
                                     + "<span class='col-1 px-0 mx-0 cls_rowIndex font-weight-bold' data-index='"+index+"'>"+index+indexSpaces+"</span>"
                                     + "<span><input type='text' class='col-7 form-control px-1 p-0 m-0 font-weight-bold pl_curr_name' name='name' value='"+currItem.name+"' style='display:inline'></span>"
                                     + "<span><input type='text' class='mx-2 cls_twoshortcol form-control px-1 p-0 m-0 font-weight-bold pl_curr_qty' name='quantity' value='"+_this.getQtyToRender(currItem.quantity)+"' style='display:inline'></span>"
@@ -1560,6 +1562,113 @@ function getSortedPL(PLToCategorize)
     }
 
     return sortedPL;
+}
+
+//Based on unitConversion and convertToTamilUnits methods - changes made in that method should be made in this method too
+//Does not cover Round-off and Percentage Increase/Decrease logics
+renderPL.prototype.formatContribution = function(qtyToConvert, unitToConvert) {
+    var _this = this;
+    var qtyConverted = qtyToConvert;
+    var unitConverted = unitToConvert;
+    
+    if(unitToConvert == "gram")
+    {
+        if(qtyToConvert>1000)
+        {
+            qtyConverted = qtyToConvert / 1000;
+            unitConverted = "kilo";
+        }
+        else if(qtyToConvert>199 && qtyToConvert<301)   //200 to 300
+        {
+            qtyConverted = 0.25;
+            unitConverted = "kilo";
+        }
+        else if(qtyToConvert>449 && qtyToConvert<650)   //450 to 649
+        {
+            qtyConverted = 0.5;
+            unitConverted = "kilo";
+        }
+        else if(qtyToConvert>649 && qtyToConvert<801)   //650 to 800
+        {
+            qtyConverted = 0.75;
+            unitConverted = "kilo";
+        }
+        else if(qtyToConvert>800 && qtyToConvert<1001)  //801 to 1000
+        {
+            qtyConverted = 1;
+            unitConverted = "kilo";
+        }
+    }
+    else if(unitToConvert == "ml")
+    {
+        if(qtyToConvert>1000)
+        {
+            qtyConverted = qtyToConvert / 1000;
+            unitConverted = "litre";
+        }
+        else if(qtyToConvert>199 && qtyToConvert<301)   //200 to 300
+        {
+            qtyConverted = 0.25;
+            unitConverted = "litre";
+        }
+        else if(qtyToConvert>449 && qtyToConvert<650)   //450 to 649
+        {
+            qtyConverted = 0.5;
+            unitConverted = "litre";
+        }
+        else if(qtyToConvert>649 && qtyToConvert<801)   //650 to 800
+        {
+            qtyConverted = 0.75;
+            unitConverted = "litre";
+        }
+        else if(qtyToConvert>800 && qtyToConvert<1001)  //801 to 1000
+        {
+            qtyConverted = 1;
+            unitConverted = "litre";
+        }
+    }
+    
+    return _this.getQtyToRender(qtyConverted)+ " " + convertToTamilUnitsForContribution(unitConverted);
+};
+
+function convertToTamilUnitsForContribution(unitToConvert)
+{
+    var unitConverted = unitToConvert;
+    
+    if(unitToConvert == "gram")
+    {
+        unitConverted = "கிராம்";
+    }
+    else if(unitToConvert == "kilo")
+    {
+        unitConverted = "கிலோ";
+    }
+    else if(unitToConvert == "ml")
+    {
+        unitConverted = "மில்லி";
+    }
+    else if(unitToConvert == "litre")
+    {
+        unitConverted = "லிட்டர்";
+    }
+    else if(unitToConvert == "pocket")
+    {
+        unitConverted = "பாக்ட்";
+    }
+    else if(unitToConvert == "meter")
+    {
+        unitConverted = "மீட்டர்";
+    }
+    else if(unitToConvert == "kowli")
+    {
+        unitConverted = "கவுளி";
+    }
+    else if(unitToConvert == "kattu")
+    {
+        unitConverted = "கட்டு";
+    }
+    
+    return unitConverted;
 }
 
 function initiatePL(PLToRender)
