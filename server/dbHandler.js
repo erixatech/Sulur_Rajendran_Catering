@@ -1,5 +1,6 @@
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
+//var url = "mongodb://localhost:27017/";
+var url = "mongodb+srv://erixatech:hailerixa@erixacluster-xlmmj.mongodb.net/test?retryWrites=true&w=majority";
 var dbName = "src";
 
 function mongoOpns(req, res, collectionName, operation, dataJson, query)
