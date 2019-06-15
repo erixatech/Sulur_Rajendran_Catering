@@ -73,6 +73,13 @@ router.delete("/deleteOrder", function(req, res){
 
 app.use("/",router);
 
-app.listen(3000,function(){
-  console.log("Live at Port 3000");
+//const server = require('http').createServer();
+const port = process.env.PORT || 3000;
+
+app.listen(port, function() {
+  console.log('Listening on ' + port);
 });
+
+/*app.listen(3000,function(){
+  console.log("Live at Port 3000");
+});*/
