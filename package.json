@@ -1,28 +1,26 @@
 {
-  "name": "Sulur Rajendran Catering App",
-  "version": "1.0",
+  "name": "sulur_rajendran_catering",
+  "version": "1.0.0",
   "description": "Catering Solutions - Powered by Erixa Tech",
   "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "body-parser": "^1.18.3"
+    "mongodb": "^3.1.13",
+    "window": "^4.2.6"
   },
-  "engines": {
-    "node": "11.10.0"
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git+https://github.com/erixatech/Sulur_Rajendran_Catering.git"
   },
-  "keywords": [
-    "Sulur Rajendran Catering"
-  ],
-  "author": "ErixaTech",
-  "contributors": [
-    "Guruprasath, Hariharasudan", "Kaviyarasan", "Gangasri"
-  ],
-  "license": "MIT"
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/erixatech/Sulur_Rajendran_Catering/issues"
+  },
+  "homepage": "https://github.com/erixatech/Sulur_Rajendran_Catering#readme"
 }
