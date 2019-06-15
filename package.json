@@ -1,0 +1,27 @@
+{
+  "name": "Sulur Rajendran Catering App",
+  "version": "1.0",
+  "description": "Catering Solutions - Powered by Erixa Tech",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.13.3"
+  },
+  "engines": {
+    "node": "4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "Sulur Rajendran Catering"
+  ],
+  "author": "ErixaTech",
+  "contributors": [
+    "Guruprasath, Hariharasudan", "Kaviyarasan", "Gangasri"
+  ],
+  "license": "MIT"
+}

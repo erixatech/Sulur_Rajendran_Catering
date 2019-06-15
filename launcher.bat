@@ -1,4 +1,4 @@
 ::start db.bat
-start server/node server/spark.js
+start node index.js
 TIMEOUT 5
 start "" http://localhost
