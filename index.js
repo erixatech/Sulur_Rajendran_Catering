@@ -1,9 +1,8 @@
 var express = require("express");
-var app = express();
-var router = express.Router();
-
 var path = require('path');
 var bodyParser = require('body-parser');
+var app = express().use('/node_modules',  express.static(__dirname + '/node_modules'));;
+var router = express.Router();
 
 var mongoOpn1 = require('./dbHandler');
 
