@@ -111,7 +111,7 @@ renderPL.prototype.calculatePL = function(){
         }
     }
 
-    PLToGenerate = incByPrecentage(PLToGenerate);
+    PLToGenerate = alterByPrecentage(PLToGenerate);
     PLToGenerate = unitConversion(PLToGenerate);    
     PLToGenerate = roundOffPL(PLToGenerate);
     PLToGenerate = convertToTamilUnits(PLToGenerate);
@@ -1253,15 +1253,23 @@ function isAlreadyPresentInPL(ingItemForPL, PLToCheck)
     return -1;
 }
 
-function incByPrecentage(PLToIncrement)
+function alterByPrecentage(PLToIncrement)
 {
-    var percToIncrease = getUrlParts(window.location.href).inc;
-    if(percToIncrease!=undefined && percToIncrease.length>0 && percToIncrease>0)
+    var percToAlter = getUrlParts(window.location.href).perc;
+    var percOperation = getUrlParts(window.location.href).oper;
+
+    if(percToAlter!=undefined && percToAlter.length>0 && percToAlter>0)
     {
     	for(var i = 0; i < PLToIncrement.length; i++)
         {
-
-            PLToIncrement[i].quantity = PLToIncrement[i].quantity + ((PLToIncrement[i].quantity*percToIncrease)/100);
+            if(percOperation!=undefined && percOperation.length>0 && percOperation=="Decrease")
+            {
+                PLToIncrement[i].quantity = PLToIncrement[i].quantity - ((PLToIncrement[i].quantity*percToAlter)/100);
+            }
+            else
+            {
+                PLToIncrement[i].quantity = PLToIncrement[i].quantity + ((PLToIncrement[i].quantity*percToAlter)/100);
+            }
         }
     }
     return PLToIncrement;
@@ -1399,7 +1407,7 @@ function roundOffPL(PLToRoundOff)
                 var fracval = Number((String(PLToRoundOff[i].quantity).split('.')[1]).charAt(0));
                 var unitsToCheckForNonFraction = ["nos", "kattu", "kowli", "pocket", "gram", "ml"];
 
-                if(!isInList(PLToRoundOff[i].unit, unitsToCheckForNonFraction))
+                if(PLToRoundOff[i].unit && !isInList(PLToRoundOff[i].unit, unitsToCheckForNonFraction))
                 {            		
             		if(fracval > 1 && fracval <4)
             		{

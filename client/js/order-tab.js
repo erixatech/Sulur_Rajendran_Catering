@@ -585,25 +585,30 @@ OrderTab.prototype.generatePLFromOrder = function() {
 	
 	if(_this.currentOrder && _this.currentOrder[0] && _this.currentOrder[0].serviceForms)
 	{
-		var incParam = '';
+		var percParam = '';
+		var percOperation = '';
 
 		if($("#id_percentageIncrease") && $("#id_percentageIncrease").val().length>0)
 		{
-			incParam = "&inc="+$("#id_percentageIncrease").val();
+			percParam = "&perc="+$("#id_percentageIncrease").val();
+		}
+		if($("#id_orderIncOrDec") && $("#id_orderIncOrDec").val().length>0)
+		{
+			percOperation = "&oper="+$("#id_orderIncOrDec").val();
 		}
 		//new renderPL(_this.currentOrder[0]);
-		var plWindow = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Maligai" + incParam);
+		var plWindow = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Maligai" + percParam + percOperation);
 
 		setTimeout(function(){
-            var plWindow2 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=KaaiKanigal" + incParam);
+            var plWindow2 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=KaaiKanigal" + percParam + percOperation);
         }, 100);
 
         setTimeout(function(){
-            var plWindow3= window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=PaalThayir" + incParam);
+            var plWindow3= window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=PaalThayir" + percParam + percOperation);
         }, 200);
 
         setTimeout(function(){
-            var plWindow4 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Extras" + incParam);
+            var plWindow4 = window.open(window.location.origin + "?orderId=" + _this.orderId + "&purchaseList=true&purchaseListCategory=Extras" + percParam + percOperation);
         }, 300);
 	}
 	else if(_this.currentOrder && _this.currentOrder[0])
