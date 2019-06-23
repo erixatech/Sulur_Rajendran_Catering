@@ -1504,7 +1504,10 @@ function getSortedPL(PLToCategorize)
             {
                 if(ingredientJson.Maligai[i].name.toLowerCase() == PLToCategorize.Maligai[j].name.toLowerCase())
                 {
-                    sortedPL.Maligai[sortedPL.Maligai.length] = PLToCategorize.Maligai[j];
+                    if(PLToCategorize.Maligai[j].quantity>0)
+                    {
+                        sortedPL.Maligai[sortedPL.Maligai.length] = PLToCategorize.Maligai[j];
+                    }
                 }
             }
         }
@@ -1518,7 +1521,10 @@ function getSortedPL(PLToCategorize)
             {
                 if(ingredientJson.KaaiKanigal[i].name.toLowerCase() == PLToCategorize.KaaiKanigal[j].name.toLowerCase())
                 {
-                    sortedPL.KaaiKanigal[sortedPL.KaaiKanigal.length] = PLToCategorize.KaaiKanigal[j];
+                    if(PLToCategorize.KaaiKanigal[j].quantity>0)
+                    {
+                        sortedPL.KaaiKanigal[sortedPL.KaaiKanigal.length] = PLToCategorize.KaaiKanigal[j];
+                    }
                 }
             }
         }
@@ -1532,7 +1538,10 @@ function getSortedPL(PLToCategorize)
             {
                 if(ingredientJson.Extras[i].name.toLowerCase() == PLToCategorize.Extras[j].name.toLowerCase())
                 {
-                    sortedPL.Extras[sortedPL.Extras.length] = PLToCategorize.Extras[j];
+                    if(PLToCategorize.Extras[j].quantity>0)
+                    {
+                        sortedPL.Extras[sortedPL.Extras.length] = PLToCategorize.Extras[j];
+                    }
                 }
             }
         }
@@ -1546,7 +1555,10 @@ function getSortedPL(PLToCategorize)
             {
                 if(ingredientJson.Suppliments[i].name.toLowerCase() == PLToCategorize.Suppliments[j].name.toLowerCase())
                 {
-                    sortedPL.Suppliments[sortedPL.Suppliments.length] = PLToCategorize.Suppliments[j];
+                    if(PLToCategorize.Suppliments[j].quantity>0)
+                    {
+                        sortedPL.Suppliments[sortedPL.Suppliments.length] = PLToCategorize.Suppliments[j];
+                    }
                 }
             }
         }

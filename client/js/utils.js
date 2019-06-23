@@ -423,6 +423,22 @@ function getCategoriesBySession(session) {
 	return toRet;
 }
 
+function fillNumOfPplInEventsWithParent(parentElem) {
+	var commonNumOfPplToFill = $(parentElem).find('.cls_commonNumOfPpl_sf').val();
+	if(commonNumOfPplToFill!=undefined && commonNumOfPplToFill.length>0 && $(parentElem).find('.cls_receipeCount_sf')!=undefined)
+	{
+		$(parentElem).find('.cls_receipeCount_sf').val(commonNumOfPplToFill);
+	}	
+}
+
+function fillNumOfPplInEventsForCurrElem(currElem, parentElem) {
+	var commonNumOfPplToFill = $(parentElem).find('.cls_commonNumOfPpl_sf').val();
+	if(commonNumOfPplToFill!=undefined && commonNumOfPplToFill.length>0 && currElem.find('#id_receipeCount_sf')!=undefined)
+	{
+		currElem.find('#id_receipeCount_sf').val(commonNumOfPplToFill);
+	}	
+}
+
 function getSupplimentNames() {
 	var toRet = null;
 	var tempArr = [];

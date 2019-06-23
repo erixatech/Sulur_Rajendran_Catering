@@ -374,7 +374,9 @@ OrderTab.prototype.addMoreEvent = function(serviceObj, isLast) {
 		+ '                 <option value="Night" '+ ((isUpdate && serviceObj.session == "Night")  ? "selected" : "")+ '> Night </option>'
 		+ '             </select>'
 		+ '  		</div>'
-		+ '         <div class="col-2">'
+		+ '         <div class="col-3">'
+		+ '				<label>No. Of People (Common)</label>'
+		+ '				<input type="number" min="0" class="form-control cls_commonNumOfPpl_sf" required="" id="id_commonNumOfPpl_sf" value="" placeholder="Enter Common Head Count" name="receipeCount">'
 		+ '         </div>'
 		+ '  		<div class="col-4">'
 		+ '    			<label for="serviceFormDateTime">Event Date</label>'
@@ -554,8 +556,15 @@ OrderTab.prototype.getReceipeMapRowForSF = function(recipeObjInServiceForm, init
 					}
 				}
 				renderHtmlMapRow += '			</select>'*/
-				+ '	<input class="form-control cls_receipeName_sf" name="receipeName" list="id_receipeName_sf_s'+_this.idIncrementer+'">'
-				+ '			<datalist id="id_receipeName_sf_s'+_this.idIncrementer+'">'
+				if(recipeInSameCategory && recipeInSameCategory.length>0)
+				{
+					renderHtmlMapRow += '	<input class="form-control cls_receipeName_sf" name="receipeName" list="id_receipeName_sf_s'+_this.idIncrementer+'">'
+				}
+				else
+				{
+					renderHtmlMapRow += '	<input class="form-control cls_receipeName_sf" disabled title="no recipe added for this category" name="receipeName" list="id_receipeName_sf_s'+_this.idIncrementer+'">'
+				}
+				renderHtmlMapRow += '			<datalist id="id_receipeName_sf_s'+_this.idIncrementer+'">'
 				if(recipeInSameCategory && recipeInSameCategory.length>0)
 				{
 					for(var i=0; i<recipeInSameCategory.length; i++)
@@ -698,7 +707,10 @@ OrderTab.prototype.renderSuppimentsListForOrderEdit = function(supplimentsArr) {
 				currMapNameField.val(currIng.name);			
 				currMapNameField.closest('.cls_orderLevelIngredientMapRow').find(".cls_orderLevelIngredientUnit_recipe option").remove();
 				addOptionsToSelectViaElem(ingredientUnits, unitsElem);
-				$(qtyElem).val(currQtyWithoutFrac);
+				if(currQtyWithoutFrac>0)
+				{
+					$(qtyElem).val(currQtyWithoutFrac);
+				}				
 				if(currFrac.length>0)
 				{
 					$(fracElem).val(currFrac);
@@ -778,11 +790,13 @@ OrderTab.prototype.renderEvents = function() {
 		
 		$(document).on("click", ".cls_addReceipe_sf", function(){
 			var elemToAdd = $(_this.getReceipeMapRowForSF("", $('.recipeMapRowSf').length, $(this).data("category")));
-			cloneDOM(elemToAdd, $(this).parents('.receipeMapContainer').find('.serviceFormReceipeMap'));
 			var $thisParentContainer = $(this).parents(".cls_orderEvent");
+			fillNumOfPplInEventsForCurrElem(elemToAdd, $thisParentContainer);
+			cloneDOM(elemToAdd, $(this).parents('.receipeMapContainer').find('.serviceFormReceipeMap'));
+			/*var $thisParentContainer = $(this).parents(".cls_orderEvent");
 			var session = $thisParentContainer.find("#id_session").val();
 			var categories = getCategoryBySession(session);
-			addOptionsToSelectViaElem(categories, $('.cls_receipeCategory_sf')[$('.cls_receipeCategory_sf').length-1]);
+			addOptionsToSelectViaElem(categories, $('.cls_receipeCategory_sf')[$('.cls_receipeCategory_sf').length-1]);*/
 		});
 
 		$(document).on("click", ".cls_removeCurrentReceipeMap", function(){
@@ -855,9 +869,9 @@ OrderTab.prototype.renderEvents = function() {
 			}
 		});
 		
-		if(_this.isCreateServiceForm == "true") {
+		/*if(_this.isCreateServiceForm == "true") {
 			addOptionsToSelectViaElem(recipeCategory, $('.cls_receipeCategory_sf')[0]);
-		}
+		}*/
 
 		$(document).on("click", "#id_createService", function(){
 			/*var url = window.location.href;
@@ -877,11 +891,11 @@ OrderTab.prototype.renderEvents = function() {
 			}
 			$(".cls_eventAction").removeClass("d-none");
 			registerDatepickerEvent();
-			var categories = getCategoryBySession("");
+			/*var categories = getCategoryBySession("");
 			if($('.cls_receipeCategory_sf') && $('.cls_receipeCategory_sf').length>0)
 			{
 				addOptionsToSelectViaElem(categories, $('.cls_receipeCategory_sf')[$('.cls_receipeCategory_sf').length-1]);
-			}
+			}*/
 		});
 		$(document).on("change", "#id_session", function(){
 			var session = $(this).val();
@@ -890,6 +904,7 @@ OrderTab.prototype.renderEvents = function() {
 			//renderOptionsToSelectViaElem(categories, $thisParent.find('.cls_receipeCategory_sf'));
 
 			$thisParent.find('.cls_categoriesInEventContainer').html(_this.renderSessionTemplate("", session));
+			fillNumOfPplInEventsWithParent($thisParent);
 		});
 		$(document).on('click', '.cls_deleteOrder', function(event){
 			event.stopPropagation();
