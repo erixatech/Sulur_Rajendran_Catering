@@ -86,9 +86,10 @@ RecipeTab.prototype.renderRecipeByCategory = function(recipeCat, catagoryJson, i
 						renderHtml += "<a class='list-group-item list-group-item-action cls_recipeCont recipe_"+ catagoryJson[j].id +"'>"
 										+ "<label class='col-3'>" + catagoryJson[j].name +"</label>"
 										+ "<label class='col-3'>" + catagoryJson[j].tamilName +"</label>"
-										+ "<label class='col-3'>" + catagoryJson[j].headCount +"</label>"
+										+ "<label class='col-2'>" + catagoryJson[j].headCount +"</label>"
 										+ "<label class='btn btn-primary btn-md mr-3 mb-0 col-1 text-center cls_editRecipe' idx='" + catagoryJson[j].id +"' data-toggle='modal' data-target='#recipeModal' data-backdrop='static' data-keyboard='false'>Edit</label>"
 										+ "<label class='btn btn-secondary btn-md mr-3 mb-0 col-1 text-center cls_deleteRecipe' idx='" + catagoryJson[j].id +"' name='" + catagoryJson[j].name +"'>Delete</label>"
+										+ "<label class='btn btn-success btn-md mr-3 mb-0 col-1 text-center cls_cloneRecipe' idx='" + catagoryJson[j].id +"' data-toggle='modal' data-target='#recipeModal' data-backdrop='static' data-keyboard='false'>Clone</label>"
 									+ "</a>"
 					}
 		renderHtml += "</a>"
@@ -516,6 +517,20 @@ RecipeTab.prototype.registerEvents = function() {
 	    	    $("#id_recipeTamilName", modal).val(tamilName);
 	    	    $("#id_recipeCategory", modal).val(categoryName);
 	    	    $("#id_recipeHeadCount", modal).val(headCount);
+	    	    _this.renderIngListForRecipe(IngredientsListForRecipe);
+	        }
+	    });
+
+	    $(document).on('click', '.cls_cloneRecipe', function(){
+			var modal = $("#recipeModal");	        
+		    var idx = $(this).attr("idx");
+	        var curRecipeObj = getRecipeObjById(recipeJson, idx);
+	        if(curRecipeObj && !$.isEmptyObject(curRecipeObj))
+	        {
+	    	    var IngredientsListForRecipe = curRecipeObj.Ingredients;
+	    	    var modal = $("#recipeModal");
+	    	    $(".modal-title", modal).text("Create Recipe");
+				modal.data("idToEdit",Number(idx));
 	    	    _this.renderIngListForRecipe(IngredientsListForRecipe);
 	        }
 	    });
